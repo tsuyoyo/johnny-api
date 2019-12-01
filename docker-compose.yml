@@ -1,13 +1,32 @@
 version: '2'
 services:
   web:
+    container_name: test-api-server
     build:
       context: .
       dockerfile: ./Dockerfile
     command: npm run dev
     environment:
       NODE_ENV: development
+      MYSQL_HOST: ${MYSQL_HOST}
+      TEST_DB_USER: ${TEST_DB_USER}
+      TEST_DB_PASSWORD: ${TEST_DB_PASSWORD}
+      TEST_DB_NAME: ${TEST_DB_NAME}
     ports:
       - '3000:3000'
     volumes:
       - .:/app
+
+  database:
+    image: mysql:8.0
+    container_name: test-db
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TEST_DB_PASSWORD}
+
+networks:
+  default:
+    external:
+      name: db-connection-test
