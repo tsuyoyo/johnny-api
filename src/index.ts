@@ -1,25 +1,22 @@
 import * as express from "express";
-import * as mysql from "mysql";
-
-const connectionParams = {
-    host : process.env.MYSQL_HOST,
-    user : process.env.TEST_DB_USER,
-    password : process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DB_NAME
-};
-const connection = mysql.createConnection(connectionParams);
-console.log('connect with ' + JSON.stringify(connectionParams));
-connection.connect();
-connection.query(
-    'select * from test_table_01;',
-    function (err, rows, fields) {
-        if (err) { console.log('err: ' + err); }
-        console.log('count ' + JSON.stringify(rows));
-    }
-);
-connection.end();
+import * as bodyParser from "body-parser";
+import * as mysqlService from "./service/mysqlService";
+import * as userRegistrationService from "./service/userRegistrationService";
 
 const app = express();
 const port = 3000;
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 app.get("/", (req, res) => res.send("Hello World!!"));
+
+// Example to test
+// $ curl -XPOST http://localhost:3000/user -H "Content-Type:application/x-www-form-urlencoded" -d "name=user_c&mail=userc@mail.com"
+app.post("/user", (req, res, next) =>
+  userRegistrationService.addUser(req, res, next)
+);
+app.get("/debug/users", (req, res) =>
+  mysqlService.getUsers((result: object) => res.send(JSON.stringify(result)))
+);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

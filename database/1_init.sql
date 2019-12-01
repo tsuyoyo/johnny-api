@@ -5,9 +5,14 @@ CREATE DATABASE test_db;
 -- https://qiita.com/monga3/items/6583c07a9b275b469608
 ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'passpass';
 
-CREATE TABLE test_db.test_table_01 (id int, name varchar(10));
+CREATE TABLE test_db.test_table_01 (
+    id int auto_increment primary key,
+    name varchar(30) unique,
+    mail varchar(100) unique
+) auto_increment = 10000;
 
 START TRANSACTION;
-INSERT INTO test_db.test_table_01 VALUES (100, 'test_a');
-INSERT INTO test_db.test_table_01 VALUES (200, 'test_b');
+INSERT INTO test_db.test_table_01 VALUES (null, 'test_a', 'test_a@mail.com');
+INSERT INTO test_db.test_table_01 VALUES (null, 'test_b', 'test_b@mail.com');
+INSERT INTO test_db.test_table_01 VALUES (null, 'test_c', 'test_c@mail.com');
 COMMIT;
