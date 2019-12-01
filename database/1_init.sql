@@ -1,6 +1,5 @@
 CREATE DATABASE test_db;
-CREATE USER 'tsuyogoro' IDENTIFIED WITH mysql_native_password BY 'passpass';
-GRANT ALL PRIVILEGES ON test_db.* TO 'tsuyogoro';
+ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'passpass';
 
 CREATE TABLE test_db.test_table_01 (id int, name varchar(10));
 INSERT INTO test_db.test_table_01 VALUES (100, 'test_a');
