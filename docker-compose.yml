@@ -12,6 +12,7 @@ services:
       TEST_DB_USER: ${TEST_DB_USER}
       TEST_DB_PASSWORD: ${TEST_DB_PASSWORD}
       TEST_DB_NAME: ${TEST_DB_NAME}
+      GOOGLE_APPLICATION_CREDENTIALS: "./johnny-app-dev-firebase-adminsdk-8q1im-6b2b072cc2.json"
     ports:
       - '3000:3000'
     volumes:

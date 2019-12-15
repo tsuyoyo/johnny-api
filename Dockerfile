@@ -9,4 +9,6 @@ WORKDIR $APP_ROOT
 COPY package*.json $APP_ROOT
 RUN npm install
 
+COPY johnny-app-dev-firebase-adminsdk-8q1im-6b2b072cc2.json /tmp/johnny/
+
 COPY . $APP_ROOT
