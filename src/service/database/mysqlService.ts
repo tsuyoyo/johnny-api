@@ -1,12 +1,12 @@
 import * as mysql from "mysql";
-import { User } from "../../model/user";
+import { User } from "../../proto/user_pb";
 import { ApiError, ErrorCode } from "../../error/apiError";
 
 const connectionParams = {
-    host : process.env.MYSQL_HOST,
-    user : process.env.TEST_DB_USER,
-    password : process.env.TEST_DB_PASSWORD,
-    database: process.env.TEST_DB_NAME
+  host: process.env.MYSQL_HOST,
+  user: process.env.TEST_DB_USER,
+  password: process.env.TEST_DB_PASSWORD,
+  database: process.env.TEST_DB_NAME
 };
 
 export function addUser(
@@ -17,9 +17,9 @@ export function addUser(
 ) {
     const connection = mysql.createConnection(connectionParams);
     const query = `INSERT INTO test_table_01 VALUES (` +
-        `'${user.id}'` +
-        `,'${user.name}'` +
-        `,'${user.photoUrl}'` +
+        `'${user.getId()}'` +
+        `,'${user.getName()}'` +
+        `,'${user.getPhoto()}'` +
         `,'${mail}'` +
         `)`;
     console.log(`query = ${query}`);

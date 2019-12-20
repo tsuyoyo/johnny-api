@@ -1,0 +1,8 @@
+syntax = "proto3";
+package pj.sakuchin.percussion.proto;
+
+message User {
+    string id = 1;
+    string name = 2;
+    string photo = 3;
+}
