@@ -1,6 +1,6 @@
 import * as mysql from "mysql";
 import { User } from "../../proto/user_pb";
-import { ApiError, ErrorCode } from "../../error/apiError";
+import { PercussionApiError } from "../../proto/error_pb";
 
 const connectionParams = {
   host: process.env.MYSQL_HOST,
@@ -9,63 +9,79 @@ const connectionParams = {
   database: process.env.TEST_DB_NAME
 };
 
-export function addUser(
-    user: User,
-    mail: string,
-    onSuccess: (res: object) => void,
-    onError: (error: object) => void
-) {
-    const connection = mysql.createConnection(connectionParams);
-    const query = `INSERT INTO test_table_01 VALUES (` +
-        `'${user.getId()}'` +
-        `,'${user.getName()}'` +
-        `,'${user.getPhoto()}'` +
-        `,'${mail}'` +
-        `)`;
-    console.log(`query = ${query}`);
-    connection.connect();
-    connection.query(
-        query,
-        function (err, rows, fields) {
-            if (err) {
-                // Ref : error codes
-                // https://github.com/mysqljs/mysql/blob/ad014c82b2cbaf47acae1cc39e5533d3cb6eb882/lib/protocol/constants/errors.js
-                console.log(`errno - ${err.errno}`);
-                if (err.errno == 1062) { // ER_DUP_ENTRY
-                    onError(
-                        new ApiError(
-                            ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED,
-                            `The mail address has already been registered`
-                        )
-                    )
-                } else {
-                    onError(
-                        new ApiError(
-                            ErrorCode.INVALID_FIREBASE_TOKEN,
-                            `Invalid firebase token`
-                        )
-                    );
-                }
-            } else {
-                onSuccess(rows);
-            }
-        }
-    );
-    connection.end();
+// TABLES
+const USER_TABLE = "test_table_01";
+
+function makeApiError(
+  code: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap],
+  message: string
+): PercussionApiError {
+  const apiError = new PercussionApiError();
+  apiError.setMessage(message);
+  apiError.setErrorcode(code);
+  return apiError;
 }
 
-export function getUsers(onSuccess: (res: object) => void) {
-    const connection = mysql.createConnection(connectionParams);
-    connection.connect();
-    connection.query(
-        'select * from test_table_01;',
-        function (err, rows, fields) {
-            if (err) {
-                console.log('err: ' + err); 
-            } else {
-                onSuccess(rows);
-            }
-        }
-    );
-    connection.end();
+function runQuery(
+  query: string,
+  onQueryDone: (err, rows, fields) => void
+): void {
+  const connection = mysql.createConnection(connectionParams);
+  connection.connect();
+
+  console.log(`query - ${query}`);
+
+  connection.query(query, onQueryDone);
+  connection.end();
+}
+
+export function addUser(
+  user: User,
+  mail: string,
+  onSuccess: (res: object) => void,
+  onError: (error: PercussionApiError) => void
+): void {
+  const query =
+    `INSERT INTO ${USER_TABLE} VALUES (` +
+    `'${user.getId()}'` +
+    `,'${user.getName()}'` +
+    `,'${user.getPhoto()}'` +
+    `,'${mail}'` +
+    `)`;
+
+  runQuery(query, (err, rows, fields) => {
+    if (err) {
+      // Ref : error codes
+      // https://github.com/mysqljs/mysql/blob/ad014c82b2cbaf47acae1cc39e5533d3cb6eb882/lib/protocol/constants/errors.js
+      console.log(`errno - ${err.errno}`);
+      if (err.errno == 1062) {
+        // ER_DUP_ENTRY
+        onError(
+          makeApiError(
+            PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED,
+            `The mail address has already been registered`
+          )
+        );
+      } else {
+        onError(
+          makeApiError(
+            PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
+            `Invalid firebase token`
+          )
+        );
+      }
+    } else {
+      onSuccess(rows);
+    }
+  });
+}
+
+export function getUsers(onSuccess: (res: object) => void): void {
+  runQuery("select * from test_table_01;", (err, rows, fields) => {
+    if (err) {
+      console.log("err: " + err);
+    } else {
+      onSuccess(rows);
+    }
+  });
 }

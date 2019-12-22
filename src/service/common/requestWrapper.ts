@@ -1,0 +1,39 @@
+import { Request } from "express";
+import { Message } from "google-protobuf";
+import { RequestType } from "../common/requestDataType";
+
+export class RequestWrapper<T extends Message> {
+  private request: Request;
+  private requestType: RequestType;
+  private deserialize: (Uint8Array) => T;
+  private fromJson: (object) => T;
+
+  constructor(
+    request: Request,
+    requestType: RequestType,
+    deserialize: (Uint8Array) => T,
+    fromJson: (object) => T
+  ) {
+    this.request = request;
+    this.requestType = requestType;
+    this.deserialize = deserialize;
+    this.fromJson = fromJson;
+  }
+
+  getAccessToken(): string {
+    return (
+      this.request.body.token ||
+      this.request.query.token ||
+      this.request.headers["x-access-token"]
+    );
+  }
+
+  deserializeData(): T {
+    switch (this.requestType) {
+      case RequestType.JSON:
+        return this.fromJson(this.request.body);
+      case RequestType.PROTOBUF:
+        return this.deserialize(Buffer.from(this.request.body));
+    }
+  }
+}

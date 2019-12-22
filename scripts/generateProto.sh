@@ -31,11 +31,14 @@ mv ${TS_OUT_DIR}/proto/* ${TS_OUT_DIR}
 rmdir ${TS_OUT_DIR}/proto
 
 # copy proto files to typescript src directory
-TS_SRC_DIR="./src/"
-cp -r "${TS_OUT_DIR}" ${TS_SRC_DIR}
+TS_SRC_DIR="./src/proto"
+rm -rf ${TS_SRC_DIR}
+mkdir ${TS_SRC_DIR}
+cp ${TS_OUT_DIR}/* ${TS_SRC_DIR}
 
 
 # Generate proto files for dart
+# https://github.com/dart-lang/protobuf/tree/master/protoc_plugin
 protoc --dart_out=${DART_OUT_DIR} \
     ${PROTO_FILES} \
     --plugin "${DART_GEN_PLUGIN}"
