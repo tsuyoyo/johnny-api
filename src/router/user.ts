@@ -1,9 +1,6 @@
 import * as express from "express";
-import { signupUser } from "../service/user/signupUserService";
-import { RequestWrapper } from "../service/common/requestWrapper";
-import { ResponseWrapper } from "../service/common/responseWrapper";
+import * as signupUserService from "../service/user/signupUserService";
 import * as admin from "firebase-admin";
-import { SignupUserRequest, SignupUserResponse } from "../proto/userService_pb";
 import { getRequestType } from "../service/common/requestDataType";
 
 function signup(
@@ -11,22 +8,12 @@ function signup(
   response: express.Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  signupUser(
+  const requestType = getRequestType(request);
+  signupUserService.singup(
     defaultAuth,
-    new RequestWrapper<SignupUserRequest>(
-      request,
-      getRequestType(request),
-      SignupUserRequest.deserializeBinary,
-      (json: object) => {
-        // TODO : ちゃんとする
-        const userRequest = new SignupUserRequest();
-        return userRequest;
-        // const user = new User();
-        // user.setId(json["aa"]);
-        // return user;
-      }
-    ),
-    new ResponseWrapper<SignupUserResponse>(response, getRequestType(request))
+    request,
+    response,
+    requestType
   );
 }
 

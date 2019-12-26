@@ -1,23 +1,28 @@
 import { Request } from "express";
 import { Message } from "google-protobuf";
 import { RequestType } from "../common/requestDataType";
+import { plainToClass } from "class-transformer";
+import {
+  SignupUserResponse,
+  SignupUserRequest
+} from "../../proto/userService_pb";
 
 export class RequestWrapper<T extends Message> {
   private request: Request;
   private requestType: RequestType;
   private deserialize: (Uint8Array) => T;
-  private fromJson: (object) => T;
+  private fromObject: (object) => T;
 
   constructor(
     request: Request,
     requestType: RequestType,
     deserialize: (Uint8Array) => T,
-    fromJson: (object) => T
+    fromObject: (jsObject: object) => T
   ) {
     this.request = request;
     this.requestType = requestType;
     this.deserialize = deserialize;
-    this.fromJson = fromJson;
+    this.fromObject = fromObject;
   }
 
   getAccessToken(): string {
@@ -31,7 +36,7 @@ export class RequestWrapper<T extends Message> {
   deserializeData(): T {
     switch (this.requestType) {
       case RequestType.JSON:
-        return this.fromJson(this.request.body);
+        return this.fromObject(this.request.body);
       case RequestType.PROTOBUF:
         return this.deserialize(Buffer.from(this.request.body));
     }

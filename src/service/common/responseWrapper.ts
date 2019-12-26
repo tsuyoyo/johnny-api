@@ -15,6 +15,7 @@ export class ResponseWrapper<T extends Message> {
   convertResponseDataForRequestType(data: Message): object {
     switch (this.requestType) {
       case RequestType.JSON:
+        console.log(`object - ${JSON.stringify(data.toObject(false))}`);
         return data.toObject(false);
       case RequestType.PROTOBUF:
         return Buffer.from(data.serializeBinary());
