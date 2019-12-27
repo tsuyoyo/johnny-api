@@ -3,7 +3,7 @@ import { assert } from "chai";
 import {
   getRequestType,
   RequestType
-} from "../../../src/service/common/requestDataType";
+} from "../../../src/gateway/requestDataType";
 
 describe("requestDataType", function() {
   describe("#getRequestType()", function() {

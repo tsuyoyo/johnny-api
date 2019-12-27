@@ -1,11 +1,6 @@
 import { Request } from "express";
 import { Message } from "google-protobuf";
-import { RequestType } from "../common/requestDataType";
-import { plainToClass } from "class-transformer";
-import {
-  SignupUserResponse,
-  SignupUserRequest
-} from "../../proto/userService_pb";
+import { RequestType } from "./requestDataType";
 
 export class RequestWrapper<T extends Message> {
   private request: Request;

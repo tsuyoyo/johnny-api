@@ -1,29 +1,26 @@
-import * as express from "express";
-import * as signupUserService from "../service/user/signupUserService";
+import { Request, Response, Router } from "express";
+import * as signupService from "../service/user/signup";
+import * as signupGateway from "../gateway/user/signup";
 import * as admin from "firebase-admin";
-import { getRequestType } from "../service/common/requestDataType";
+import { getRequestType } from "../gateway/requestDataType";
 
 function signup(
-  request: express.Request,
-  response: express.Response,
+  request: Request,
+  response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  signupUserService.singup(
+  const reqType = getRequestType(request.headers["content-type"]);
+  signupService.signup(
     defaultAuth,
-    request,
-    response,
-    getRequestType(request.headers["content-type"])
+    signupGateway.getSignupUserReqeustWrapper(request, reqType),
+    signupGateway.getSignupUserResponseWrapper(response, reqType)
   );
 }
 
-export function provideUserRouter(
-  defaultAuth: admin.auth.Auth
-): express.Router {
-  const router = express.Router();
-
+export function provideUserRouter(defaultAuth: admin.auth.Auth): Router {
+  const router = Router();
   router.post("/signup", (request, response) =>
     signup(request, response, defaultAuth)
   );
-
   return router;
 }
