@@ -8,12 +8,11 @@ function signup(
   response: express.Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const requestType = getRequestType(request);
   signupUserService.singup(
     defaultAuth,
     request,
     response,
-    requestType
+    getRequestType(request.headers["content-type"])
   );
 }
 
