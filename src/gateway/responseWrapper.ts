@@ -1,6 +1,6 @@
 import { Response } from "express";
-import { PercussionApiError } from "../../proto/error_pb";
-import { RequestType } from "../common/requestDataType";
+import { PercussionApiError } from "../proto/error_pb";
+import { RequestType } from "./requestDataType";
 import { Message } from "google-protobuf";
 
 export class ResponseWrapper<T extends Message> {

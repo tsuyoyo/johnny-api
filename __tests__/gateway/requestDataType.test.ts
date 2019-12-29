@@ -1,7 +1,4 @@
-import {
-  getRequestType,
-  RequestType
-} from "../../../src/gateway/requestDataType";
+import { getRequestType, RequestType } from "../../src/gateway/requestDataType";
 
 describe("requestDataType", function() {
   describe("#getRequestType()", function() {

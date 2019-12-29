@@ -71,3 +71,16 @@ export function signup(
       );
     });
 }
+
+export function sample(
+  isSuccess: boolean,
+  n: number,
+  onSuccess: (number) => void,
+  onError: (number) => void
+) {
+  if (isSuccess) {
+    onSuccess(n * 2);
+  } else {
+    onError(n * 3);
+  }
+}
