@@ -1,74 +1,61 @@
 import * as mysqlService from "../database/mysqlService";
-import * as admin from "firebase-admin";
-import { User } from "../../proto/user_pb";
 import { PercussionApiError } from "../../proto/error_pb";
-import { ResponseWrapper } from "../../gateway/responseWrapper";
-import { RequestWrapper } from "../../gateway/requestWrapper";
+import { ApiException } from "../../error/apiException";
 import {
   SignupUserRequest,
   SignupUserResponse
 } from "../../proto/userService_pb";
+import { FirebaseUser } from "../../firebase/getUser";
 
-function onAddUser(
-  user: User,
-  response: ResponseWrapper<SignupUserResponse>
-): () => void {
-  return (): void => {
-    const signupResonse = new SignupUserResponse();
-    signupResonse.setUser(user);
-    response.respondSuccess(signupResonse);
-  };
+function registerUser(
+  firebaseUser: FirebaseUser,
+  onSuccess: (SignupUserRequest) => void,
+  onError: (ApiException) => void
+): void {
+  mysqlService.addUser(
+    firebaseUser.user,
+    firebaseUser.email,
+    () => {
+      const signupResonse = new SignupUserResponse();
+      signupResonse.setUser(firebaseUser.user);
+      onSuccess(signupResonse);
+    },
+    (e: PercussionApiError) => {
+      onError(new ApiException(e.getErrorcode(), e.getMessage(), 403));
+    }
+  );
 }
 
-function onError(
-  response: ResponseWrapper<SignupUserResponse>
-): (PercussionApiError) => void {
-  return (error: PercussionApiError): void => response.respondError(error, 403);
-}
-
-function makeUserInstance(userRecord: admin.auth.UserRecord): User {
-  const user = new User();
-  user.setId(userRecord.uid);
-  user.setName(userRecord.displayName);
-  user.setPhoto(userRecord.photoURL || "");
-  return user;
+function getToken(request: SignupUserRequest): Promise<string> {
+  return new Promise<string>((onResolve, onReject) => {
+    const token = request.getToken();
+    if (token && token.length > 0) {
+      onResolve(token);
+    } else {
+      onReject(
+        new ApiException(
+          PercussionApiError.ErrorCode.NO_TOKEN,
+          "Valid firebase token is necessary at sign-in",
+          401
+        )
+      );
+    }
+  });
 }
 
 export function signup(
-  auth: admin.auth.Auth,
-  request: RequestWrapper<SignupUserRequest>,
-  response: ResponseWrapper<SignupUserResponse>
+  request: SignupUserRequest,
+  getFirebaseUser: (token: string) => Promise<FirebaseUser>,
+  onSuccess: (SignupUserResponse) => void,
+  onError: (ApiException) => void
 ): void {
-  const requestValues: SignupUserRequest = request.deserializeData();
-  const token = requestValues.getToken();
-  if (!token) {
-    response.makeApiErrorAndRespond(
-      PercussionApiError.ErrorCode.NO_TOKEN,
-      "Valid firebase token is necessary at sign-in",
-      401
-    );
-    return;
-  }
-  auth
-    .verifyIdToken(token)
-    .then((decodedToken: admin.auth.DecodedIdToken) =>
-      auth.getUser(decodedToken.uid)
-    )
-    .then(function(userRecord: admin.auth.UserRecord) {
-      const user = makeUserInstance(userRecord);
-      mysqlService.addUser(
-        user,
-        userRecord.email,
-        onAddUser(user, response),
-        onError(response)
-      );
-    })
-    .catch(function(error) {
-      response.makeApiErrorAndRespond(
-        PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
-        `Invalid firebase token - ${error}`,
-        403
-      );
+  getToken(request)
+    .then((token: string) => getFirebaseUser(token))
+    .then((user: FirebaseUser) => registerUser(user, onSuccess, onError))
+    .catch(error => {
+      if (error instanceof ApiException) {
+        onError(error);
+      }
     });
 }
 

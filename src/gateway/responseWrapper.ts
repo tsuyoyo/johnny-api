@@ -2,6 +2,7 @@ import { Response } from "express";
 import { PercussionApiError } from "../proto/error_pb";
 import { RequestType } from "./requestDataType";
 import { Message } from "google-protobuf";
+import { ApiException } from "../error/apiException";
 
 export class ResponseWrapper<T extends Message> {
   private response: Response;
@@ -12,10 +13,9 @@ export class ResponseWrapper<T extends Message> {
     this.requestType = requestType;
   }
 
-  convertResponseDataForRequestType(data: Message): object {
+  private convertResponseDataForRequestType(data: Message): object {
     switch (this.requestType) {
       case RequestType.JSON:
-        console.log(`object - ${JSON.stringify(data.toObject(false))}`);
         return data.toObject(false);
       case RequestType.PROTOBUF:
         return Buffer.from(data.serializeBinary());
@@ -28,20 +28,12 @@ export class ResponseWrapper<T extends Message> {
       .send(this.convertResponseDataForRequestType(message));
   }
 
-  public respondError(apiError: PercussionApiError, statusCode: number): void {
-    this.response
-      .status(statusCode)
-      .send(this.convertResponseDataForRequestType(apiError));
-  }
-
-  public makeApiErrorAndRespond(
-    code: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap],
-    message: string,
-    statusCode: number
-  ): void {
+  public respondError(apiException: ApiException): void {
     const apiError = new PercussionApiError();
-    apiError.setMessage(message);
-    apiError.setErrorcode(code);
-    this.respondError(apiError, statusCode);
+    apiError.setMessage(apiException.message);
+    apiError.setErrorcode(apiException.apiError);
+    this.response
+      .status(apiException.statusCode)
+      .send(this.convertResponseDataForRequestType(apiError));
   }
 }
