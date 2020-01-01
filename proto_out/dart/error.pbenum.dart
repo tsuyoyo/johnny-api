@@ -14,12 +14,14 @@ class PercussionApiError_ErrorCode extends $pb.ProtobufEnum {
   static const PercussionApiError_ErrorCode NO_TOKEN = PercussionApiError_ErrorCode._(1, 'NO_TOKEN');
   static const PercussionApiError_ErrorCode INVALID_FIREBASE_TOKEN = PercussionApiError_ErrorCode._(2, 'INVALID_FIREBASE_TOKEN');
   static const PercussionApiError_ErrorCode USER_HAS_BEEN_ALREADY_REGISTERED = PercussionApiError_ErrorCode._(3, 'USER_HAS_BEEN_ALREADY_REGISTERED');
+  static const PercussionApiError_ErrorCode DB_ERROR = PercussionApiError_ErrorCode._(4, 'DB_ERROR');
 
   static const $core.List<PercussionApiError_ErrorCode> values = <PercussionApiError_ErrorCode> [
     UNKNOWN,
     NO_TOKEN,
     INVALID_FIREBASE_TOKEN,
     USER_HAS_BEEN_ALREADY_REGISTERED,
+    DB_ERROR,
   ];
 
   static final $core.Map<$core.int, PercussionApiError_ErrorCode> _byValue = $pb.ProtobufEnum.initByValue(values);

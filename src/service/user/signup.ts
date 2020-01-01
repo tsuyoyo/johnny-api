@@ -1,4 +1,3 @@
-import * as mysqlService from "../database/mysqlService";
 import { PercussionApiError } from "../../proto/error_pb";
 import { ApiException } from "../../error/apiException";
 import {
@@ -6,25 +5,7 @@ import {
   SignupUserResponse
 } from "../../proto/userService_pb";
 import { FirebaseUser } from "../../firebase/getUser";
-
-function registerUser(
-  firebaseUser: FirebaseUser,
-  onSuccess: (SignupUserRequest) => void,
-  onError: (ApiException) => void
-): void {
-  mysqlService.addUser(
-    firebaseUser.user,
-    firebaseUser.email,
-    () => {
-      const signupResonse = new SignupUserResponse();
-      signupResonse.setUser(firebaseUser.user);
-      onSuccess(signupResonse);
-    },
-    (e: PercussionApiError) => {
-      onError(new ApiException(e.getErrorcode(), e.getMessage(), 403));
-    }
-  );
-}
+import { User } from "../../proto/user_pb";
 
 function getToken(request: SignupUserRequest): Promise<string> {
   return new Promise<string>((onResolve, onReject) => {
@@ -46,28 +27,28 @@ function getToken(request: SignupUserRequest): Promise<string> {
 export function signup(
   request: SignupUserRequest,
   getFirebaseUser: (token: string) => Promise<FirebaseUser>,
-  onSuccess: (SignupUserResponse) => void,
-  onError: (ApiException) => void
-): void {
-  getToken(request)
-    .then((token: string) => getFirebaseUser(token))
-    .then((user: FirebaseUser) => registerUser(user, onSuccess, onError))
-    .catch(error => {
-      if (error instanceof ApiException) {
-        onError(error);
-      }
-    });
-}
-
-export function sample(
-  isSuccess: boolean,
-  n: number,
-  onSuccess: (number) => void,
-  onError: (number) => void
-) {
-  if (isSuccess) {
-    onSuccess(n * 2);
-  } else {
-    onError(n * 3);
-  }
+  registerUserToDatabase: (
+    user: User,
+    email: string,
+    onRegisterSuccess: () => void,
+    onRegisterFailed: (ApiException) => void
+  ) => void
+): Promise<SignupUserResponse> {
+  return new Promise<SignupUserResponse>((onResolve, onReject) => {
+    getToken(request)
+      .then((token: string) => getFirebaseUser(token))
+      .then((firebaseUser: FirebaseUser) => {
+        const onRegisterSuccess = (): void => {
+          const signupResonse = new SignupUserResponse();
+          signupResonse.setUser(firebaseUser.user);
+          onResolve(signupResonse);
+        };
+        registerUserToDatabase(
+          firebaseUser.user,
+          firebaseUser.email,
+          onRegisterSuccess,
+          onReject
+        );
+      });
+  });
 }

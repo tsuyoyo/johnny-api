@@ -1,6 +1,7 @@
 import * as mysql from "mysql";
 import { User } from "../../proto/user_pb";
 import { PercussionApiError } from "../../proto/error_pb";
+import { ApiException } from "../../error/apiException";
 
 const connectionParams = {
   host: process.env.MYSQL_HOST,
@@ -12,15 +13,9 @@ const connectionParams = {
 // TABLES
 const USER_TABLE = "test_table_01";
 
-function makeApiError(
-  code: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap],
-  message: string
-): PercussionApiError {
-  const apiError = new PercussionApiError();
-  apiError.setMessage(message);
-  apiError.setErrorcode(code);
-  return apiError;
-}
+// Ref : error codes from sqlite.
+// https://github.com/mysqljs/mysql/blob/ad014c82b2cbaf47acae1cc39e5533d3cb6eb882/lib/protocol/constants/errors.js
+const ER_DUP_ENTRY = 1062;
 
 function runQuery(
   query: string,
@@ -35,11 +30,23 @@ function runQuery(
   connection.end();
 }
 
+function mapApiErrorCodeWithDbError(
+  err: any
+): PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap] {
+  let errorCode: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap];
+  if (err.errno == ER_DUP_ENTRY) {
+    errorCode = PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED;
+  } else {
+    errorCode = PercussionApiError.ErrorCode.DB_ERROR;
+  }
+  return errorCode;
+}
+
 export function addUser(
   user: User,
   mail: string,
-  onSuccess: (res: object) => void,
-  onError: (error: PercussionApiError) => void
+  onSuccess: () => void,
+  onError: (error: ApiException) => void
 ): void {
   const query =
     `INSERT INTO ${USER_TABLE} VALUES (` +
@@ -51,27 +58,11 @@ export function addUser(
 
   runQuery(query, (err, rows, fields) => {
     if (err) {
-      // Ref : error codes
-      // https://github.com/mysqljs/mysql/blob/ad014c82b2cbaf47acae1cc39e5533d3cb6eb882/lib/protocol/constants/errors.js
       console.log(`errno - ${err.errno}`);
-      if (err.errno == 1062) {
-        // ER_DUP_ENTRY
-        onError(
-          makeApiError(
-            PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED,
-            `The mail address has already been registered`
-          )
-        );
-      } else {
-        onError(
-          makeApiError(
-            PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
-            `Invalid firebase token`
-          )
-        );
-      }
+      const errorCode = mapApiErrorCodeWithDbError(err);
+      onError(new ApiException(errorCode, err.message, 403));
     } else {
-      onSuccess(rows);
+      onSuccess();
     }
   });
 }

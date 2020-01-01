@@ -1,39 +1,62 @@
-import * as admin from "firebase-admin";
 import * as signupService from "../../../src/service/user/signup";
-import { RequestWrapper } from "../../../src/gateway/requestWrapper";
 import {
   SignupUserRequest,
   SignupUserResponse
 } from "../../../src/proto/userService_pb";
-import { ResponseWrapper } from "../../../src/gateway/responseWrapper";
 import { PercussionApiError } from "../../../src/proto/error_pb";
-import { mocked } from "ts-jest/utils";
 import { ApiException } from "../../../src/error/apiException";
-import { mock } from "ts-mockito";
-
-// TODO : https://qiita.com/rema424/items/ee650a1cf99de178cb90 をまねてみよう
-jest.mock("../../../src/gateway/requestWrapper");
+import { User } from "../../../src/proto/user_pb";
+import { FirebaseUser } from "../../../src/firebase/getUser";
 
 describe("signup", function() {
-  it("should work", function() {
-    const value = 15;
-    const mockedOnSuccess = jest.fn();
-    const mockedOnError = jest.fn();
-
-    signupService.sample(true, value, mockedOnSuccess, mockedOnError);
-
-    expect(mockedOnSuccess).toHaveBeenCalledWith(value * 2);
-    expect(mockedOnSuccess).toHaveBeenCalledTimes(1);
-    expect(mockedOnError).toHaveBeenCalledTimes(0);
+  describe("when no token is set in the request", () => {
+    it("should return NO_TOKEN as error", () => {
+      const request = new SignupUserRequest();
+      request.setToken("");
+      const expectedError = new ApiException(
+        PercussionApiError.ErrorCode.NO_TOKEN,
+        "Valid firebase token is necessary at sign-in",
+        401
+      );
+      expect(
+        signupService.signup(request, jest.fn(), jest.fn())
+      ).rejects.toThrow(expectedError);
+    });
   });
+  describe("when everything is fine", () => {
+    // Token is set correctly.
+    const dummyToken = "dummyToken";
+    const request = new SignupUserRequest();
+    request.setToken(dummyToken);
 
-  // it("should throw exception", function() {
-  // });
+    // getFirebaseUser returns user.
+    const expectedUser = new User();
+    expectedUser.setId("dummyId");
+    expectedUser.setName("dummyName");
+    expectedUser.setPhoto("dummyPhoto");
+    const expectedEmail = "email@mail.com";
+    const expectedFirebaseUser = new FirebaseUser(expectedUser, expectedEmail);
+    const mockedGetFirebaseUser = jest.fn();
+    mockedGetFirebaseUser.mockReturnValueOnce(
+      new Promise<FirebaseUser>(onResolve => onResolve(expectedFirebaseUser))
+    );
 
-  it("should throw exception for auth fail", function() {
-    // const admin = jest.genMockFromModule("firebase-admin");
-    // jest.fn<ICommunicator<IEmail>>(() => ({
-    //   send: jest.fn(),
-    // }));
+    // registerUserToDatabase is success
+    const expectedResponse = new SignupUserResponse();
+    expectedResponse.setUser(expectedUser);
+    const mockedRegisterUserToDb = jest.fn();
+    mockedRegisterUserToDb.mockRejectedValueOnce(
+      new Promise<SignupUserResponse>(onResolve => onResolve(expectedResponse))
+    );
+
+    it("should return SignupResponse instance with registered user info", () => {
+      expect(
+        signupService.signup(
+          request,
+          mockedGetFirebaseUser,
+          mockedRegisterUserToDb
+        )
+      ).resolves.toBe(expectedResponse);
+    });
   });
 });

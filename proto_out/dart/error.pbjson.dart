@@ -21,6 +21,7 @@ const PercussionApiError_ErrorCode$json = const {
     const {'1': 'NO_TOKEN', '2': 1},
     const {'1': 'INVALID_FIREBASE_TOKEN', '2': 2},
     const {'1': 'USER_HAS_BEEN_ALREADY_REGISTERED', '2': 3},
+    const {'1': 'DB_ERROR', '2': 4},
   ],
 };
 

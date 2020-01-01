@@ -18,6 +18,9 @@ const app = express();
 const router = express.Router();
 const port = 3000;
 
+// Investigate logger.
+// https://qiita.com/mt_middle/items/543f83393c357ad3ab12
+
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(

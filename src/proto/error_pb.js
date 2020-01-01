@@ -166,7 +166,8 @@ proto.pj.sakuchin.percussion.proto.PercussionApiError.ErrorCode = {
   UNKNOWN: 0,
   NO_TOKEN: 1,
   INVALID_FIREBASE_TOKEN: 2,
-  USER_HAS_BEEN_ALREADY_REGISTERED: 3
+  USER_HAS_BEEN_ALREADY_REGISTERED: 3,
+  DB_ERROR: 4
 };
 
 /**
