@@ -21,11 +21,10 @@ function runQuery(
   query: string,
   onQueryDone: (err, rows, fields) => void
 ): void {
-  const connection = mysql.createConnection(connectionParams);
-  connection.connect();
-
   console.log(`query - ${query}`);
 
+  const connection = mysql.createConnection(connectionParams);
+  connection.connect();
   connection.query(query, onQueryDone);
   connection.end();
 }
@@ -42,28 +41,25 @@ function mapApiErrorCodeWithDbError(
   return errorCode;
 }
 
-export function addUser(
-  user: User,
-  mail: string,
-  onSuccess: () => void,
-  onError: (error: ApiException) => void
-): void {
-  const query =
-    `INSERT INTO ${USER_TABLE} VALUES (` +
-    `'${user.getId()}'` +
-    `,'${user.getName()}'` +
-    `,'${user.getPhoto()}'` +
-    `,'${mail}'` +
-    `)`;
+export function addUser(user: User, mail: string): Promise<User> {
+  return new Promise<User>((onResolve, onReject) => {
+    const query =
+      `INSERT INTO ${USER_TABLE} VALUES (` +
+      `'${user.getId()}'` +
+      `,'${user.getName()}'` +
+      `,'${user.getPhoto()}'` +
+      `,'${mail}'` +
+      `)`;
 
-  runQuery(query, (err, rows, fields) => {
-    if (err) {
-      console.log(`errno - ${err.errno}`);
-      const errorCode = mapApiErrorCodeWithDbError(err);
-      onError(new ApiException(errorCode, err.message, 403));
-    } else {
-      onSuccess();
-    }
+    runQuery(query, (err, rows, fields) => {
+      if (err) {
+        console.log(`errno - ${err.errno}`);
+        const errorCode = mapApiErrorCodeWithDbError(err);
+        onReject(new ApiException(errorCode, err.message, 403));
+      } else {
+        onResolve(user);
+      }
+    });
   });
 }
 

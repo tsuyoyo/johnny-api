@@ -42,6 +42,7 @@ router.get("/debug/users", (req, res) =>
   mysqlService.getUsers((result: object) => res.send(JSON.stringify(result)))
 );
 
+// Routers
 app.use("/", router);
 app.use("/user", provideUserRouter(defaultAuth));
 

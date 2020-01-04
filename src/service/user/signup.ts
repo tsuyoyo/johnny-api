@@ -27,28 +27,18 @@ function getToken(request: SignupUserRequest): Promise<string> {
 export function signup(
   request: SignupUserRequest,
   getFirebaseUser: (token: string) => Promise<FirebaseUser>,
-  registerUserToDatabase: (
-    user: User,
-    email: string,
-    onRegisterSuccess: () => void,
-    onRegisterFailed: (ApiException) => void
-  ) => void
+  registerUserToDatabase: (user: User, email: string) => Promise<User>
 ): Promise<SignupUserResponse> {
-  return new Promise<SignupUserResponse>((onResolve, onReject) => {
+  return new Promise<SignupUserResponse>(onResolve => {
     getToken(request)
       .then((token: string) => getFirebaseUser(token))
-      .then((firebaseUser: FirebaseUser) => {
-        const onRegisterSuccess = (): void => {
-          const signupResonse = new SignupUserResponse();
-          signupResonse.setUser(firebaseUser.user);
-          onResolve(signupResonse);
-        };
-        registerUserToDatabase(
-          firebaseUser.user,
-          firebaseUser.email,
-          onRegisterSuccess,
-          onReject
-        );
+      .then((firebaseUser: FirebaseUser) =>
+        registerUserToDatabase(firebaseUser.user, firebaseUser.email)
+      )
+      .then((user: User) => {
+        const signupResonse = new SignupUserResponse();
+        signupResonse.setUser(user);
+        onResolve(signupResonse);
       });
   });
 }

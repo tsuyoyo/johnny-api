@@ -10,9 +10,10 @@ import { FirebaseUser } from "../../../src/firebase/getUser";
 
 describe("signup", function() {
   describe("when no token is set in the request", () => {
+    const request = new SignupUserRequest();
+    request.setToken("");
+
     it("should return NO_TOKEN as error", () => {
-      const request = new SignupUserRequest();
-      request.setToken("");
       const expectedError = new ApiException(
         PercussionApiError.ErrorCode.NO_TOKEN,
         "Valid firebase token is necessary at sign-in",
@@ -23,6 +24,7 @@ describe("signup", function() {
       ).rejects.toThrow(expectedError);
     });
   });
+
   describe("when everything is fine", () => {
     // Token is set correctly.
     const dummyToken = "dummyToken";
@@ -46,7 +48,7 @@ describe("signup", function() {
     expectedResponse.setUser(expectedUser);
     const mockedRegisterUserToDb = jest.fn();
     mockedRegisterUserToDb.mockRejectedValueOnce(
-      new Promise<SignupUserResponse>(onResolve => onResolve(expectedResponse))
+      new Promise<User>(onResolve => onResolve(expectedUser))
     );
 
     it("should return SignupResponse instance with registered user info", () => {
