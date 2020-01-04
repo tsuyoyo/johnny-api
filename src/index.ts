@@ -1,9 +1,9 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as mysqlService from "./service/database/mysqlService";
-import { logApiRequest } from "./middleware/logger";
 import * as admin from "firebase-admin";
 import { provideUserRouter } from "./router/user";
+import * as morgan from "morgan";
 
 const serviceAccount = require("/tmp/johnny/johnny-app-dev-firebase-adminsdk-8q1im-6b2b072cc2.json");
 
@@ -18,8 +18,10 @@ const app = express();
 const router = express.Router();
 const port = 3000;
 
-// Investigate logger.
+// Logger.
 // https://qiita.com/mt_middle/items/543f83393c357ad3ab12
+// https://www.npmjs.com/package/morgan
+app.use(morgan("tiny"));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -29,9 +31,7 @@ app.use(
     limit: "100kb",
     type: "application/protobuf"
   })
-); // For protobuf
-
-router.use(logApiRequest);
+);
 
 // Example to test
 // $ curl -XPOST http://localhost:3000/user -H "Content-Type:application/x-www-form-urlencoded" -d "name=user_c&mail=userc@mail.com" -w '%{http_code}\n'

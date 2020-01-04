@@ -8,6 +8,8 @@ import * as admin from "firebase-admin";
 import { getRequestType, RequestType } from "../gateway/requestDataType";
 import { getFirebaseUser } from "../firebase/getUser";
 import * as mysqlService from "../service/database/mysqlService";
+import { SignupUserResponse } from "../proto/userService_pb";
+import { ApiException } from "../error/apiException";
 
 function signup(
   request: Request,
@@ -23,8 +25,8 @@ function signup(
       getFirebaseUser(defaultAuth),
       mysqlService.addUser
     )
-    .then(responseWrapper.respondSuccess)
-    .catch(responseWrapper.respondError);
+    .then((res: SignupUserResponse) => responseWrapper.respondSuccess(res))
+    .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
 export function provideUserRouter(defaultAuth: admin.auth.Auth): Router {
