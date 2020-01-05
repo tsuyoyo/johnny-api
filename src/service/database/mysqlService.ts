@@ -11,7 +11,7 @@ const connectionParams = {
 };
 
 // TABLES
-const USER_TABLE = "test_table_01";
+const USER_TABLE = "users";
 
 // Ref : error codes from sqlite.
 // https://github.com/mysqljs/mysql/blob/ad014c82b2cbaf47acae1cc39e5533d3cb6eb882/lib/protocol/constants/errors.js
