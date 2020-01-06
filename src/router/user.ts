@@ -7,9 +7,9 @@ import {
 import * as admin from "firebase-admin";
 import { getRequestType, RequestType } from "../gateway/requestDataType";
 import { getFirebaseUser } from "../firebase/getUser";
-import * as mysqlService from "../service/database/mysqlService";
 import { SignupUserResponse } from "../proto/userService_pb";
 import { ApiException } from "../error/apiException";
+import * as userTable from "../service/database/users";
 
 function signup(
   request: Request,
@@ -23,7 +23,7 @@ function signup(
     .signup(
       requestWrapper.deserializeData(),
       getFirebaseUser(defaultAuth),
-      mysqlService.addUser
+      userTable.addUser
     )
     .then((res: SignupUserResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));

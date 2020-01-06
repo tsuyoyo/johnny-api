@@ -1,6 +1,6 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as mysqlService from "./service/database/mysqlService";
+import * as mysqlWrapper from "./service/database/mysqlWrapper";
 import * as admin from "firebase-admin";
 import { provideUserRouter } from "./router/user";
 import * as morgan from "morgan";
@@ -39,7 +39,7 @@ router.get("/", (req, res) => res.send("Hello World!!"));
 
 // NOTE : validationのmiddlewareを作って、parameterチェックもmiddlewareでやるといいかも
 router.get("/debug/users", (req, res) =>
-  mysqlService.getUsers((result: object) => res.send(JSON.stringify(result)))
+  mysqlWrapper.getUsers((result: object) => res.send(JSON.stringify(result)))
 );
 
 // Routers
