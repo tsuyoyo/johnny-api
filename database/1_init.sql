@@ -30,11 +30,11 @@ CREATE TABLE test_db.areas (
     prefecture INT not null
  ) AUTO_INCREMENT = 100;
 START TRANSACTION;
-INSERT INTO test_db.areas VALUE (50, '渋谷', 13);
-INSERT INTO test_db.areas VALUE (null, '新宿', 13);
-INSERT INTO test_db.areas VALUE (null, '池袋', 13);
-INSERT INTO test_db.areas VALUE (60, '市川', 12);
-INSERT INTO test_db.areas VALUE (null, '本八幡', 12);
+INSERT INTO test_db.areas VALUE (50, N'渋谷', 13);
+INSERT INTO test_db.areas VALUE (null, N'新宿', 13);
+INSERT INTO test_db.areas VALUE (null, N'池袋', 13);
+INSERT INTO test_db.areas VALUE (60, N'市川', 12);
+INSERT INTO test_db.areas VALUE (null, N'本八幡', 12);
 COMMIT;
 
 -- ************************

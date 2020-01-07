@@ -1,11 +1,8 @@
-import { PercussionApiError } from "../../proto/error_pb";
-import { ApiException } from "../../error/apiException";
-import {
-  SignupUserRequest,
-  SignupUserResponse
-} from "../../proto/userService_pb";
-import { FirebaseUser } from "../../firebase/getUser";
-import { User } from "../../proto/user_pb";
+import { PercussionApiError } from "../proto/error_pb";
+import { ApiException } from "../error/apiException";
+import { SignupUserRequest, SignupUserResponse } from "../proto/userService_pb";
+import { FirebaseUser } from "../firebase/getUser";
+import { User } from "../proto/user_pb";
 
 function getToken(request: SignupUserRequest): Promise<string> {
   return new Promise<string>((onResolve, onReject) => {

@@ -1,4 +1,4 @@
-import { User } from "../../proto/user_pb";
+import { User } from "../proto/user_pb";
 import { runQuery } from "./mysqlWrapper";
 
 const USER_TABLE = "users";

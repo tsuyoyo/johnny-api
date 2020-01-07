@@ -1,12 +1,13 @@
 import * as mysql from "mysql";
-import { PercussionApiError } from "../../proto/error_pb";
-import { ApiException } from "../../error/apiException";
+import { PercussionApiError } from "../proto/error_pb";
+import { ApiException } from "../error/apiException";
 
 const connectionParams = {
   host: process.env.MYSQL_HOST,
   user: process.env.TEST_DB_USER,
   password: process.env.TEST_DB_PASSWORD,
-  database: process.env.TEST_DB_NAME
+  database: process.env.TEST_DB_NAME,
+  charset: "utf8_general_ci"
 };
 
 // Ref : error codes from sqlite.

@@ -20,14 +20,6 @@ export class RequestWrapper<T extends Message> {
     this.fromObject = fromObject;
   }
 
-  // getAccessToken(): string {
-  //   return (
-  //     this.request.body.token ||
-  //     this.request.query.token ||
-  //     this.request.headers["x-access-token"]
-  //   );
-  // }
-
   deserializeData(): T {
     switch (this.requestType) {
       case RequestType.JSON:

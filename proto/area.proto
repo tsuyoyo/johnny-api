@@ -51,3 +51,9 @@ enum Prefecture {
   KAGOSHIMA = 46;
   OKINAWA = 47;
 }
+
+message Area {
+  int32 id = 1;
+  string name = 2;
+  Prefecture prefecture = 3;
+}

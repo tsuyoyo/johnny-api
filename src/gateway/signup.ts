@@ -1,10 +1,7 @@
-import { ResponseWrapper } from "../responseWrapper";
-import { RequestWrapper } from "../requestWrapper";
-import {
-  SignupUserRequest,
-  SignupUserResponse
-} from "../../proto/userService_pb";
-import { RequestType } from "../requestDataType";
+import { ResponseWrapper } from "./responseWrapper";
+import { RequestWrapper } from "./requestWrapper";
+import { SignupUserRequest, SignupUserResponse } from "../proto/userService_pb";
+import { RequestType } from "./requestDataType";
 import { Request, Response } from "express";
 
 function convertObjectToSingupUserRequest(obj: object): SignupUserRequest {

@@ -1,8 +1,9 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as mysqlWrapper from "./service/database/mysqlWrapper";
+import * as mysqlWrapper from "./database/mysqlWrapper";
 import * as admin from "firebase-admin";
 import { provideUserRouter } from "./router/user";
+import { provideAreaRouter } from "./router/area";
 import * as morgan from "morgan";
 
 const serviceAccount = require("/tmp/johnny/johnny-app-dev-firebase-adminsdk-8q1im-6b2b072cc2.json");
@@ -45,5 +46,6 @@ router.get("/debug/users", (req, res) =>
 // Routers
 app.use("/", router);
 app.use("/user", provideUserRouter(defaultAuth));
+app.use("/area", provideAreaRouter());
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

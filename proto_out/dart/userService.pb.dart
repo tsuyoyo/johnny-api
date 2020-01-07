@@ -9,7 +9,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'user.pb.dart' as $0;
+import 'user.pb.dart' as $1;
 
 class SignupUserRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('SignupUserRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
@@ -44,7 +44,7 @@ class SignupUserRequest extends $pb.GeneratedMessage {
 
 class SignupUserResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('SignupUserResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
-    ..aOM<$0.User>(1, 'user', subBuilder: $0.User.create)
+    ..aOM<$1.User>(1, 'user', subBuilder: $1.User.create)
     ..hasRequiredFields = false
   ;
 
@@ -64,14 +64,14 @@ class SignupUserResponse extends $pb.GeneratedMessage {
   static SignupUserResponse _defaultInstance;
 
   @$pb.TagNumber(1)
-  $0.User get user => $_getN(0);
+  $1.User get user => $_getN(0);
   @$pb.TagNumber(1)
-  set user($0.User v) { setField(1, v); }
+  set user($1.User v) { setField(1, v); }
   @$pb.TagNumber(1)
   $core.bool hasUser() => $_has(0);
   @$pb.TagNumber(1)
   void clearUser() => clearField(1);
   @$pb.TagNumber(1)
-  $0.User ensureUser() => $_ensure(0);
+  $1.User ensureUser() => $_ensure(0);
 }
 
