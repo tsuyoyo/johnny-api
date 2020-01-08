@@ -1,12 +1,12 @@
-import * as signupService from "../../../src/service/signup";
+import * as signupService from "../../src/service/signup";
 import {
   SignupUserRequest,
   SignupUserResponse
-} from "../../../src/proto/userService_pb";
-import { PercussionApiError } from "../../../src/proto/error_pb";
-import { ApiException } from "../../../src/error/apiException";
-import { User } from "../../../src/proto/user_pb";
-import { FirebaseUser } from "../../../src/firebase/getUser";
+} from "../../src/proto/userService_pb";
+import { PercussionApiError } from "../../src/proto/error_pb";
+import { ApiException } from "../../src/error/apiException";
+import { User } from "../../src/proto/user_pb";
+import { FirebaseUser } from "../../src/firebase/getUser";
 
 describe("signup", function() {
   describe("when no token is set in the request", () => {

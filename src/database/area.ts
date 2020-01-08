@@ -1,5 +1,7 @@
 import { Area, PrefectureMap } from "../proto/area_pb";
 import { runQuery } from "./mysqlWrapper";
+import { ApiException } from "../error/apiException";
+import { PercussionApiError } from "../proto/error_pb";
 
 const AREAS_TABLE = "areas";
 
@@ -49,6 +51,36 @@ export function getAreasByPrefecture(
           areas.push(area);
         }
         onResolve(areas);
+      }
+    });
+  });
+}
+
+export function getAreasById(id: string): Promise<Area> {
+  return new Promise<Area>((onResolve, onReject) => {
+    const query = `SELECT * from ${AREAS_TABLE} where id=${id}`;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    runQuery(query, (err, rows, _fields) => {
+      if (err) {
+        onReject(err);
+      } else {
+        if (rows.length == 0) {
+          onReject(
+            new ApiException(
+              PercussionApiError.ErrorCode.DB_ERROR,
+              `Area id=${id} is not found`,
+              404
+            )
+          );
+        } else {
+          const areaObj = rows[0];
+          const area = new Area();
+          area.setId(areaObj["id"]);
+          area.setName(areaObj["name"]);
+          area.setPrefecture(areaObj["prefecture"]);
+          onResolve(area);
+        }
       }
     });
   });

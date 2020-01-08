@@ -1,6 +1,10 @@
 import { ResponseWrapper } from "./responseWrapper";
 import { RequestWrapper } from "./requestWrapper";
-import { AddAreaRequest, AddAreaResponse, GetAreaResponse } from "../proto/areaService_pb";
+import {
+  AddAreaRequest,
+  AddAreaResponse,
+  GetAreaResponse
+} from "../proto/areaService_pb";
 import { RequestType } from "./requestDataType";
 import { Request, Response } from "express";
 
