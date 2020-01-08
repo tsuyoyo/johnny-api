@@ -1,4 +1,4 @@
-import * as signupService from "../../../src/service/user/signup";
+import * as signupService from "../../../src/service/signup";
 import {
   SignupUserRequest,
   SignupUserResponse
@@ -47,18 +47,18 @@ describe("signup", function() {
     const expectedResponse = new SignupUserResponse();
     expectedResponse.setUser(expectedUser);
     const mockedRegisterUserToDb = jest.fn();
-    mockedRegisterUserToDb.mockRejectedValueOnce(
+    mockedRegisterUserToDb.mockReturnValueOnce(
       new Promise<User>(onResolve => onResolve(expectedUser))
     );
 
-    it("should return SignupResponse instance with registered user info", () => {
-      expect(
+    it("should return SignupResponse instance with registered user info", async () => {
+      await expect(
         signupService.signup(
           request,
           mockedGetFirebaseUser,
           mockedRegisterUserToDb
         )
-      ).resolves.toBe(expectedResponse);
+      ).resolves.toEqual(expectedResponse);
     });
   });
 });
