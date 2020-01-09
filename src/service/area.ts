@@ -2,7 +2,7 @@ import { ApiException } from "../error/apiException";
 import { PrefectureMap, Area } from "../proto/area_pb";
 import { AddAreaRequest, AddAreaResponse } from "../proto/areaService_pb";
 
-export function addArea(
+export async function addArea(
   request: AddAreaRequest,
   addAreaToDatabase: (
     name: string,

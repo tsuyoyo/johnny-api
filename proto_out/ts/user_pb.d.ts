@@ -2,6 +2,7 @@
 // file: proto/user.proto
 
 import * as jspb from "google-protobuf";
+import * as proto_area_pb from "../proto/area_pb";
 
 export class User extends jspb.Message {
   getId(): string;
@@ -28,6 +29,28 @@ export namespace User {
     id: string,
     name: string,
     photo: string,
+  }
+}
+
+export class UserProfile extends jspb.Message {
+  clearActivityareasList(): void;
+  getActivityareasList(): Array<proto_area_pb.Area>;
+  setActivityareasList(value: Array<proto_area_pb.Area>): void;
+  addActivityareas(value?: proto_area_pb.Area, index?: number): proto_area_pb.Area;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): UserProfile.AsObject;
+  static toObject(includeInstance: boolean, msg: UserProfile): UserProfile.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: UserProfile, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): UserProfile;
+  static deserializeBinaryFromReader(message: UserProfile, reader: jspb.BinaryReader): UserProfile;
+}
+
+export namespace UserProfile {
+  export type AsObject = {
+    activityareasList: Array<proto_area_pb.Area.AsObject>,
   }
 }
 

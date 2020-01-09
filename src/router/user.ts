@@ -1,4 +1,4 @@
-import { Request, Response, Router } from "express";
+import { Request, Response, Router, request, response } from "express";
 import * as signupService from "../service/signup";
 import {
   getSignupUserReqeustWrapper,
@@ -34,5 +34,14 @@ export function provideUserRouter(defaultAuth: admin.auth.Auth): Router {
   router.post("/signup", (request, response) =>
     signup(request, response, defaultAuth)
   );
+  router.get("/:id", (request, response) => {
+    const userId = request.params["id"];
+  });
+  router.put("/:id", (request, response) => {
+    const userId = request.params["id"];
+  });
+  router.delete("/:id", (request, response) => {
+    const userId = request.params["id"];
+  });
   return router;
 }

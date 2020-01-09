@@ -46,3 +46,59 @@ export namespace SignupUserResponse {
   }
 }
 
+export class GetUserResponse extends jspb.Message {
+  hasUser(): boolean;
+  clearUser(): void;
+  getUser(): proto_user_pb.User | undefined;
+  setUser(value?: proto_user_pb.User): void;
+
+  hasUserprofile(): boolean;
+  clearUserprofile(): void;
+  getUserprofile(): proto_user_pb.UserProfile | undefined;
+  setUserprofile(value?: proto_user_pb.UserProfile): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): GetUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: GetUserResponse): GetUserResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: GetUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): GetUserResponse;
+  static deserializeBinaryFromReader(message: GetUserResponse, reader: jspb.BinaryReader): GetUserResponse;
+}
+
+export namespace GetUserResponse {
+  export type AsObject = {
+    user?: proto_user_pb.User.AsObject,
+    userprofile?: proto_user_pb.UserProfile.AsObject,
+  }
+}
+
+export class PutUserResponse extends jspb.Message {
+  hasUser(): boolean;
+  clearUser(): void;
+  getUser(): proto_user_pb.User | undefined;
+  setUser(value?: proto_user_pb.User): void;
+
+  hasUserprofile(): boolean;
+  clearUserprofile(): void;
+  getUserprofile(): proto_user_pb.UserProfile | undefined;
+  setUserprofile(value?: proto_user_pb.UserProfile): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): PutUserResponse.AsObject;
+  static toObject(includeInstance: boolean, msg: PutUserResponse): PutUserResponse.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: PutUserResponse, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): PutUserResponse;
+  static deserializeBinaryFromReader(message: PutUserResponse, reader: jspb.BinaryReader): PutUserResponse;
+}
+
+export namespace PutUserResponse {
+  export type AsObject = {
+    user?: proto_user_pb.User.AsObject,
+    userprofile?: proto_user_pb.UserProfile.AsObject,
+  }
+}
+

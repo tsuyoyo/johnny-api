@@ -19,3 +19,19 @@ const SignupUserResponse$json = const {
   ],
 };
 
+const GetUserResponse$json = const {
+  '1': 'GetUserResponse',
+  '2': const [
+    const {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.pj.sakuchin.percussion.proto.User', '10': 'user'},
+    const {'1': 'userProfile', '3': 2, '4': 1, '5': 11, '6': '.pj.sakuchin.percussion.proto.UserProfile', '10': 'userProfile'},
+  ],
+};
+
+const PutUserResponse$json = const {
+  '1': 'PutUserResponse',
+  '2': const [
+    const {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.pj.sakuchin.percussion.proto.User', '10': 'user'},
+    const {'1': 'userProfile', '3': 2, '4': 1, '5': 11, '6': '.pj.sakuchin.percussion.proto.UserProfile', '10': 'userProfile'},
+  ],
+};
+

@@ -9,6 +9,8 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
+import 'area.pb.dart' as $0;
+
 class User extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('User', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
     ..aOS(1, 'id')
@@ -58,5 +60,30 @@ class User extends $pb.GeneratedMessage {
   $core.bool hasPhoto() => $_has(2);
   @$pb.TagNumber(3)
   void clearPhoto() => clearField(3);
+}
+
+class UserProfile extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('UserProfile', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..pc<$0.Area>(1, 'activityAreas', $pb.PbFieldType.PM, protoName: 'activityAreas', subBuilder: $0.Area.create)
+    ..hasRequiredFields = false
+  ;
+
+  UserProfile._() : super();
+  factory UserProfile() => create();
+  factory UserProfile.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory UserProfile.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  UserProfile clone() => UserProfile()..mergeFromMessage(this);
+  UserProfile copyWith(void Function(UserProfile) updates) => super.copyWith((message) => updates(message as UserProfile));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static UserProfile create() => UserProfile._();
+  UserProfile createEmptyInstance() => create();
+  static $pb.PbList<UserProfile> createRepeated() => $pb.PbList<UserProfile>();
+  @$core.pragma('dart2js:noInline')
+  static UserProfile getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<UserProfile>(create);
+  static UserProfile _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$0.Area> get activityAreas => $_getList(0);
 }
 

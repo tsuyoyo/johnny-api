@@ -5,7 +5,7 @@ import { PercussionApiError } from "../proto/error_pb";
 
 const AREAS_TABLE = "areas";
 
-export function addArea(
+export async function addArea(
   name: string,
   prefecture: PrefectureMap[keyof PrefectureMap]
 ): Promise<Area> {
@@ -15,7 +15,6 @@ export function addArea(
       `, N'${name}'` +
       `, ${prefecture}` +
       `)`;
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
       if (err) {
@@ -31,57 +30,73 @@ export function addArea(
   });
 }
 
-export function getAreasByPrefecture(
+function buildAreaFromJsObj(areaObj: object): Area {
+  const area = new Area();
+  area.setId(areaObj["id"]);
+  area.setName(areaObj["name"]);
+  area.setPrefecture(areaObj["prefecture"]);
+  return area;
+}
+
+function buildAreasArrayFromJsObj(areasObj: any): Array<Area> {
+  const areas = new Array<Area>();
+  for (const areaObj of areasObj) {
+    areas.push(buildAreaFromJsObj(areaObj));
+  }
+  return areas;
+}
+
+export async function getAreasByPrefecture(
   prefecture: PrefectureMap[keyof PrefectureMap]
 ): Promise<Array<Area>> {
   return new Promise<Array<Area>>((onResolve, onReject) => {
     const query = `SELECT * from ${AREAS_TABLE} where prefecture=${prefecture}`;
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
       if (err) {
         onReject(err);
       } else {
-        const areas = new Array<Area>();
-        for (const areaObj of rows) {
-          const area = new Area();
-          area.setId(areaObj["id"]);
-          area.setName(areaObj["name"]);
-          area.setPrefecture(areaObj["prefecture"]);
-          areas.push(area);
-        }
-        onResolve(areas);
+        onResolve(buildAreasArrayFromJsObj(rows));
       }
     });
   });
 }
 
-export function getAreasById(id: string): Promise<Area> {
+export async function getAreaById(id: number): Promise<Area> {
   return new Promise<Area>((onResolve, onReject) => {
     const query = `SELECT * from ${AREAS_TABLE} where id=${id}`;
-
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
       if (err) {
         onReject(err);
+      } else if (rows.length > 0) {
+        onResolve(buildAreaFromJsObj(rows[0]));
       } else {
-        if (rows.length == 0) {
-          onReject(
-            new ApiException(
-              PercussionApiError.ErrorCode.DB_ERROR,
-              `Area id=${id} is not found`,
-              404
-            )
-          );
-        } else {
-          const areaObj = rows[0];
-          const area = new Area();
-          area.setId(areaObj["id"]);
-          area.setName(areaObj["name"]);
-          area.setPrefecture(areaObj["prefecture"]);
-          onResolve(area);
-        }
+        const notFoundError = new ApiException(
+          PercussionApiError.ErrorCode.DB_ERROR,
+          `Area id=${id} is not found`,
+          404
+        );
+        onReject(notFoundError);
       }
+    });
+  });
+}
+
+export async function getAreasByIds(ids: Array<number>): Promise<Array<Area>> {
+  return new Promise<Array<Area>>((onResolve, onReject) => {
+    let query = `SELECT * from ${AREAS_TABLE} where id in (`;
+    for (let i = 0; i < ids.length; i++) {
+      query += ids[i];
+      if (i < ids.length) {
+        query += ",";
+      } else {
+        query += ")";
+      }
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    runQuery(query, (err, rows, _fields) => {
+      return onResolve(buildAreasArrayFromJsObj(rows));
     });
   });
 }

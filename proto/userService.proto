@@ -4,9 +4,19 @@ package pj.sakuchin.percussion.proto;
 import "proto/user.proto";
 
 message SignupUserRequest {
-    string token = 1;
+  string token = 1;
 }
 
 message SignupUserResponse {
   User user = 1;
+}
+
+message GetUserResponse {
+  User user = 1;
+  UserProfile userProfile = 2;
+}
+
+message PutUserResponse {
+  User user = 1;
+  UserProfile userProfile = 2;
 }

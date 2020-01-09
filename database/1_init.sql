@@ -20,6 +20,18 @@ INSERT INTO test_db.users VALUES ('id_b', 'test_b', 'http://photo.com', 'test_b@
 INSERT INTO test_db.users VALUES ('id_c', 'test_c', 'http://photo.com', 'test_c@mail.com');
 COMMIT;
 
+-- (Note : to prevent adding duplicated activity area)
+-- ALTER TABLE `table` ADD UNIQUE (
+-- `a` ,
+-- `b` ,
+-- `c`
+-- );
+CREATE TABLE test_db.user_activity_areas (
+    id INT primary key AUTO_INCREMENT,
+    user_id VARCHAR(256) not null,
+    area_id INT not null
+ ) AUTO_INCREMENT = 1;
+
 -- ************************
 -- Area is expected to be used to bind a lot of information.
 -- (Which area the studio is, Which area the player often visit...etc)
