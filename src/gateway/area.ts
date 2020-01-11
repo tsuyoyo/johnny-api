@@ -10,7 +10,6 @@ import { Request, Response } from "express";
 
 function convertObjectToAddAreaRequest(obj: object): AddAreaRequest {
   const req = new AddAreaRequest();
-  console.log(`aaaaa - ${JSON.stringify(obj)}`);
   req.setAreaname(obj["areaName"]);
   req.setPrefecture(obj["prefecture"]);
   return req;

@@ -32,6 +32,7 @@ export namespace PercussionApiError {
     INVALID_FIREBASE_TOKEN: 2;
     USER_HAS_BEEN_ALREADY_REGISTERED: 3;
     DB_ERROR: 4;
+    INVALID_PARAMETER: 5;
   }
 
   export const ErrorCode: ErrorCodeMap;

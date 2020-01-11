@@ -1,0 +1,4 @@
+syntax = "proto3";
+package pj.sakuchin.percussion.proto;
+
+message EmptyResponse {}

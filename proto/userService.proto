@@ -11,12 +11,12 @@ message SignupUserResponse {
   User user = 1;
 }
 
-message GetUserResponse {
+message GetUserProfileResponse {
   User user = 1;
   UserProfile userProfile = 2;
 }
 
-message PutUserResponse {
+message PutUserProfileRequest {
   User user = 1;
   UserProfile userProfile = 2;
 }

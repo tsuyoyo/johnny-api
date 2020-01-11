@@ -75,27 +75,27 @@ class SignupUserResponse extends $pb.GeneratedMessage {
   $1.User ensureUser() => $_ensure(0);
 }
 
-class GetUserResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('GetUserResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+class GetUserProfileResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('GetUserProfileResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
     ..aOM<$1.User>(1, 'user', subBuilder: $1.User.create)
     ..aOM<$1.UserProfile>(2, 'userProfile', protoName: 'userProfile', subBuilder: $1.UserProfile.create)
     ..hasRequiredFields = false
   ;
 
-  GetUserResponse._() : super();
-  factory GetUserResponse() => create();
-  factory GetUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory GetUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  GetUserResponse clone() => GetUserResponse()..mergeFromMessage(this);
-  GetUserResponse copyWith(void Function(GetUserResponse) updates) => super.copyWith((message) => updates(message as GetUserResponse));
+  GetUserProfileResponse._() : super();
+  factory GetUserProfileResponse() => create();
+  factory GetUserProfileResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetUserProfileResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetUserProfileResponse clone() => GetUserProfileResponse()..mergeFromMessage(this);
+  GetUserProfileResponse copyWith(void Function(GetUserProfileResponse) updates) => super.copyWith((message) => updates(message as GetUserProfileResponse));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static GetUserResponse create() => GetUserResponse._();
-  GetUserResponse createEmptyInstance() => create();
-  static $pb.PbList<GetUserResponse> createRepeated() => $pb.PbList<GetUserResponse>();
+  static GetUserProfileResponse create() => GetUserProfileResponse._();
+  GetUserProfileResponse createEmptyInstance() => create();
+  static $pb.PbList<GetUserProfileResponse> createRepeated() => $pb.PbList<GetUserProfileResponse>();
   @$core.pragma('dart2js:noInline')
-  static GetUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetUserResponse>(create);
-  static GetUserResponse _defaultInstance;
+  static GetUserProfileResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetUserProfileResponse>(create);
+  static GetUserProfileResponse _defaultInstance;
 
   @$pb.TagNumber(1)
   $1.User get user => $_getN(0);
@@ -120,27 +120,27 @@ class GetUserResponse extends $pb.GeneratedMessage {
   $1.UserProfile ensureUserProfile() => $_ensure(1);
 }
 
-class PutUserResponse extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PutUserResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+class PutUserProfileRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PutUserProfileRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
     ..aOM<$1.User>(1, 'user', subBuilder: $1.User.create)
     ..aOM<$1.UserProfile>(2, 'userProfile', protoName: 'userProfile', subBuilder: $1.UserProfile.create)
     ..hasRequiredFields = false
   ;
 
-  PutUserResponse._() : super();
-  factory PutUserResponse() => create();
-  factory PutUserResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PutUserResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  PutUserResponse clone() => PutUserResponse()..mergeFromMessage(this);
-  PutUserResponse copyWith(void Function(PutUserResponse) updates) => super.copyWith((message) => updates(message as PutUserResponse));
+  PutUserProfileRequest._() : super();
+  factory PutUserProfileRequest() => create();
+  factory PutUserProfileRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PutUserProfileRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PutUserProfileRequest clone() => PutUserProfileRequest()..mergeFromMessage(this);
+  PutUserProfileRequest copyWith(void Function(PutUserProfileRequest) updates) => super.copyWith((message) => updates(message as PutUserProfileRequest));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static PutUserResponse create() => PutUserResponse._();
-  PutUserResponse createEmptyInstance() => create();
-  static $pb.PbList<PutUserResponse> createRepeated() => $pb.PbList<PutUserResponse>();
+  static PutUserProfileRequest create() => PutUserProfileRequest._();
+  PutUserProfileRequest createEmptyInstance() => create();
+  static $pb.PbList<PutUserProfileRequest> createRepeated() => $pb.PbList<PutUserProfileRequest>();
   @$core.pragma('dart2js:noInline')
-  static PutUserResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutUserResponse>(create);
-  static PutUserResponse _defaultInstance;
+  static PutUserProfileRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutUserProfileRequest>(create);
+  static PutUserProfileRequest _defaultInstance;
 
   @$pb.TagNumber(1)
   $1.User get user => $_getN(0);

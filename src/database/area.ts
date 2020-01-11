@@ -5,7 +5,7 @@ import { PercussionApiError } from "../proto/error_pb";
 
 const AREAS_TABLE = "areas";
 
-export async function addArea(
+export async function insertArea(
   name: string,
   prefecture: PrefectureMap[keyof PrefectureMap]
 ): Promise<Area> {
@@ -46,7 +46,7 @@ function buildAreasArrayFromJsObj(areasObj: any): Array<Area> {
   return areas;
 }
 
-export async function getAreasByPrefecture(
+export async function selectAreasByPrefecture(
   prefecture: PrefectureMap[keyof PrefectureMap]
 ): Promise<Array<Area>> {
   return new Promise<Array<Area>>((onResolve, onReject) => {
@@ -62,7 +62,7 @@ export async function getAreasByPrefecture(
   });
 }
 
-export async function getAreaById(id: number): Promise<Area> {
+export async function selectAreaById(id: number): Promise<Area> {
   return new Promise<Area>((onResolve, onReject) => {
     const query = `SELECT * from ${AREAS_TABLE} where id=${id}`;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -83,7 +83,9 @@ export async function getAreaById(id: number): Promise<Area> {
   });
 }
 
-export async function getAreasByIds(ids: Array<number>): Promise<Array<Area>> {
+export async function selectAreasByIds(
+  ids: Array<number>
+): Promise<Array<Area>> {
   return new Promise<Array<Area>>((onResolve, onReject) => {
     let query = `SELECT * from ${AREAS_TABLE} where id in (`;
     for (let i = 0; i < ids.length; i++) {
