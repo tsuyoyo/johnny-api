@@ -45,14 +45,3 @@ export function runQuery(
   });
   connection.end();
 }
-
-// 消す
-export function getUsers(onSuccess: (res: object) => void): void {
-  runQuery("select * from test_table_01;", (err, rows, fields) => {
-    if (err) {
-      console.log("err: " + err);
-    } else {
-      onSuccess(rows);
-    }
-  });
-}

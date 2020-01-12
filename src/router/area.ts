@@ -9,24 +9,23 @@ import {
 } from "../gateway/area";
 import { Area } from "../proto/area_pb";
 import { AddAreaResponse, GetAreaResponse } from "../proto/areaService_pb";
-import { ApiException } from "../error/apiException";
-import { PercussionApiError } from "../proto/error_pb";
+import { ApiException, invalidParameterError } from "../error/apiException";
+
+function getPromiseToGetAreasByParameter(
+  request: Request
+): Promise<Array<Area>> {
+  if (request.query.prefecture) {
+    return areaTable.selectAreasByPrefecture(request.query.prefecture);
+  } else {
+    return Promise.reject(invalidParameterError("query parameter is required"));
+  }
+}
 
 function getArea(request: Request, response: Response): void {
   const reqType: RequestType = getRequestType(request.headers["content-type"]);
   const responseWrapper = getGetAreaResponseWrapper(response, reqType);
-  if (!request.query.prefecture) {
-    responseWrapper.respondError(
-      new ApiException(
-        PercussionApiError.ErrorCode.INVALID_PARAMETER,
-        "no parameter to query area",
-        404
-      )
-    );
-    return;
-  }
-  areaTable
-    .selectAreasByPrefecture(request.query.prefecture)
+
+  getPromiseToGetAreasByParameter(request)
     .then((areas: Array<Area>) => {
       const getGetAreaResponse = new GetAreaResponse();
       getGetAreaResponse.setAreasList(areas);
@@ -39,6 +38,7 @@ function postArea(request: Request, response: Response): void {
   const reqType: RequestType = getRequestType(request.headers["content-type"]);
   const responseWrapper = getAddAreaResponseWrapper(response, reqType);
   const requestWrapper = getAddAreaRequestWrapper(request, reqType);
+
   addArea(requestWrapper.deserializeData(), areaTable.insertArea)
     .then((res: AddAreaResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));

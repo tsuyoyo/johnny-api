@@ -14,3 +14,7 @@ export class ApiException extends Error {
     this.statusCode = statusCode;
   }
 }
+
+export function invalidParameterError(msg: string): ApiException {
+  return new ApiException(PercussionApiError.ErrorCode.INVALID_PARAMETER, msg, 403);
+}

@@ -56,7 +56,11 @@ export async function selectAreasByPrefecture(
       if (err) {
         onReject(err);
       } else {
-        onResolve(buildAreasArrayFromJsObj(rows));
+        if (!rows || rows.length == 0) {
+          onResolve([]);
+        } else {
+          onResolve(buildAreasArrayFromJsObj(rows));
+        }
       }
     });
   });
@@ -87,18 +91,22 @@ export async function selectAreasByIds(
   ids: Array<number>
 ): Promise<Array<Area>> {
   return new Promise<Array<Area>>((onResolve, onReject) => {
+    if (ids.length == 0) {
+      onResolve([]);
+      return;
+    }
     let query = `SELECT * from ${AREAS_TABLE} where id in (`;
     for (let i = 0; i < ids.length; i++) {
       query += ids[i];
-      if (i < ids.length) {
+      if (i < ids.length - 1) {
         query += ",";
       } else {
         query += ")";
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(query, (err, rows, _fields) => {
-      return onResolve(buildAreasArrayFromJsObj(rows));
-    });
+    runQuery(query, (err, rows, _fields) =>
+      onResolve(buildAreasArrayFromJsObj(rows))
+    );
   });
 }

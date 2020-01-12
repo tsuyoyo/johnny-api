@@ -15,22 +15,10 @@ CREATE TABLE test_db.users (
     mail varchar(100) unique
 );
 START TRANSACTION;
-INSERT INTO test_db.users VALUES ('id_a', 'あああああ', 'http://photo.com', 'test_a@mail.com');
+INSERT INTO test_db.users VALUES ('id_a', N'あああああ', 'http://photo.com', 'test_a@mail.com');
 INSERT INTO test_db.users VALUES ('id_b', 'test_b', 'http://photo.com', 'test_b@mail.com');
 INSERT INTO test_db.users VALUES ('id_c', 'test_c', 'http://photo.com', 'test_c@mail.com');
 COMMIT;
-
--- (Note : to prevent adding duplicated activity area)
--- ALTER TABLE `table` ADD UNIQUE (
--- `a` ,
--- `b` ,
--- `c`
--- );
-CREATE TABLE test_db.user_activity_areas (
-    id INT primary key AUTO_INCREMENT,
-    user_id VARCHAR(256) not null,
-    area_id INT not null
- ) AUTO_INCREMENT = 1;
 
 -- ************************
 -- Area is expected to be used to bind a lot of information.
@@ -47,6 +35,22 @@ INSERT INTO test_db.areas VALUE (null, N'新宿', 13);
 INSERT INTO test_db.areas VALUE (null, N'池袋', 13);
 INSERT INTO test_db.areas VALUE (60, N'市川', 12);
 INSERT INTO test_db.areas VALUE (null, N'本八幡', 12);
+COMMIT;
+
+-- (Note : to prevent adding duplicated activity area)
+-- ALTER TABLE `table` ADD UNIQUE (
+-- `a` ,
+-- `b` ,
+-- `c`
+-- );
+CREATE TABLE test_db.user_activity_areas (
+    id INT primary key AUTO_INCREMENT,
+    user_id VARCHAR(256) not null,
+    area_id INT not null
+ ) AUTO_INCREMENT = 1;
+START TRANSACTION;
+INSERT INTO test_db.user_activity_areas(user_id, area_id) VALUE ('id_a', 50);
+INSERT INTO test_db.user_activity_areas(user_id, area_id) VALUE ('id_a', 60);
 COMMIT;
 
 -- ************************

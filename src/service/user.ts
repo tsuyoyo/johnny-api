@@ -8,9 +8,13 @@ export function getUserProfile(
   const promises = [];
   promises.push(getActivityArea(userId));
 
+  console.log(`getUsrProfile#service - 1111111111`);
+
   return Promise.all(promises).then((results: any[]) => {
+    console.log(`getUsrProfile#service - 2222222 : ${JSON.stringify(results)}`);
     const userProfile = new UserProfile();
-    userProfile.addActivityareas(results[0]);
+    userProfile.setActivityareasList(results[0]);
+    console.log(`getUsrProfile#service - 333333333`);
     return userProfile;
   });
 }

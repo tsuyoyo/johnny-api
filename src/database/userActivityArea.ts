@@ -11,8 +11,10 @@ export async function insertActivityAreas(
     let query = `INSERT INTO ${USER_ACTIVITY_AREAS_TABLE} (user_id, area_id) VALUES (`;
     for (let i = 0; i < areas.length; i++) {
       query += `("${userId}, ${areas[i].getId()}")`;
-      if (i != areas.length - 1) {
+      if (i < areas.length - 1) {
         query += ",";
+      } else {
+        query += ")";
       }
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -44,11 +46,14 @@ export async function selectActiveAreaIds(
   userId: string
 ): Promise<Array<number>> {
   return new Promise<Array<number>>((onResolve, onReject) => {
-    const query = `SELECT * from ${USER_ACTIVITY_AREAS_TABLE}} where user_id=${userId}`;
+    const query = `SELECT * from ${USER_ACTIVITY_AREAS_TABLE} where user_id="${userId}"`;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
       if (err) {
         onReject(err);
+      } else if (!rows || rows.length == 0) {
+        console.log(`selectActiveAreaIds - empty`);
+        onResolve([]);
       } else {
         const areaIds = new Array<number>();
         for (const activeAreaObj of rows) {

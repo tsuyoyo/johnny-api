@@ -30,7 +30,7 @@ function getUserFromObj(userObj: object): User {
   const user = new User();
   user.setId(userObj["id"]);
   user.setName(userObj["name"]);
-  user.setPhoto(userObj["photo"]);
+  user.setPhoto(userObj["photo_url"]);
   return user;
 }
 
@@ -47,9 +47,11 @@ export function selectUserById(userId: string): Promise<User> {
     const query = `SELECT * FROM ${USER_TABLE} WHERE id="${userId}"`;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
+      console.log(`selectUserById - ${rows.length}`);
       if (err) {
         onReject(err);
       } else if (rows.length > 0) {
+        console.log(`selectUserById - onSelectUser`);
         onResolve(getUserFromObj(rows[0]));
       } else {
         onReject(getNotFoundError(userId));
