@@ -28,7 +28,11 @@ describe("area", function() {
 
     it("should get AddAreaResponse with added Area data", async function() {
       await expect(
-        areaService.addArea(dummyRequest, mockedAddAreaToDatabase)
+        areaService.addArea(
+          dummyRequest.getAreaname(),
+          dummyRequest.getPrefecture(),
+          mockedAddAreaToDatabase
+        )
       ).resolves.toEqual(expectedResponse);
     });
   });
@@ -47,7 +51,11 @@ describe("area", function() {
 
     it("should get AddAreaResponse with added Area data", async function() {
       await expect(
-        areaService.addArea(dummyRequest, mockedAddAreaToDatabase)
+        areaService.addArea(
+          dummyRequest.getAreaname(),
+          dummyRequest.getPrefecture(),
+          mockedAddAreaToDatabase
+        )
       ).rejects.toThrow(expectedError);
     });
   });

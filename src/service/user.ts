@@ -8,13 +8,9 @@ export function getUserProfile(
   const promises = [];
   promises.push(getActivityArea(userId));
 
-  console.log(`getUsrProfile#service - 1111111111`);
-
-  return Promise.all(promises).then((results: any[]) => {
-    console.log(`getUsrProfile#service - 2222222 : ${JSON.stringify(results)}`);
+  return Promise.all(promises).then(results => {
     const userProfile = new UserProfile();
     userProfile.setActivityareasList(results[0]);
-    console.log(`getUsrProfile#service - 333333333`);
     return userProfile;
   });
 }
@@ -33,5 +29,7 @@ export function deleteUserProfile(
   userId: string,
   deleteActivityArea: (userId: string) => Promise<number>
 ): Promise<any> {
+  // note : when more attributes are defined in userProfile,
+  // more Promise chains are necessary
   return deleteActivityArea(userId);
 }

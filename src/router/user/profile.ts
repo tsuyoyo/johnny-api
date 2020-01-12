@@ -9,6 +9,7 @@ import {
   getPutUserProfileRequestWrapper
 } from "../../gateway/user";
 import * as admin from "firebase-admin";
+import { authenticate } from "../../middleware/authentication";
 import { getRequestType, RequestType } from "../../gateway/requestDataType";
 import { GetUserProfileResponse } from "../../proto/userService_pb";
 import { ApiException, invalidParameterError } from "../../error/apiException";
@@ -80,14 +81,14 @@ function updateUserProfile(request: Request, response: Response): void {
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
-export function provideUserProfileRouter(defaultAuth: admin.auth.Auth): Router {
+export function provideUserProfileRouter(auth: admin.auth.Auth): Router {
   const router = Router();
   router.get("/:id", (request, response) => getUsrProfile(request, response));
-  // TODO : authentication before update
-  // (Firebaseで認証して、requestに入ってるIDが一致したらOK)
-  router.put("/", (request, response) => updateUserProfile(request, response));
-  // TODO : authentication before delete
-  router.delete("/:id", (request, response) => {
+  router.put("/:id", authenticate(auth), (request, response) => {
+    console.log("put : passed authentication");
+    // updateUserProfile(request, response);
+  });
+  router.delete("/:id", authenticate(auth), (request, response) => {
     const userId = request.params["id"];
   });
   return router;

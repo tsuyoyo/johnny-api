@@ -39,7 +39,12 @@ function postArea(request: Request, response: Response): void {
   const responseWrapper = getAddAreaResponseWrapper(response, reqType);
   const requestWrapper = getAddAreaRequestWrapper(request, reqType);
 
-  addArea(requestWrapper.deserializeData(), areaTable.insertArea)
+  const addAreaRequest = requestWrapper.deserializeData();
+  addArea(
+    addAreaRequest.getAreaname(),
+    addAreaRequest.getPrefecture(),
+    areaTable.insertArea
+  )
     .then((res: AddAreaResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
