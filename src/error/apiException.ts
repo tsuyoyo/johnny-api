@@ -34,3 +34,11 @@ export function authorizationError(msg: string): ApiException {
     404
   );
 }
+
+export function authenticationError(msg: string): ApiException {
+  return new ApiException(
+    PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+    msg,
+    404
+  );
+}

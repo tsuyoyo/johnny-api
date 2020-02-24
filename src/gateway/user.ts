@@ -4,9 +4,11 @@ import {
   SignupUserRequest,
   SignupUserResponse,
   GetUserProfileResponse,
-  PutUserProfileRequest
+  PutUserProfileRequest,
+  PostUserLoginRequest,
+  PostUserLoginResponse
 } from "../proto/userService_pb";
-import { RequestType } from "./requestDataType";
+import { getRequestType, RequestType } from "./requestDataType";
 import { Request, Response } from "express";
 import { UserProfile, User } from "../proto/user_pb";
 import { Area } from "../proto/area_pb";
@@ -15,32 +17,6 @@ function convertObjectToSingupUserRequest(obj: object): SignupUserRequest {
   const response = new SignupUserRequest();
   response.setToken(obj["token"]);
   return response;
-}
-
-export function getSignupUserReqeustWrapper(
-  request: Request,
-  requestType: RequestType
-): RequestWrapper<SignupUserRequest> {
-  return new RequestWrapper<SignupUserRequest>(
-    request,
-    requestType,
-    SignupUserRequest.deserializeBinary,
-    convertObjectToSingupUserRequest
-  );
-}
-
-export function getSignupUserResponseWrapper(
-  response: Response,
-  requestType: RequestType
-): ResponseWrapper<SignupUserResponse> {
-  return new ResponseWrapper<SignupUserResponse>(response, requestType);
-}
-
-export function getGetUserProfileResponseWrapper(
-  response: Response,
-  requestType: RequestType
-): ResponseWrapper<GetUserProfileResponse> {
-  return new ResponseWrapper<GetUserProfileResponse>(response, requestType);
 }
 
 function convertObjectToUser(obj: object): User {
@@ -78,6 +54,40 @@ function convertObjectToPutUserProfileRequest(
   return response;
 }
 
+function convertObjectToPostUserLoginRequest(
+  obj: object
+): PostUserLoginRequest {
+  const request = new PostUserLoginRequest();
+  request.setToken(obj["token"]);
+  return request;
+}
+
+export function getSignupUserReqeustWrapper(
+  request: Request,
+  requestType: RequestType
+): RequestWrapper<SignupUserRequest> {
+  return new RequestWrapper<SignupUserRequest>(
+    request,
+    requestType,
+    SignupUserRequest.deserializeBinary,
+    convertObjectToSingupUserRequest
+  );
+}
+
+export function getSignupUserResponseWrapper(
+  response: Response,
+  requestType: RequestType
+): ResponseWrapper<SignupUserResponse> {
+  return new ResponseWrapper<SignupUserResponse>(response, requestType);
+}
+
+export function getGetUserProfileResponseWrapper(
+  response: Response,
+  requestType: RequestType
+): ResponseWrapper<GetUserProfileResponse> {
+  return new ResponseWrapper<GetUserProfileResponse>(response, requestType);
+}
+
 export function getPutUserProfileRequestWrapper(
   request: Request,
   requestType: RequestType
@@ -88,4 +98,23 @@ export function getPutUserProfileRequestWrapper(
     PutUserProfileRequest.deserializeBinary,
     convertObjectToPutUserProfileRequest
   );
+}
+
+export function getPostUserLoginRequestWrapper(
+  request: Request
+): RequestWrapper<PostUserLoginRequest> {
+  const requestType = getRequestType(request.headers["content-type"]);
+  return new RequestWrapper<PostUserLoginRequest>(
+    request,
+    requestType,
+    PostUserLoginRequest.deserializeBinary,
+    convertObjectToPostUserLoginRequest
+  );
+}
+
+export function getPostUserLoginResponseWrapper(
+  response: Response,
+  requestType: RequestType
+): ResponseWrapper<SignupUserResponse> {
+  return new ResponseWrapper<PostUserLoginResponse>(response, requestType);
 }

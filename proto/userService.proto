@@ -11,6 +11,14 @@ message SignupUserResponse {
   User user = 1;
 }
 
+message PostUserLoginRequest {
+  string token = 1;
+}
+
+message PostUserLoginResponse {
+  User user = 1;
+}
+
 message GetUserProfileResponse {
   User user = 1;
   UserProfile userProfile = 2;

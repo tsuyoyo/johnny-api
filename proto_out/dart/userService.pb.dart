@@ -75,6 +75,70 @@ class SignupUserResponse extends $pb.GeneratedMessage {
   $1.User ensureUser() => $_ensure(0);
 }
 
+class PostUserLoginRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PostUserLoginRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..aOS(1, 'token')
+    ..hasRequiredFields = false
+  ;
+
+  PostUserLoginRequest._() : super();
+  factory PostUserLoginRequest() => create();
+  factory PostUserLoginRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PostUserLoginRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PostUserLoginRequest clone() => PostUserLoginRequest()..mergeFromMessage(this);
+  PostUserLoginRequest copyWith(void Function(PostUserLoginRequest) updates) => super.copyWith((message) => updates(message as PostUserLoginRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static PostUserLoginRequest create() => PostUserLoginRequest._();
+  PostUserLoginRequest createEmptyInstance() => create();
+  static $pb.PbList<PostUserLoginRequest> createRepeated() => $pb.PbList<PostUserLoginRequest>();
+  @$core.pragma('dart2js:noInline')
+  static PostUserLoginRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PostUserLoginRequest>(create);
+  static PostUserLoginRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.String get token => $_getSZ(0);
+  @$pb.TagNumber(1)
+  set token($core.String v) { $_setString(0, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasToken() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearToken() => clearField(1);
+}
+
+class PostUserLoginResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PostUserLoginResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..aOM<$1.User>(1, 'user', subBuilder: $1.User.create)
+    ..hasRequiredFields = false
+  ;
+
+  PostUserLoginResponse._() : super();
+  factory PostUserLoginResponse() => create();
+  factory PostUserLoginResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PostUserLoginResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PostUserLoginResponse clone() => PostUserLoginResponse()..mergeFromMessage(this);
+  PostUserLoginResponse copyWith(void Function(PostUserLoginResponse) updates) => super.copyWith((message) => updates(message as PostUserLoginResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static PostUserLoginResponse create() => PostUserLoginResponse._();
+  PostUserLoginResponse createEmptyInstance() => create();
+  static $pb.PbList<PostUserLoginResponse> createRepeated() => $pb.PbList<PostUserLoginResponse>();
+  @$core.pragma('dart2js:noInline')
+  static PostUserLoginResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PostUserLoginResponse>(create);
+  static PostUserLoginResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $1.User get user => $_getN(0);
+  @$pb.TagNumber(1)
+  set user($1.User v) { setField(1, v); }
+  @$pb.TagNumber(1)
+  $core.bool hasUser() => $_has(0);
+  @$pb.TagNumber(1)
+  void clearUser() => clearField(1);
+  @$pb.TagNumber(1)
+  $1.User ensureUser() => $_ensure(0);
+}
+
 class GetUserProfileResponse extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('GetUserProfileResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
     ..aOM<$1.User>(1, 'user', subBuilder: $1.User.create)

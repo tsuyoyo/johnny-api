@@ -19,6 +19,20 @@ const SignupUserResponse$json = const {
   ],
 };
 
+const PostUserLoginRequest$json = const {
+  '1': 'PostUserLoginRequest',
+  '2': const [
+    const {'1': 'token', '3': 1, '4': 1, '5': 9, '10': 'token'},
+  ],
+};
+
+const PostUserLoginResponse$json = const {
+  '1': 'PostUserLoginResponse',
+  '2': const [
+    const {'1': 'user', '3': 1, '4': 1, '5': 11, '6': '.pj.sakuchin.percussion.proto.User', '10': 'user'},
+  ],
+};
+
 const GetUserProfileResponse$json = const {
   '1': 'GetUserProfileResponse',
   '2': const [

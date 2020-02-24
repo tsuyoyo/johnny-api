@@ -23,6 +23,7 @@ const PercussionApiError_ErrorCode$json = const {
     const {'1': 'USER_HAS_BEEN_ALREADY_REGISTERED', '2': 3},
     const {'1': 'DB_ERROR', '2': 4},
     const {'1': 'INVALID_PARAMETER', '2': 5},
+    const {'1': 'AUTHENTICATION_ERROR', '2': 6},
   ],
 };
 

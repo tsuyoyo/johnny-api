@@ -28,15 +28,27 @@ function getUserIdFromRequest(request: Request): Promise<string> {
   });
 }
 
+const getActivityArea = (userId: string): Promise<Array<Area>> =>
+  userActivityAreaService.getActivityArea(
+    userId,
+    userActivityAreaTable.selectActiveAreaIds,
+    areaTable.selectAreasByIds
+  );
+
+const updateUserActivityArea = (
+  userId: string,
+  areas: Array<Area>
+): Promise<number> =>
+  userActivityAreaService.updateActivityArea(
+    userId,
+    areas,
+    userActivityAreaTable.deleteActiveAreas,
+    userActivityAreaTable.insertActivityAreas
+  );
+
 function getUsrProfile(request: Request, response: Response): void {
   const reqType: RequestType = getRequestType(request.headers["content-type"]);
   const responseWrapper = getGetUserProfileResponseWrapper(response, reqType);
-  const getActivityArea = (userId: string): Promise<Array<Area>> =>
-    userActivityAreaService.getActivityArea(
-      userId,
-      userActivityAreaTable.selectActiveAreaIds,
-      areaTable.selectAreasByIds
-    );
 
   getUserIdFromRequest(request)
     .then((userId: string) => {
@@ -60,22 +72,11 @@ function updateUserProfile(request: Request, response: Response): void {
   const responseWrapper = new ResponseWrapper<EmptyResponse>(response, reqType);
   const putUserProfileRequest = requestWrapper.deserializeData();
 
-  const updateActivityArea = (
-    userId: string,
-    areas: Array<Area>
-  ): Promise<number> =>
-    userActivityAreaService.updateActivityArea(
-      userId,
-      areas,
-      userActivityAreaTable.deleteActiveAreas,
-      userActivityAreaTable.insertActivityAreas
-    );
-
   userService
     .updateUserProfile(
       putUserProfileRequest.getUser(),
       putUserProfileRequest.getUserprofile(),
-      updateActivityArea
+      updateUserActivityArea
     )
     .then(() => responseWrapper.respondSuccess(new EmptyResponse()))
     .catch((error: ApiException) => responseWrapper.respondError(error));

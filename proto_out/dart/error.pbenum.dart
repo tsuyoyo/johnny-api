@@ -16,6 +16,7 @@ class PercussionApiError_ErrorCode extends $pb.ProtobufEnum {
   static const PercussionApiError_ErrorCode USER_HAS_BEEN_ALREADY_REGISTERED = PercussionApiError_ErrorCode._(3, 'USER_HAS_BEEN_ALREADY_REGISTERED');
   static const PercussionApiError_ErrorCode DB_ERROR = PercussionApiError_ErrorCode._(4, 'DB_ERROR');
   static const PercussionApiError_ErrorCode INVALID_PARAMETER = PercussionApiError_ErrorCode._(5, 'INVALID_PARAMETER');
+  static const PercussionApiError_ErrorCode AUTHENTICATION_ERROR = PercussionApiError_ErrorCode._(6, 'AUTHENTICATION_ERROR');
 
   static const $core.List<PercussionApiError_ErrorCode> values = <PercussionApiError_ErrorCode> [
     UNKNOWN,
@@ -24,6 +25,7 @@ class PercussionApiError_ErrorCode extends $pb.ProtobufEnum {
     USER_HAS_BEEN_ALREADY_REGISTERED,
     DB_ERROR,
     INVALID_PARAMETER,
+    AUTHENTICATION_ERROR,
   ];
 
   static final $core.Map<$core.int, PercussionApiError_ErrorCode> _byValue = $pb.ProtobufEnum.initByValue(values);

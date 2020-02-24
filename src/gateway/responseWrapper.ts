@@ -25,6 +25,7 @@ export class ResponseWrapper<T extends Message> {
   public respondSuccess(message: T): void {
     this.response
       .status(200)
+      .contentType("application/x-protobuf")
       .send(this.convertResponseDataForRequestType(message));
   }
 
@@ -32,6 +33,11 @@ export class ResponseWrapper<T extends Message> {
     const apiError = new PercussionApiError();
     apiError.setMessage(apiException.message);
     apiError.setErrorcode(apiException.apiError);
+
+    console.log(`ResponseError`);
+    console.log(`  Message - ${apiError.getMessage()}`);
+    console.log(`  ErrorCode - ${apiError.getErrorcode()}`);
+
     this.response
       .status(apiException.statusCode)
       .send(this.convertResponseDataForRequestType(apiError));
