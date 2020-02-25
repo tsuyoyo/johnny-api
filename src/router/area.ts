@@ -10,22 +10,20 @@ import {
 import { Area } from "../proto/area_pb";
 import { AddAreaResponse, GetAreaResponse } from "../proto/areaService_pb";
 import { ApiException, invalidParameterError } from "../error/apiException";
-
-function getPromiseToGetAreasByParameter(
-  request: Request
-): Promise<Array<Area>> {
-  if (request.query.prefecture) {
-    return areaTable.selectAreasByPrefecture(request.query.prefecture);
-  } else {
-    return Promise.reject(invalidParameterError("query parameter is required"));
-  }
-}
+import authenticate from "../middleware/authentication";
 
 function getArea(request: Request, response: Response): void {
   const reqType: RequestType = getRequestType(request.headers["content-type"]);
   const responseWrapper = getGetAreaResponseWrapper(response, reqType);
 
-  getPromiseToGetAreasByParameter(request)
+  if (!request.query.prefecture) {
+    responseWrapper.respondError(
+      invalidParameterError("query parameter is required")
+    );
+    return;
+  }
+  areaTable
+    .selectAreasByPrefecture(request.query.prefecture)
     .then((areas: Array<Area>) => {
       const getGetAreaResponse = new GetAreaResponse();
       getGetAreaResponse.setAreasList(areas);
@@ -51,7 +49,7 @@ function postArea(request: Request, response: Response): void {
 
 export function provideAreaRouter(): Router {
   const router = Router();
-  router.get("/", (request, response) => getArea(request, response));
-  router.post("/", (request, response) => postArea(request, response));
+  router.get("/", getArea);
+  router.post("/", authenticate, postArea);
   return router;
 }

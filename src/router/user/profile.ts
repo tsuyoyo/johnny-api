@@ -9,7 +9,7 @@ import {
   getPutUserProfileRequestWrapper
 } from "../../gateway/user";
 import * as admin from "firebase-admin";
-import { authenticate } from "../../middleware/authentication";
+import authenticate from "../../middleware/authentication";
 import { getRequestType, RequestType } from "../../gateway/requestDataType";
 import { GetUserProfileResponse } from "../../proto/userService_pb";
 import { ApiException, invalidParameterError } from "../../error/apiException";
