@@ -26,7 +26,7 @@ export default function authenticate(
 
     const firebaseAuthError = new ApiException(
       PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-      "Couldn't get firebase user",
+      "ログインに失敗しました",
       401
     );
     getFirebaseUser(auth)(token.toString())

@@ -27,18 +27,34 @@ function mapApiErrorCodeWithDbError(
   return errorCode;
 }
 
+function getErrorMessage(
+  errorCode: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap]
+): string {
+  switch (errorCode) {
+    case PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED:
+      return "このアカウントは登録済みです。Loginしてください。";
+    default:
+      return "データベースエラーが発生しました。再度時間を置いて試してください。";
+  }
+}
+
+function getApiExceptionForDbError(error: any): ApiException {
+  const errorCode = mapApiErrorCodeWithDbError(error);
+  const errorMessage = getErrorMessage(errorCode);
+  return new ApiException(errorCode, errorMessage, 403);
+}
+
 export function runQuery(
   query: string,
   onQueryDone: (apiException: ApiException, rows, fields) => void
 ): void {
   console.log(`query - ${query}`);
-
   const connection = mysql.createConnection(connectionParams);
   connection.connect();
   connection.query(query, (err, rows, fields) => {
     if (err) {
-      const errorCode = mapApiErrorCodeWithDbError(err);
-      onQueryDone(new ApiException(errorCode, err.message, 403), rows, fields);
+      console.log(`Database error - ${err.errorMessage}`);
+      onQueryDone(getApiExceptionForDbError(err), rows, fields);
     } else {
       onQueryDone(err, rows, fields);
     }

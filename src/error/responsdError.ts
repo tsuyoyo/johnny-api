@@ -3,7 +3,6 @@ import { ApiException } from "../error/apiException";
 import { PercussionApiError } from "../proto/error_pb";
 import { RequestType } from "../gateway/requestDataType";
 import { convertResponseDataForRequestType } from "../gateway/responseWrapper";
-
 export default function respondError(
   response: Response,
   apiException: ApiException,
