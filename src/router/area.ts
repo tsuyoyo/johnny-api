@@ -13,7 +13,7 @@ import { ApiException, invalidParameterError } from "../error/apiException";
 import authenticate from "../middleware/authentication";
 
 function getArea(request: Request, response: Response): void {
-  const reqType: RequestType = getRequestType(request.headers["content-type"]);
+  const reqType: RequestType = getRequestType(request);
   const responseWrapper = getGetAreaResponseWrapper(response, reqType);
 
   if (!request.query.prefecture) {
@@ -33,7 +33,7 @@ function getArea(request: Request, response: Response): void {
 }
 
 function postArea(request: Request, response: Response): void {
-  const reqType: RequestType = getRequestType(request.headers["content-type"]);
+  const reqType: RequestType = getRequestType(request);
   const responseWrapper = getAddAreaResponseWrapper(response, reqType);
   const requestWrapper = getAddAreaRequestWrapper(request, reqType);
 

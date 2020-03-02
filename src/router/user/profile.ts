@@ -17,8 +17,8 @@ import { ResponseWrapper } from "../../gateway/responseWrapper";
 import { EmptyResponse } from "../../proto/empty_pb";
 import { Area } from "../../proto/area_pb";
 
-function getUserIdFromRequest(request: Request): Promise<string> {
-  return new Promise<string>((onResolve, onReject) => {
+const getUserIdFromRequest = (request: Request): Promise<string> =>
+  new Promise<string>((onResolve, onReject) => {
     const userId = request.params["id"];
     if (userId) {
       onResolve(userId);
@@ -26,7 +26,6 @@ function getUserIdFromRequest(request: Request): Promise<string> {
       onReject(invalidParameterError("user ID is required"));
     }
   });
-}
 
 const getActivityArea = (userId: string): Promise<Array<Area>> =>
   userActivityAreaService.getActivityArea(
@@ -46,8 +45,8 @@ const updateUserActivityArea = (
     userActivityAreaTable.insertActivityAreas
   );
 
-function getUsrProfile(request: Request, response: Response): void {
-  const reqType: RequestType = getRequestType(request.headers["content-type"]);
+function getUserProfile(request: Request, response: Response): void {
+  const reqType: RequestType = getRequestType(request);
   const responseWrapper = getGetUserProfileResponseWrapper(response, reqType);
 
   getUserIdFromRequest(request)
@@ -63,11 +62,14 @@ function getUsrProfile(request: Request, response: Response): void {
       getUserProfileResponse.setUserprofile(results[1]);
       responseWrapper.respondSuccess(getUserProfileResponse);
     })
-    .catch((apiError: ApiException) => responseWrapper.respondError(apiError));
+    .catch((apiError: ApiException) => {
+      console.log(`Error - ${apiError.message}`)
+      responseWrapper.respondError(apiError);
+    });
 }
 
 function updateUserProfile(request: Request, response: Response): void {
-  const reqType: RequestType = getRequestType(request.headers["content-type"]);
+  const reqType: RequestType = getRequestType(request);
   const requestWrapper = getPutUserProfileRequestWrapper(request, reqType);
   const responseWrapper = new ResponseWrapper<EmptyResponse>(response, reqType);
   const putUserProfileRequest = requestWrapper.deserializeData();
@@ -84,13 +86,16 @@ function updateUserProfile(request: Request, response: Response): void {
 
 export function provideUserProfileRouter(auth: admin.auth.Auth): Router {
   const router = Router();
-  router.get("/:id", (request, response) => getUsrProfile(request, response));
+  router.get("/:id", (request, response) => getUserProfile(request, response));
   router.put("/:id", authenticate(auth), (request, response) => {
     console.log("put : passed authentication");
     // updateUserProfile(request, response);
   });
   router.delete("/:id", authenticate(auth), (request, response) => {
     const userId = request.params["id"];
+  });
+  router.put("/:id/activeAreas", authenticate(auth), (request, response) => {
+    console.log("put : passed authentication");
   });
   return router;
 }

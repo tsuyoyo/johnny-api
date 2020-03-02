@@ -16,7 +16,7 @@ function login(
   response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const reqType: RequestType = getRequestType(request.headers["content-type"]);
+  const reqType: RequestType = getRequestType(request);
   const responseWrapper = getPostUserLoginResponseWrapper(response, reqType);
   const requestWrapper = getPostUserLoginRequestWrapper(request);
   loginService

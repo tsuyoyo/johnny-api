@@ -16,7 +16,7 @@ function signup(
   response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const reqType: RequestType = getRequestType(request.headers["content-type"]);
+  const reqType: RequestType = getRequestType(request);
   const responseWrapper = getSignupUserResponseWrapper(response, reqType);
   const requestWrapper = getSignupUserReqeustWrapper(request, reqType);
   signupService

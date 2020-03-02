@@ -12,7 +12,7 @@ export default function authenticate(
   return (request: Request, response: Response, next: NextFunction): void => {
     const token = request.headers["x-api-token"];
     const userId = request.headers["x-user-id"];
-    const requestType = getRequestType(request.headers["content-type"]);
+    const requestType = getRequestType(request);
 
     if (!(token && userId)) {
       const authError = new ApiException(

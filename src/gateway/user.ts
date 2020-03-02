@@ -103,7 +103,7 @@ export function getPutUserProfileRequestWrapper(
 export function getPostUserLoginRequestWrapper(
   request: Request
 ): RequestWrapper<PostUserLoginRequest> {
-  const requestType = getRequestType(request.headers["content-type"]);
+  const requestType = getRequestType(request);
   return new RequestWrapper<PostUserLoginRequest>(
     request,
     requestType,
