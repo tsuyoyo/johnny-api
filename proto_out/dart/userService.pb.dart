@@ -10,6 +10,7 @@ import 'dart:core' as $core;
 import 'package:protobuf/protobuf.dart' as $pb;
 
 import 'user.pb.dart' as $1;
+import 'area.pb.dart' as $0;
 
 class SignupUserRequest extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('SignupUserRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
@@ -227,5 +228,30 @@ class PutUserProfileRequest extends $pb.GeneratedMessage {
   void clearUserProfile() => clearField(2);
   @$pb.TagNumber(2)
   $1.UserProfile ensureUserProfile() => $_ensure(1);
+}
+
+class PutUserProfileActiveAreasRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PutUserProfileActiveAreasRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..pc<$0.Area>(1, 'activityAreas', $pb.PbFieldType.PM, protoName: 'activityAreas', subBuilder: $0.Area.create)
+    ..hasRequiredFields = false
+  ;
+
+  PutUserProfileActiveAreasRequest._() : super();
+  factory PutUserProfileActiveAreasRequest() => create();
+  factory PutUserProfileActiveAreasRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PutUserProfileActiveAreasRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PutUserProfileActiveAreasRequest clone() => PutUserProfileActiveAreasRequest()..mergeFromMessage(this);
+  PutUserProfileActiveAreasRequest copyWith(void Function(PutUserProfileActiveAreasRequest) updates) => super.copyWith((message) => updates(message as PutUserProfileActiveAreasRequest));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static PutUserProfileActiveAreasRequest create() => PutUserProfileActiveAreasRequest._();
+  PutUserProfileActiveAreasRequest createEmptyInstance() => create();
+  static $pb.PbList<PutUserProfileActiveAreasRequest> createRepeated() => $pb.PbList<PutUserProfileActiveAreasRequest>();
+  @$core.pragma('dart2js:noInline')
+  static PutUserProfileActiveAreasRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutUserProfileActiveAreasRequest>(create);
+  static PutUserProfileActiveAreasRequest _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$0.Area> get activityAreas => $_getList(0);
 }
 

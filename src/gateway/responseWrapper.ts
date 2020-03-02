@@ -33,6 +33,7 @@ export class ResponseWrapper<T extends Message> {
   }
 
   public respondError(apiException: ApiException): void {
+    console.log(`Error - ${apiException.apiError} : ${apiException.message}`);
     respondError(this.response, apiException, this.requestType);
   }
 }

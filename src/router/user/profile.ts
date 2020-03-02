@@ -6,7 +6,8 @@ import * as userActivityAreaTable from "../../database/userActivityArea";
 import * as areaTable from "../../database/area";
 import {
   getGetUserProfileResponseWrapper,
-  getPutUserProfileRequestWrapper
+  getPutUserProfileRequestWrapper,
+  getPutUserProfileActiveAreasRequestWrapper
 } from "../../gateway/user";
 import * as admin from "firebase-admin";
 import authenticate from "../../middleware/authentication";
@@ -16,6 +17,7 @@ import { ApiException, invalidParameterError } from "../../error/apiException";
 import { ResponseWrapper } from "../../gateway/responseWrapper";
 import { EmptyResponse } from "../../proto/empty_pb";
 import { Area } from "../../proto/area_pb";
+import { User, UserProfile } from "../../proto/user_pb";
 
 const getUserIdFromRequest = (request: Request): Promise<string> =>
   new Promise<string>((onResolve, onReject) => {
@@ -34,6 +36,37 @@ const getActivityArea = (userId: string): Promise<Array<Area>> =>
     areaTable.selectAreasByIds
   );
 
+const buildGetUserProfileResponse = (
+  user: User,
+  userProfile: UserProfile
+): GetUserProfileResponse => {
+  const getUserProfileResponse = new GetUserProfileResponse();
+  getUserProfileResponse.setUser(user);
+  getUserProfileResponse.setUserprofile(userProfile);
+  return getUserProfileResponse;
+};
+
+function getUserProfile(request: Request, response: Response): void {
+  const responseWrapper = getGetUserProfileResponseWrapper(
+    response,
+    getRequestType(request)
+  );
+  getUserIdFromRequest(request)
+    .then((userId: string) =>
+      Promise.all([
+        userTable.selectUserById(userId),
+        userService.getUserProfile(userId, getActivityArea)
+      ])
+    )
+    .then(results => {
+      const [user, userProfile] = results;
+      responseWrapper.respondSuccess(
+        buildGetUserProfileResponse(user, userProfile)
+      );
+    })
+    .catch(responseWrapper.respondError);
+}
+
 const updateUserActivityArea = (
   userId: string,
   areas: Array<Area>
@@ -45,28 +78,13 @@ const updateUserActivityArea = (
     userActivityAreaTable.insertActivityAreas
   );
 
-function getUserProfile(request: Request, response: Response): void {
-  const reqType: RequestType = getRequestType(request);
-  const responseWrapper = getGetUserProfileResponseWrapper(response, reqType);
-
-  getUserIdFromRequest(request)
-    .then((userId: string) => {
-      const promises = [];
-      promises.push(userTable.selectUserById(userId));
-      promises.push(userService.getUserProfile(userId, getActivityArea));
-      return Promise.all(promises);
-    })
-    .then(results => {
-      const getUserProfileResponse = new GetUserProfileResponse();
-      getUserProfileResponse.setUser(results[0]);
-      getUserProfileResponse.setUserprofile(results[1]);
-      responseWrapper.respondSuccess(getUserProfileResponse);
-    })
-    .catch((apiError: ApiException) => {
-      console.log(`Error - ${apiError.message}`)
-      responseWrapper.respondError(apiError);
-    });
-}
+const putActiveAreas = (request: Request, response: Response): void => {
+  const requestWrapper = getPutUserProfileActiveAreasRequestWrapper(request);
+  const putRequest = requestWrapper.deserializeData();
+  getUserIdFromRequest(request).then((userId: string) =>
+    updateUserActivityArea(userId, putRequest.getActivityareasList())
+  );
+};
 
 function updateUserProfile(request: Request, response: Response): void {
   const reqType: RequestType = getRequestType(request);
@@ -86,6 +104,7 @@ function updateUserProfile(request: Request, response: Response): void {
 
 export function provideUserProfileRouter(auth: admin.auth.Auth): Router {
   const router = Router();
+  // Profile
   router.get("/:id", (request, response) => getUserProfile(request, response));
   router.put("/:id", authenticate(auth), (request, response) => {
     console.log("put : passed authentication");
@@ -94,8 +113,12 @@ export function provideUserProfileRouter(auth: admin.auth.Auth): Router {
   router.delete("/:id", authenticate(auth), (request, response) => {
     const userId = request.params["id"];
   });
-  router.put("/:id/activeAreas", authenticate(auth), (request, response) => {
+
+  // Active Areas
+  router.get("/:id/activeAreas", authenticate(auth), (request, response) => {
     console.log("put : passed authentication");
   });
+  router.put("/:id/activeAreas", authenticate(auth), putActiveAreas);
+
   return router;
 }

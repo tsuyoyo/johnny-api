@@ -6,7 +6,8 @@ import {
   GetUserProfileResponse,
   PutUserProfileRequest,
   PostUserLoginRequest,
-  PostUserLoginResponse
+  PostUserLoginResponse,
+  PutUserProfileActiveAreasRequest
 } from "../proto/userService_pb";
 import { getRequestType, RequestType } from "./requestDataType";
 import { Request, Response } from "express";
@@ -59,6 +60,14 @@ function convertObjectToPostUserLoginRequest(
 ): PostUserLoginRequest {
   const request = new PostUserLoginRequest();
   request.setToken(obj["token"]);
+  return request;
+}
+
+function convertObjectToPutUserProfileActiveAreasRequest(
+  obj: object
+): PutUserProfileActiveAreasRequest {
+  const request = new PutUserProfileActiveAreasRequest();
+  // TODO:
   return request;
 }
 
@@ -117,4 +126,16 @@ export function getPostUserLoginResponseWrapper(
   requestType: RequestType
 ): ResponseWrapper<SignupUserResponse> {
   return new ResponseWrapper<PostUserLoginResponse>(response, requestType);
+}
+
+export function getPutUserProfileActiveAreasRequestWrapper(
+  request: Request
+): RequestWrapper<PutUserProfileActiveAreasRequest> {
+  const requestType = getRequestType(request);
+  return new RequestWrapper<PutUserProfileActiveAreasRequest>(
+    request,
+    requestType,
+    PutUserProfileActiveAreasRequest.deserializeBinary,
+    convertObjectToPutUserProfileActiveAreasRequest
+  );
 }

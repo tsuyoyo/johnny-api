@@ -2,6 +2,7 @@ syntax = "proto3";
 package pj.sakuchin.percussion.proto;
 
 import "proto/user.proto";
+import "proto/area.proto";
 
 message SignupUserRequest {
   string token = 1;
@@ -27,4 +28,8 @@ message GetUserProfileResponse {
 message PutUserProfileRequest {
   User user = 1;
   UserProfile userProfile = 2;
+}
+
+message PutUserProfileActiveAreasRequest {
+  repeated Area activityAreas = 1;
 }

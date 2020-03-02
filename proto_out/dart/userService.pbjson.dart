@@ -49,3 +49,10 @@ const PutUserProfileRequest$json = const {
   ],
 };
 
+const PutUserProfileActiveAreasRequest$json = const {
+  '1': 'PutUserProfileActiveAreasRequest',
+  '2': const [
+    const {'1': 'activityAreas', '3': 1, '4': 3, '5': 11, '6': '.pj.sakuchin.percussion.proto.Area', '10': 'activityAreas'},
+  ],
+};
+

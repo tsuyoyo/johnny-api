@@ -3,11 +3,11 @@ package pj.sakuchin.percussion.proto;
 import "proto/area.proto";
 
 message User {
-    string id = 1;
-    string name = 2;
-    string photo = 3;
+  string id = 1;
+  string name = 2;
+  string photo = 3;
 }
 
 message UserProfile {
-    repeated Area activityAreas = 1;
+  repeated Area activityAreas = 1;
 }
