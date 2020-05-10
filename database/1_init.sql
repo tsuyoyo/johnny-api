@@ -86,4 +86,3 @@ CREATE TABLE test_db.studio_ratings (
     comment VARCHAR(1000),
     user_id VARCHAR(256)
 );
-
