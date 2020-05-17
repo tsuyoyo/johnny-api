@@ -1,7 +1,7 @@
 import { noTokenError, authenticationError } from "../error/apiException";
 import {
   PostUserLoginRequest,
-  PostUserLoginResponse
+  PostUserLoginResponse,
 } from "../proto/userService_pb";
 import { FirebaseUser } from "../firebase/getUser";
 import { User } from "../proto/user_pb";
@@ -30,7 +30,7 @@ export async function login(
       response.setUser(user);
       return response;
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(`Error : login service - ${error.message}`);
       throw authenticationError("Failed to authentication");
     });

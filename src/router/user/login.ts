@@ -2,23 +2,22 @@ import { Request, Response, Router } from "express";
 import * as admin from "firebase-admin";
 import * as userTable from "../../database/users";
 import { getFirebaseUser } from "../../firebase/getUser";
-import { getRequestType, RequestType } from "../../gateway/requestDataType";
-import {
-  getPostUserLoginRequestWrapper,
-  getPostUserLoginResponseWrapper
-} from "../../gateway/user";
 import * as loginService from "../../service/login";
-import { PostUserLoginResponse } from "../../proto/userService_pb";
+import { PostUserLoginResponse, PostUserLoginRequest } from "../../proto/userService_pb";
 import { ApiException } from "../../error/apiException";
+import { RequestWrapper } from "../../gateway/requestWrapper";
+import { ResponseWrapper } from "../../gateway/responseWrapper";
 
 function login(
   request: Request,
   response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const reqType: RequestType = getRequestType(request);
-  const responseWrapper = getPostUserLoginResponseWrapper(response, reqType);
-  const requestWrapper = getPostUserLoginRequestWrapper(request);
+  const responseWrapper = new ResponseWrapper<PostUserLoginResponse>(response);
+  const requestWrapper = new RequestWrapper<PostUserLoginRequest>(
+    request,
+    PostUserLoginRequest.deserializeBinary
+  );
   loginService
     .login(
       requestWrapper.deserializeData(),

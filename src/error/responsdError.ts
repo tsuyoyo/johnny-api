@@ -1,12 +1,10 @@
 import { Response } from "express";
 import { ApiException } from "../error/apiException";
 import { PercussionApiError } from "../proto/error_pb";
-import { RequestType } from "../gateway/requestDataType";
-import { convertResponseDataForRequestType } from "../gateway/responseWrapper";
+
 export default function respondError(
   response: Response,
-  apiException: ApiException,
-  requestType: RequestType
+  apiException: ApiException
 ): void {
   const apiError = new PercussionApiError();
   apiError.setMessage(apiException.message);
@@ -14,7 +12,5 @@ export default function respondError(
   console.log(
     `ResponseError : errorCode = ${apiError.getErrorcode()} message = ${apiError.getMessage()}`
   );
-  response
-    .status(apiException.statusCode)
-    .send(convertResponseDataForRequestType(apiError, requestType));
+  response.status(apiException.statusCode).send(apiError.serializeBinary());
 }

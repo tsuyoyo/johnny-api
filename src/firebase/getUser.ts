@@ -30,7 +30,7 @@ export function getFirebaseUser(
           user.setPhoto(userRecord.photoURL || "");
           onResolve(new FirebaseUser(user, userRecord.email));
         })
-        .catch(error => {
+        .catch((error) => {
           const apiException = new ApiException(
             PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
             `Invalid firebase token - ${error}`,

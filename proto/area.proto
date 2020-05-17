@@ -52,8 +52,16 @@ enum Prefecture {
   OKINAWA = 47;
 }
 
+// deprecated
 message Area {
   int32 id = 1;
   string name = 2;
   Prefecture prefecture = 3;
+}
+
+message City {
+  string id = 1;
+  string name = 2;
+  string zipCode = 3;
+  Prefecture prefecture = 4;
 }

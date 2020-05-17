@@ -8,7 +8,7 @@ export function getUserProfile(
   const promises = [];
   promises.push(getActivityArea(userId));
 
-  return Promise.all(promises).then(results => {
+  return Promise.all(promises).then((results) => {
     const userProfile = new UserProfile();
     userProfile.setActivityareasList(results[0]);
     return userProfile;

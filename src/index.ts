@@ -11,7 +11,7 @@ const serviceAccount = require("/tmp/johnny/johnny-app-dev-firebase-adminsdk-8q1
 // Initialize the default app
 const defaultApp = admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://johnny-app-dev.firebaseio.com"
+  databaseURL: "https://johnny-app-dev.firebaseio.com",
 });
 const defaultAuth = admin.auth();
 
@@ -30,7 +30,7 @@ app.use(
   bodyParser.raw({
     inflate: true,
     limit: "100kb",
-    type: "application/protobuf"
+    type: "application/protobuf",
   })
 );
 

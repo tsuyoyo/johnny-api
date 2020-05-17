@@ -5,19 +5,17 @@ import * as userTable from "../../database/users";
 import * as userActivityAreaTable from "../../database/userActivityArea";
 import * as areaTable from "../../database/area";
 import {
-  getGetUserProfileResponseWrapper,
-  getPutUserProfileRequestWrapper,
-  getPutUserProfileActiveAreasRequestWrapper
+  getPutUserProfileActiveAreasRequestWrapper,
 } from "../../gateway/user";
 import * as admin from "firebase-admin";
 import authenticate from "../../middleware/authentication";
-import { getRequestType, RequestType } from "../../gateway/requestDataType";
-import { GetUserProfileResponse } from "../../proto/userService_pb";
+import { GetUserProfileResponse, PutUserProfileRequest } from "../../proto/userService_pb";
 import { ApiException, invalidParameterError } from "../../error/apiException";
 import { ResponseWrapper } from "../../gateway/responseWrapper";
 import { EmptyResponse } from "../../proto/empty_pb";
 import { Area } from "../../proto/area_pb";
 import { User, UserProfile } from "../../proto/user_pb";
+import { RequestWrapper } from "../../gateway/requestWrapper";
 
 const getUserIdFromRequest = (request: Request): Promise<string> =>
   new Promise<string>((onResolve, onReject) => {
@@ -47,10 +45,7 @@ const buildGetUserProfileResponse = (
 };
 
 function getUserProfile(request: Request, response: Response): void {
-  const responseWrapper = getGetUserProfileResponseWrapper(
-    response,
-    getRequestType(request)
-  );
+  const responseWrapper = new ResponseWrapper<GetUserProfileResponse>(response);
   getUserIdFromRequest(request)
     .then((userId: string) =>
       Promise.all([
@@ -58,7 +53,7 @@ function getUserProfile(request: Request, response: Response): void {
         userService.getUserProfile(userId, getActivityArea)
       ])
     )
-    .then(results => {
+    .then((results) => {
       const [user, userProfile] = results;
       responseWrapper.respondSuccess(
         buildGetUserProfileResponse(user, userProfile)
@@ -79,7 +74,10 @@ const updateUserActivityArea = (
   );
 
 const putActiveAreas = (request: Request, response: Response): void => {
-  const requestWrapper = getPutUserProfileActiveAreasRequestWrapper(request);
+  const requestWrapper = new RequestWrapper<PutUserProfileActiveAreasRequest>(
+    request,
+    PutUserProfileActiveAreasRequest.deserializeBinary
+  );
   const putRequest = requestWrapper.deserializeData();
   getUserIdFromRequest(request).then((userId: string) =>
     updateUserActivityArea(userId, putRequest.getActivityareasList())
@@ -87,9 +85,11 @@ const putActiveAreas = (request: Request, response: Response): void => {
 };
 
 function updateUserProfile(request: Request, response: Response): void {
-  const reqType: RequestType = getRequestType(request);
-  const requestWrapper = getPutUserProfileRequestWrapper(request, reqType);
-  const responseWrapper = new ResponseWrapper<EmptyResponse>(response, reqType);
+  const requestWrapper = new RequestWrapper<PutUserProfileRequest>(
+    request,
+    PutUserProfileRequest.deserializeBinary
+  );
+  const responseWrapper = new ResponseWrapper<EmptyResponse>(response);
   const putUserProfileRequest = requestWrapper.deserializeData();
 
   userService

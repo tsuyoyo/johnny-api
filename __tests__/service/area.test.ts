@@ -1,7 +1,7 @@
 import * as areaService from "../../src/service/area";
 import {
   AddAreaResponse,
-  AddAreaRequest
+  AddAreaRequest,
 } from "../../src/proto/areaService_pb";
 import { Area, Prefecture } from "../../src/proto/area_pb";
 import { ApiException } from "../../src/error/apiException";
