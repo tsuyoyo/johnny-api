@@ -4,12 +4,13 @@ import * as userActivityAreaService from "../../service/activityArea";
 import * as userTable from "../../database/users";
 import * as userActivityAreaTable from "../../database/userActivityArea";
 import * as areaTable from "../../database/area";
-import {
-  getPutUserProfileActiveAreasRequestWrapper,
-} from "../../gateway/user";
 import * as admin from "firebase-admin";
 import authenticate from "../../middleware/authentication";
-import { GetUserProfileResponse, PutUserProfileRequest } from "../../proto/userService_pb";
+import {
+  GetUserProfileResponse,
+  PutUserProfileRequest,
+  PutUserProfileActiveAreasRequest,
+} from "../../proto/userService_pb";
 import { ApiException, invalidParameterError } from "../../error/apiException";
 import { ResponseWrapper } from "../../gateway/responseWrapper";
 import { EmptyResponse } from "../../proto/empty_pb";
