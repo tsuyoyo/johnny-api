@@ -1,6 +1,5 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
-import * as mysqlWrapper from "./database/mysqlWrapper";
 import * as admin from "firebase-admin";
 import { provideRouter } from "./router/root";
 
@@ -16,7 +15,6 @@ const defaultApp = admin.initializeApp({
 const defaultAuth = admin.auth();
 
 const app = express();
-const router = express.Router();
 const port = 3000;
 
 // Logger.
@@ -33,15 +31,9 @@ app.use(
     type: "application/protobuf",
   })
 );
+app.use("/", provideRouter(defaultAuth));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // Example to test
 // $ curl -XPOST http://localhost:3000/user -H "Content-Type:application/x-www-form-urlencoded" -d "name=user_c&mail=userc@mail.com" -w '%{http_code}\n'
 // router.get("/", (req, res) => res.send("Hello World!!"));
-
-app.use("/", provideRouter(defaultAuth));
-
-// app.use("/", router);
-// app.use("/user", provideUserRouter(defaultAuth));
-// app.use("/area", provideAreaRouter());
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
