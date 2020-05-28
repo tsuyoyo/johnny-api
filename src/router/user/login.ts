@@ -3,7 +3,10 @@ import * as admin from "firebase-admin";
 import * as userTable from "../../database/users";
 import { getFirebaseUser } from "../../firebase/getUser";
 import * as loginService from "../../service/login";
-import { PostUserLoginResponse, PostUserLoginRequest } from "../../proto/userService_pb";
+import {
+  PostUserLoginResponse,
+  PostUserLoginRequest,
+} from "../../proto/userService_pb";
 import { ApiException } from "../../error/apiException";
 import { RequestWrapper } from "../../gateway/requestWrapper";
 import { ResponseWrapper } from "../../gateway/responseWrapper";

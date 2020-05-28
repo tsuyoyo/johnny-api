@@ -68,3 +68,13 @@ const Area$json = const {
   ],
 };
 
+const City$json = const {
+  '1': 'City',
+  '2': const [
+    const {'1': 'id', '3': 1, '4': 1, '5': 9, '10': 'id'},
+    const {'1': 'name', '3': 2, '4': 1, '5': 9, '10': 'name'},
+    const {'1': 'zipCode', '3': 3, '4': 1, '5': 9, '10': 'zipCode'},
+    const {'1': 'prefecture', '3': 4, '4': 1, '5': 14, '6': '.pj.sakuchin.percussion.proto.Prefecture', '10': 'prefecture'},
+  ],
+};
+

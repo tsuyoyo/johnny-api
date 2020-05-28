@@ -27,3 +27,10 @@ const GetAreaResponse$json = const {
   ],
 };
 
+const GetAreaCityResponse$json = const {
+  '1': 'GetAreaCityResponse',
+  '2': const [
+    const {'1': 'cities', '3': 1, '4': 3, '5': 11, '6': '.pj.sakuchin.percussion.proto.City', '10': 'cities'},
+  ],
+};
+

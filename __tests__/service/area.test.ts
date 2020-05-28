@@ -17,16 +17,16 @@ describe("area", function() {
   dummyRequest.setAreaname(expectedArea.getName());
   dummyRequest.setPrefecture(expectedArea.getPrefecture());
 
-  describe("when it succeeds to add area to database", function() {
+  describe("when it succeeds to add area to database", function () {
     const expectedResponse = new AddAreaResponse();
     expectedResponse.setArea(expectedArea);
 
     const mockedAddAreaToDatabase = jest.fn();
     mockedAddAreaToDatabase.mockReturnValueOnce(
-      new Promise<Area>(onResolve => onResolve(expectedArea))
+      new Promise<Area>((onResolve) => onResolve(expectedArea))
     );
 
-    it("should get AddAreaResponse with added Area data", async function() {
+    it("should get AddAreaResponse with added Area data", async function () {
       await expect(
         areaService.addArea(
           dummyRequest.getAreaname(),
@@ -37,7 +37,7 @@ describe("area", function() {
     });
   });
 
-  describe("when it fails to add area to database", function() {
+  describe("when it fails to add area to database", function () {
     const expectedError = new ApiException(
       PercussionApiError.ErrorCode.DB_ERROR,
       "test success",
@@ -49,7 +49,7 @@ describe("area", function() {
       new Promise<Area>((onResolve, onReject) => onReject(expectedError))
     );
 
-    it("should get AddAreaResponse with added Area data", async function() {
+    it("should get AddAreaResponse with added Area data", async function () {
       await expect(
         areaService.addArea(
           dummyRequest.getAreaname(),

@@ -3,7 +3,7 @@ import * as userService from "../../service/user";
 import * as userActivityAreaService from "../../service/activityArea";
 import * as userTable from "../../database/users";
 import * as userActivityAreaTable from "../../database/userActivityArea";
-import * as areaTable from "../../database/area";
+import * as areaTable from "../../database/deprecated/area";
 import * as admin from "firebase-admin";
 import authenticate from "../../middleware/authentication";
 import {

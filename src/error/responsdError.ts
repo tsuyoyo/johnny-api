@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { ApiException } from "../error/apiException";
 import { PercussionApiError } from "../proto/error_pb";
+import * as base64 from "base64-arraybuffer";
 
 export default function respondError(
   response: Response,
@@ -12,5 +13,7 @@ export default function respondError(
   console.log(
     `ResponseError : errorCode = ${apiError.getErrorcode()} message = ${apiError.getMessage()}`
   );
-  response.status(apiException.statusCode).send(apiError.serializeBinary());
+  response
+    .status(apiException.statusCode)
+    .send(base64.encode(apiError.serializeBinary()));
 }

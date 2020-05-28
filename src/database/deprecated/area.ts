@@ -1,7 +1,7 @@
-import { Area, PrefectureMap } from "../proto/area_pb";
-import { runQuery } from "./mysqlWrapper";
-import { ApiException } from "../error/apiException";
-import { PercussionApiError } from "../proto/error_pb";
+import { Area, PrefectureMap } from "../../proto/area_pb";
+import { runQuery } from "../mysqlWrapper";
+import { ApiException } from "../../error/apiException";
+import { PercussionApiError } from "../../proto/error_pb";
 
 const AREAS_TABLE = "areas";
 

@@ -1,9 +1,13 @@
 import { Router } from "express";
 
+
 export function provideAreaCityRouter(): Router {
   const router = Router();
-  // GET /area/city/{prefecture}
-  // router.get("/", (request, response) => );
-
+  // GET /area/city?zipCode=xxxxxxx
+  // router.get("/", (request, response) => {
+  //   const zipCode = request.query.zipCode;
+  //   if (!zipCode) {
+  //   }
+  // });
   return router;
 }
