@@ -1,26 +1,7 @@
-import { PrefectureMap, Area, City } from "../proto/area_pb";
-import { AddAreaResponse, GetAreaCityResponse } from "../proto/areaService_pb";
+import { City } from "../proto/area_pb";
+import { GetAreaCityResponse } from "../proto/areaService_pb";
 import { GetSuggestCityResponse } from "../proto/suggestService_pb";
 import * as ApiException from "../error/apiException";
-
-// Deprecated
-export async function addArea(
-  areaName: string,
-  prefecture: PrefectureMap[keyof PrefectureMap],
-  addAreaToDatabase: (
-    name: string,
-    prefecture: PrefectureMap[keyof PrefectureMap]
-  ) => Promise<Area>
-): Promise<AddAreaResponse> {
-  return new Promise<AddAreaResponse>((onResolve, onReject) => {
-    addAreaToDatabase(areaName, prefecture).then((area: Area) => {
-      const response = new AddAreaResponse();
-      response.setArea(area);
-      onResolve(response);
-    });
-    // .catch((error: ApiException) => onReject(error));
-  });
-}
 
 export async function getCitiesByPrefecture(
   prefecture: string,
@@ -44,7 +25,7 @@ function normalizeZipCodeToQuery(zipCode: string): string {
 }
 
 function validateZipCode(zipCode: string): boolean {
-  return zipCode && zipCode.length >= 4 && zipCode.match(/^\d{4,7}$/) !== null;
+  return zipCode && zipCode.length > 0 && zipCode.match(/^\d{1,7}$/) !== null;
 }
 
 export async function getCitiesSuggestionByZipCode(

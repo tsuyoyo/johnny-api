@@ -14,9 +14,9 @@ function handleGetCitySuggestionRequest(
   if (zipCode) {
     areaService
       .getCitiesSuggestionByZipCode(zipCode, areaDb.selectCitiesLikeZipCode)
-      .then((response: GetSuggestCityResponse) =>
-        responseWrapper.respondSuccess(response)
-      );
+      .then((response: GetSuggestCityResponse) => {
+        return responseWrapper.respondSuccess(response);
+      });
   } else {
     responseWrapper.respondError(
       ApiException.invalidParameterError(`Invalid zipCode - ${zipCode}`)

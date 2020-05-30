@@ -64,7 +64,7 @@ class User extends $pb.GeneratedMessage {
 
 class UserProfile extends $pb.GeneratedMessage {
   static final $pb.BuilderInfo _i = $pb.BuilderInfo('UserProfile', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
-    ..pc<$0.Area>(1, 'activityAreas', $pb.PbFieldType.PM, protoName: 'activityAreas', subBuilder: $0.Area.create)
+    ..pc<$0.City>(1, 'activeCities', $pb.PbFieldType.PM, protoName: 'activeCities', subBuilder: $0.City.create)
     ..hasRequiredFields = false
   ;
 
@@ -84,6 +84,6 @@ class UserProfile extends $pb.GeneratedMessage {
   static UserProfile _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$0.Area> get activityAreas => $_getList(0);
+  $core.List<$0.City> get activeCities => $_getList(0);
 }
 

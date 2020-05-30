@@ -1,38 +1,28 @@
 import { Request, Response, Router } from "express";
 import * as userService from "../../service/user";
-import * as userActivityAreaService from "../../service/activityArea";
+import * as userCityService from "../../service/userCity";
 import * as userTable from "../../database/users";
-import * as userActivityAreaTable from "../../database/userActivityArea";
-import * as areaTable from "../../database/deprecated/area";
+import * as userCitiesTable from "../../database/user/cities";
+import * as areaTable from "../../database/areas";
 import * as admin from "firebase-admin";
 import authenticate from "../../middleware/authentication";
 import {
   GetUserProfileResponse,
   PutUserProfileRequest,
-  PutUserProfileActiveAreasRequest,
 } from "../../proto/userService_pb";
-import { ApiException, invalidParameterError } from "../../error/apiException";
+import { ApiException } from "../../error/apiException";
 import { ResponseWrapper } from "../../gateway/responseWrapper";
 import { EmptyResponse } from "../../proto/empty_pb";
-import { Area } from "../../proto/area_pb";
+import { City } from "../../proto/area_pb";
 import { User, UserProfile } from "../../proto/user_pb";
 import { RequestWrapper } from "../../gateway/requestWrapper";
+import * as userRequestUtil from "./util";
 
-const getUserIdFromRequest = (request: Request): Promise<string> =>
-  new Promise<string>((onResolve, onReject) => {
-    const userId = request.params["id"];
-    if (userId) {
-      onResolve(userId);
-    } else {
-      onReject(invalidParameterError("user ID is required"));
-    }
-  });
-
-const getActivityArea = (userId: string): Promise<Array<Area>> =>
-  userActivityAreaService.getActivityArea(
+const getActivityArea = (userId: string): Promise<Array<City>> =>
+  userCityService.getUserCitiesByUserId(
     userId,
-    userActivityAreaTable.selectActiveAreaIds,
-    areaTable.selectAreasByIds
+    userCitiesTable.selectCities,
+    areaTable.selectCitiesByIds
   );
 
 const buildGetUserProfileResponse = (
@@ -47,11 +37,12 @@ const buildGetUserProfileResponse = (
 
 function getUserProfile(request: Request, response: Response): void {
   const responseWrapper = new ResponseWrapper<GetUserProfileResponse>(response);
-  getUserIdFromRequest(request)
+  userRequestUtil
+    .getUserIdFromRequest(request)
     .then((userId: string) =>
       Promise.all([
         userTable.selectUserById(userId),
-        userService.getUserProfile(userId, getActivityArea)
+        userService.getUserProfile(userId, getActivityArea),
       ])
     )
     .then((results) => {
@@ -65,25 +56,14 @@ function getUserProfile(request: Request, response: Response): void {
 
 const updateUserActivityArea = (
   userId: string,
-  areas: Array<Area>
+  areas: Array<City>
 ): Promise<number> =>
-  userActivityAreaService.updateActivityArea(
+  userCityService.updateUserCities(
     userId,
     areas,
-    userActivityAreaTable.deleteActiveAreas,
-    userActivityAreaTable.insertActivityAreas
+    userCitiesTable.deleteCities,
+    userCitiesTable.insertCities
   );
-
-const putActiveAreas = (request: Request, response: Response): void => {
-  const requestWrapper = new RequestWrapper<PutUserProfileActiveAreasRequest>(
-    request,
-    PutUserProfileActiveAreasRequest.deserializeBinary
-  );
-  const putRequest = requestWrapper.deserializeData();
-  getUserIdFromRequest(request).then((userId: string) =>
-    updateUserActivityArea(userId, putRequest.getActivityareasList())
-  );
-};
 
 function updateUserProfile(request: Request, response: Response): void {
   const requestWrapper = new RequestWrapper<PutUserProfileRequest>(
@@ -105,21 +85,18 @@ function updateUserProfile(request: Request, response: Response): void {
 
 export function provideUserProfileRouter(auth: admin.auth.Auth): Router {
   const router = Router();
+
   // Profile
-  router.get("/:id", (request, response) => getUserProfile(request, response));
-  router.put("/:id", authenticate(auth), (request, response) => {
+  router.get("/:id/profile", (request, response) =>
+    getUserProfile(request, response)
+  );
+  router.put("/:id/profile", authenticate(auth), (_request, response) => {
     console.log("put : passed authentication");
     // updateUserProfile(request, response);
   });
-  router.delete("/:id", authenticate(auth), (request, response) => {
+  router.delete("/:id/profile", authenticate(auth), (request, response) => {
     const userId = request.params["id"];
   });
-
-  // Active Areas
-  router.get("/:id/activeAreas", authenticate(auth), (request, response) => {
-    console.log("put : passed authentication");
-  });
-  router.put("/:id/activeAreas", authenticate(auth), putActiveAreas);
 
   return router;
 }

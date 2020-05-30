@@ -23,6 +23,7 @@ services:
     container_name: test-db
     volumes:
       - ./database:/docker-entrypoint-initdb.d
+      - ./database_conf/my.cnf:/etc/mysql/conf.d/my.cnf
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: ${TEST_DB_PASSWORD}

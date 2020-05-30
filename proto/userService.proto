@@ -30,6 +30,10 @@ message PutUserProfileRequest {
   UserProfile userProfile = 2;
 }
 
-message PutUserProfileActiveAreasRequest {
-  repeated Area activityAreas = 1;
+message PutUserCityRequest {
+  repeated City cities = 1;
+}
+
+message GetUserCityResponse {
+  repeated City cities = 1;
 }

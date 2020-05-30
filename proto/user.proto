@@ -9,5 +9,5 @@ message User {
 }
 
 message UserProfile {
-  repeated Area activityAreas = 1;
+  repeated City activeCities = 1;
 }
