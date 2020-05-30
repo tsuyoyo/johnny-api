@@ -13,33 +13,33 @@ import 'area.pbenum.dart';
 
 export 'area.pbenum.dart';
 
-class Area extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('Area', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
-    ..a<$core.int>(1, 'id', $pb.PbFieldType.O3)
+class City extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('City', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..aOS(1, 'id')
     ..aOS(2, 'name')
     ..e<Prefecture>(3, 'prefecture', $pb.PbFieldType.OE, defaultOrMaker: Prefecture.UNKNOWN, valueOf: Prefecture.valueOf, enumValues: Prefecture.values)
     ..hasRequiredFields = false
   ;
 
-  Area._() : super();
-  factory Area() => create();
-  factory Area.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory Area.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  Area clone() => Area()..mergeFromMessage(this);
-  Area copyWith(void Function(Area) updates) => super.copyWith((message) => updates(message as Area));
+  City._() : super();
+  factory City() => create();
+  factory City.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory City.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  City clone() => City()..mergeFromMessage(this);
+  City copyWith(void Function(City) updates) => super.copyWith((message) => updates(message as City));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static Area create() => Area._();
-  Area createEmptyInstance() => create();
-  static $pb.PbList<Area> createRepeated() => $pb.PbList<Area>();
+  static City create() => City._();
+  City createEmptyInstance() => create();
+  static $pb.PbList<City> createRepeated() => $pb.PbList<City>();
   @$core.pragma('dart2js:noInline')
-  static Area getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<Area>(create);
-  static Area _defaultInstance;
+  static City getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<City>(create);
+  static City _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.int get id => $_getIZ(0);
+  $core.String get id => $_getSZ(0);
   @$pb.TagNumber(1)
-  set id($core.int v) { $_setSignedInt32(0, v); }
+  set id($core.String v) { $_setString(0, v); }
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)

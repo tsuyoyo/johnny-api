@@ -7,7 +7,7 @@ const connectionParams = {
   user: process.env.TEST_DB_USER,
   password: process.env.TEST_DB_PASSWORD,
   database: process.env.TEST_DB_NAME,
-  charset: "utf8_general_ci"
+  charset: "utf8_general_ci",
 };
 
 // Ref : error codes from sqlite.

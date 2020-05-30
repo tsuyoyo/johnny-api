@@ -3,9 +3,9 @@
 
 import * as jspb from "google-protobuf";
 
-export class Area extends jspb.Message {
-  getId(): number;
-  setId(value: number): void;
+export class City extends jspb.Message {
+  getId(): string;
+  setId(value: string): void;
 
   getName(): string;
   setName(value: string): void;
@@ -14,18 +14,18 @@ export class Area extends jspb.Message {
   setPrefecture(value: PrefectureMap[keyof PrefectureMap]): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Area.AsObject;
-  static toObject(includeInstance: boolean, msg: Area): Area.AsObject;
+  toObject(includeInstance?: boolean): City.AsObject;
+  static toObject(includeInstance: boolean, msg: City): City.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Area, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Area;
-  static deserializeBinaryFromReader(message: Area, reader: jspb.BinaryReader): Area;
+  static serializeBinaryToWriter(message: City, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): City;
+  static deserializeBinaryFromReader(message: City, reader: jspb.BinaryReader): City;
 }
 
-export namespace Area {
+export namespace City {
   export type AsObject = {
-    id: number,
+    id: string,
     name: string,
     prefecture: PrefectureMap[keyof PrefectureMap],
   }

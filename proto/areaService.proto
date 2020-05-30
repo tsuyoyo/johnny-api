@@ -3,15 +3,6 @@ package pj.sakuchin.percussion.proto;
 
 import "proto/area.proto";
 
-message AddAreaRequest {
-  string areaName = 1;
-  Prefecture prefecture = 2;
-}
-
-message AddAreaResponse {
-  Area area = 1;
-}
-
-message GetAreaResponse {
-  repeated Area areas = 1;
+message GetAreaCityResponse {
+  repeated City cities = 1;
 }

@@ -1,12 +1,11 @@
 import { Response } from "express";
 import { ApiException } from "../error/apiException";
 import { PercussionApiError } from "../proto/error_pb";
-import { RequestType } from "../gateway/requestDataType";
-import { convertResponseDataForRequestType } from "../gateway/responseWrapper";
+import * as base64 from "base64-arraybuffer";
+
 export default function respondError(
   response: Response,
-  apiException: ApiException,
-  requestType: RequestType
+  apiException: ApiException
 ): void {
   const apiError = new PercussionApiError();
   apiError.setMessage(apiException.message);
@@ -16,5 +15,5 @@ export default function respondError(
   );
   response
     .status(apiException.statusCode)
-    .send(convertResponseDataForRequestType(apiError, requestType));
+    .send(base64.encode(apiError.serializeBinary()));
 }

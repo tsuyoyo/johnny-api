@@ -1,24 +1,26 @@
 import { Request, Response, Router } from "express";
 import * as signupService from "../../service/signup";
 import * as userTable from "../../database/users";
-import {
-  getSignupUserReqeustWrapper,
-  getSignupUserResponseWrapper
-} from "../../gateway/user";
 import * as admin from "firebase-admin";
-import { getRequestType, RequestType } from "../../gateway/requestDataType";
 import { getFirebaseUser } from "../../firebase/getUser";
-import { SignupUserResponse } from "../../proto/userService_pb";
+import {
+  SignupUserResponse,
+  SignupUserRequest,
+} from "../../proto/userService_pb";
 import { ApiException } from "../../error/apiException";
+import { RequestWrapper } from "../../gateway/requestWrapper";
+import { ResponseWrapper } from "../../gateway/responseWrapper";
 
 function signup(
   request: Request,
   response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const reqType: RequestType = getRequestType(request);
-  const responseWrapper = getSignupUserResponseWrapper(response, reqType);
-  const requestWrapper = getSignupUserReqeustWrapper(request, reqType);
+  const requestWrapper = new RequestWrapper<SignupUserRequest>(
+    request,
+    SignupUserRequest.deserializeBinary
+  );
+  const responseWrapper = new ResponseWrapper<SignupUserResponse>(response);
   signupService
     .signup(
       requestWrapper.deserializeData(),

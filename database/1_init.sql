@@ -43,14 +43,14 @@ COMMIT;
 -- `b` ,
 -- `c`
 -- );
-CREATE TABLE test_db.user_activity_areas (
+CREATE TABLE test_db.user_cities (
     id INT primary key AUTO_INCREMENT,
     user_id VARCHAR(256) not null,
-    area_id INT not null
+    city_id VARCHAR(16) not null
  ) AUTO_INCREMENT = 1;
 START TRANSACTION;
-INSERT INTO test_db.user_activity_areas(user_id, area_id) VALUE ('id_a', 50);
-INSERT INTO test_db.user_activity_areas(user_id, area_id) VALUE ('id_a', 60);
+INSERT INTO test_db.user_cities(user_id, city_id) VALUE ('id_a', '50');
+INSERT INTO test_db.user_cities(user_id, city_id) VALUE ('id_a', '60');
 COMMIT;
 
 -- ************************

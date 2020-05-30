@@ -1,14 +1,14 @@
 import * as signupService from "../../src/service/signup";
 import {
   SignupUserRequest,
-  SignupUserResponse
+  SignupUserResponse,
 } from "../../src/proto/userService_pb";
 import { PercussionApiError } from "../../src/proto/error_pb";
 import { ApiException } from "../../src/error/apiException";
 import { User } from "../../src/proto/user_pb";
 import { FirebaseUser } from "../../src/firebase/getUser";
 
-describe("signup", function() {
+describe("signup", function () {
   describe("when no token is set in the request", () => {
     const request = new SignupUserRequest();
     request.setToken("");
@@ -40,7 +40,7 @@ describe("signup", function() {
     const expectedFirebaseUser = new FirebaseUser(expectedUser, expectedEmail);
     const mockedGetFirebaseUser = jest.fn();
     mockedGetFirebaseUser.mockReturnValueOnce(
-      new Promise<FirebaseUser>(onResolve => onResolve(expectedFirebaseUser))
+      new Promise<FirebaseUser>((onResolve) => onResolve(expectedFirebaseUser))
     );
 
     // registerUserToDatabase is success
@@ -48,7 +48,7 @@ describe("signup", function() {
     expectedResponse.setUser(expectedUser);
     const mockedRegisterUserToDb = jest.fn();
     mockedRegisterUserToDb.mockReturnValueOnce(
-      new Promise<User>(onResolve => onResolve(expectedUser))
+      new Promise<User>((onResolve) => onResolve(expectedUser))
     );
 
     it("should return SignupResponse instance with registered user info", async () => {

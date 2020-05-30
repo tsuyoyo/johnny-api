@@ -4,7 +4,6 @@ import { ApiException } from "../error/apiException";
 import respondError from "../error/responsdError";
 import { PercussionApiError } from "../proto/error_pb";
 import { getFirebaseUser } from "../firebase/getUser";
-import { getRequestType } from "../gateway/requestDataType";
 
 export default function authenticate(
   auth: admin.auth.Auth
@@ -12,7 +11,6 @@ export default function authenticate(
   return (request: Request, response: Response, next: NextFunction): void => {
     const token = request.headers["x-api-token"];
     const userId = request.headers["x-user-id"];
-    const requestType = getRequestType(request);
 
     if (!(token && userId)) {
       const authError = new ApiException(
@@ -20,7 +18,7 @@ export default function authenticate(
         "No token or userId",
         401
       );
-      respondError(response, authError, requestType);
+      respondError(response, authError);
       return;
     }
 
@@ -30,13 +28,13 @@ export default function authenticate(
       401
     );
     getFirebaseUser(auth)(token.toString())
-      .then(firebaseUser => {
+      .then((firebaseUser) => {
         if (firebaseUser.user.getId() == userId.toString()) {
           next();
         } else {
-          respondError(response, firebaseAuthError, requestType);
+          respondError(response, firebaseAuthError);
         }
       })
-      .catch(() => respondError(response, firebaseAuthError, requestType));
+      .catch(() => respondError(response, firebaseAuthError));
   };
 }

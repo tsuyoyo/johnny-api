@@ -17,7 +17,7 @@ const User$json = const {
 const UserProfile$json = const {
   '1': 'UserProfile',
   '2': const [
-    const {'1': 'activityAreas', '3': 1, '4': 3, '5': 11, '6': '.pj.sakuchin.percussion.proto.Area', '10': 'activityAreas'},
+    const {'1': 'activeCities', '3': 1, '4': 3, '5': 11, '6': '.pj.sakuchin.percussion.proto.City', '10': 'activeCities'},
   ],
 };
 

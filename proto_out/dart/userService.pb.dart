@@ -230,28 +230,53 @@ class PutUserProfileRequest extends $pb.GeneratedMessage {
   $1.UserProfile ensureUserProfile() => $_ensure(1);
 }
 
-class PutUserProfileActiveAreasRequest extends $pb.GeneratedMessage {
-  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PutUserProfileActiveAreasRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
-    ..pc<$0.Area>(1, 'activityAreas', $pb.PbFieldType.PM, protoName: 'activityAreas', subBuilder: $0.Area.create)
+class PutUserCityRequest extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('PutUserCityRequest', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..pc<$0.City>(1, 'cities', $pb.PbFieldType.PM, subBuilder: $0.City.create)
     ..hasRequiredFields = false
   ;
 
-  PutUserProfileActiveAreasRequest._() : super();
-  factory PutUserProfileActiveAreasRequest() => create();
-  factory PutUserProfileActiveAreasRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
-  factory PutUserProfileActiveAreasRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
-  PutUserProfileActiveAreasRequest clone() => PutUserProfileActiveAreasRequest()..mergeFromMessage(this);
-  PutUserProfileActiveAreasRequest copyWith(void Function(PutUserProfileActiveAreasRequest) updates) => super.copyWith((message) => updates(message as PutUserProfileActiveAreasRequest));
+  PutUserCityRequest._() : super();
+  factory PutUserCityRequest() => create();
+  factory PutUserCityRequest.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory PutUserCityRequest.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  PutUserCityRequest clone() => PutUserCityRequest()..mergeFromMessage(this);
+  PutUserCityRequest copyWith(void Function(PutUserCityRequest) updates) => super.copyWith((message) => updates(message as PutUserCityRequest));
   $pb.BuilderInfo get info_ => _i;
   @$core.pragma('dart2js:noInline')
-  static PutUserProfileActiveAreasRequest create() => PutUserProfileActiveAreasRequest._();
-  PutUserProfileActiveAreasRequest createEmptyInstance() => create();
-  static $pb.PbList<PutUserProfileActiveAreasRequest> createRepeated() => $pb.PbList<PutUserProfileActiveAreasRequest>();
+  static PutUserCityRequest create() => PutUserCityRequest._();
+  PutUserCityRequest createEmptyInstance() => create();
+  static $pb.PbList<PutUserCityRequest> createRepeated() => $pb.PbList<PutUserCityRequest>();
   @$core.pragma('dart2js:noInline')
-  static PutUserProfileActiveAreasRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutUserProfileActiveAreasRequest>(create);
-  static PutUserProfileActiveAreasRequest _defaultInstance;
+  static PutUserCityRequest getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<PutUserCityRequest>(create);
+  static PutUserCityRequest _defaultInstance;
 
   @$pb.TagNumber(1)
-  $core.List<$0.Area> get activityAreas => $_getList(0);
+  $core.List<$0.City> get cities => $_getList(0);
+}
+
+class GetUserCityResponse extends $pb.GeneratedMessage {
+  static final $pb.BuilderInfo _i = $pb.BuilderInfo('GetUserCityResponse', package: const $pb.PackageName('pj.sakuchin.percussion.proto'), createEmptyInstance: create)
+    ..pc<$0.City>(1, 'cities', $pb.PbFieldType.PM, subBuilder: $0.City.create)
+    ..hasRequiredFields = false
+  ;
+
+  GetUserCityResponse._() : super();
+  factory GetUserCityResponse() => create();
+  factory GetUserCityResponse.fromBuffer($core.List<$core.int> i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromBuffer(i, r);
+  factory GetUserCityResponse.fromJson($core.String i, [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(i, r);
+  GetUserCityResponse clone() => GetUserCityResponse()..mergeFromMessage(this);
+  GetUserCityResponse copyWith(void Function(GetUserCityResponse) updates) => super.copyWith((message) => updates(message as GetUserCityResponse));
+  $pb.BuilderInfo get info_ => _i;
+  @$core.pragma('dart2js:noInline')
+  static GetUserCityResponse create() => GetUserCityResponse._();
+  GetUserCityResponse createEmptyInstance() => create();
+  static $pb.PbList<GetUserCityResponse> createRepeated() => $pb.PbList<GetUserCityResponse>();
+  @$core.pragma('dart2js:noInline')
+  static GetUserCityResponse getDefault() => _defaultInstance ??= $pb.GeneratedMessage.$_defaultFor<GetUserCityResponse>(create);
+  static GetUserCityResponse _defaultInstance;
+
+  @$pb.TagNumber(1)
+  $core.List<$0.City> get cities => $_getList(0);
 }
 

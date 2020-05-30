@@ -1,39 +1,25 @@
 import { Response } from "express";
-import { RequestType } from "./requestDataType";
 import { Message } from "google-protobuf";
 import { ApiException } from "../error/apiException";
 import respondError from "../error/responsdError";
-
-export function convertResponseDataForRequestType(
-  data: Message,
-  requestType: RequestType
-): object {
-  switch (requestType) {
-    case RequestType.JSON:
-      return data.toObject(false);
-    case RequestType.PROTOBUF:
-      return Buffer.from(data.serializeBinary());
-  }
-}
+import * as base64 from "base64-arraybuffer";
 
 export class ResponseWrapper<T extends Message> {
   private response: Response;
-  private requestType: RequestType;
 
-  constructor(response: Response, requestType: RequestType) {
+  constructor(response: Response) {
     this.response = response;
-    this.requestType = requestType;
   }
 
   public respondSuccess(message: T): void {
     this.response
       .status(200)
-      .contentType("application/x-protobuf")
-      .send(convertResponseDataForRequestType(message, this.requestType));
+      .contentType("application/protobuf")
+      .send(base64.encode(message.serializeBinary()));
   }
 
   public respondError(apiException: ApiException): void {
     console.log(`Error - ${apiException.apiError} : ${apiException.message}`);
-    respondError(this.response, apiException, this.requestType);
+    respondError(this.response, apiException);
   }
 }
