@@ -15,7 +15,10 @@ function handleGetCitySuggestionRequest(
     areaService
       .getCitiesSuggestionByZipCode(zipCode, areaDb.selectCitiesLikeZipCode)
       .then((response: GetSuggestCityResponse) => {
-        return responseWrapper.respondSuccess(response);
+        responseWrapper.respondSuccess(response);
+      })
+      .catch((e: ApiException.ApiException) => {
+        responseWrapper.respondError(e);
       });
   } else {
     responseWrapper.respondError(

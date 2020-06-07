@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { provideUserSignupRouter } from "./user/signup";
 import { provideUserLoginRouter } from "./user/login";
-import { provideUserProfileRouter } from "./user/profile";
-import { provideUserCityRouter } from "./user/city";
+import { provideUserProfileRouter } from "./user/profile/profile";
+import { provideUserCityRouter } from "./user/profile/city";
 import { provideAreaCityRouter } from "./area/prefecture/city";
 import { provideSuggetionRouter } from "./suggestion/city";
 import admin = require("firebase-admin");

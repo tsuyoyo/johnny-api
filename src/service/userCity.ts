@@ -14,5 +14,6 @@ export function updateUserCities(
   deleteUserCities: (userId: string) => Promise<number>,
   insertUserCities: (userId: string, areas: Array<City>) => Promise<number>
 ): Promise<number> {
+  // return insertUserCities(userId, areas);
   return deleteUserCities(userId).then(() => insertUserCities(userId, areas));
 }

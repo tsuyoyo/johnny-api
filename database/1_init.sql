@@ -15,7 +15,7 @@ CREATE TABLE test_db.users (
     mail varchar(100) unique
 );
 START TRANSACTION;
-INSERT INTO test_db.users VALUES ('id_a', N'あああああ', 'http://photo.com', 'test_a@mail.com');
+INSERT INTO test_db.users VALUES ('id_a', 'あああああ', 'http://photo.com', 'test_a@mail.com');
 INSERT INTO test_db.users VALUES ('id_b', 'test_b', 'http://photo.com', 'test_b@mail.com');
 INSERT INTO test_db.users VALUES ('id_c', 'test_c', 'http://photo.com', 'test_c@mail.com');
 COMMIT;
@@ -30,11 +30,11 @@ CREATE TABLE test_db.areas (
     prefecture INT not null
  ) AUTO_INCREMENT = 100;
 START TRANSACTION;
-INSERT INTO test_db.areas VALUE (50, N'渋谷', 13);
-INSERT INTO test_db.areas VALUE (null, N'新宿', 13);
-INSERT INTO test_db.areas VALUE (null, N'池袋', 13);
-INSERT INTO test_db.areas VALUE (60, N'市川', 12);
-INSERT INTO test_db.areas VALUE (null, N'本八幡', 12);
+INSERT INTO test_db.areas VALUE (50, '渋谷', 13);
+INSERT INTO test_db.areas VALUE (null, '新宿', 13);
+INSERT INTO test_db.areas VALUE (null, '池袋', 13);
+INSERT INTO test_db.areas VALUE (60, '市川', 12);
+INSERT INTO test_db.areas VALUE (null, '本八幡', 12);
 COMMIT;
 
 -- (Note : to prevent adding duplicated activity area)
@@ -44,7 +44,7 @@ COMMIT;
 -- `c`
 -- );
 CREATE TABLE test_db.user_cities (
-    id INT primary key AUTO_INCREMENT,
+    id BIGINT primary key AUTO_INCREMENT,
     user_id VARCHAR(256) not null,
     city_id VARCHAR(16) not null
  ) AUTO_INCREMENT = 1;

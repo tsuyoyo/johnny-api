@@ -1,22 +1,22 @@
 import { Request, Response, Router } from "express";
-import * as userService from "../../service/user";
-import * as userCityService from "../../service/userCity";
-import * as userTable from "../../database/users";
-import * as userCitiesTable from "../../database/user/cities";
-import * as areaTable from "../../database/areas";
+import * as userService from "../../../service/user";
+import * as userCityService from "../../../service/userCity";
+import * as userTable from "../../../database/users";
+import * as userCitiesTable from "../../../database/user/cities";
+import * as areaTable from "../../../database/areas";
 import * as admin from "firebase-admin";
-import authenticate from "../../middleware/authentication";
+import authenticate from "../../../middleware/authentication";
 import {
   GetUserProfileResponse,
   PutUserProfileRequest,
-} from "../../proto/userService_pb";
-import { ApiException } from "../../error/apiException";
-import { ResponseWrapper } from "../../gateway/responseWrapper";
-import { EmptyResponse } from "../../proto/empty_pb";
-import { City } from "../../proto/area_pb";
-import { User, UserProfile } from "../../proto/user_pb";
-import { RequestWrapper } from "../../gateway/requestWrapper";
-import * as userRequestUtil from "./util";
+} from "../../../proto/userService_pb";
+import { ApiException } from "../../../error/apiException";
+import { ResponseWrapper } from "../../../gateway/responseWrapper";
+import { EmptyResponse } from "../../../proto/empty_pb";
+import { City } from "../../../proto/area_pb";
+import { User, UserProfile } from "../../../proto/user_pb";
+import { RequestWrapper } from "../../../gateway/requestWrapper";
+import * as userRequestUtil from "../util";
 
 const getActivityArea = (userId: string): Promise<Array<City>> =>
   userCityService.getUserCitiesByUserId(

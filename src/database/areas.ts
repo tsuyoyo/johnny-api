@@ -7,7 +7,7 @@ const SELECT_QUERY = `SELECT DISTINCT ${SELECT_FIELDS} from ${ADDRESS_TABLE}`;
 
 function buildCityFromJsObj(obj: object): City {
   const city = new City();
-  city.setId(obj["city_id"]);
+  city.setId(`${obj["city_id"]}`);
   city.setName(obj["city_name"]);
   city.setPrefecture(obj["ken_id"]);
   return city;
@@ -56,9 +56,9 @@ export async function selectCitiesByIds(
   ids: Array<number>
 ): Promise<Array<City>> {
   return new Promise<Array<City>>((onResolve, onReject) => {
-    let query = `SELECT * from ${ADDRESS_TABLE} where city_id in (`;
+    let query = `where city_id in (`;
     for (let i = 0; i < ids.length; i++) {
-      query += ids[i] + (i < ids.length - 1 ? "," : ")");
+      query += `'${ids[i]}'` + (i < ids.length - 1 ? "," : ")");
     }
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     runSelectQuery(query, onResolve, onReject);

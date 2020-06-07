@@ -36,6 +36,7 @@ export function getFirebaseUser(
             `Invalid firebase token - ${error}`,
             403
           );
+          console.log(`Failed to get firebase user - ${error.message}`);
           onReject(apiException);
         });
     });

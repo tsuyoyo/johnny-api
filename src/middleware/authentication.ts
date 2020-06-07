@@ -29,7 +29,10 @@ export default function authenticate(
     );
     getFirebaseUser(auth)(token.toString())
       .then((firebaseUser) => {
-        if (firebaseUser.user.getId() == userId.toString()) {
+        console.log(
+          `firebaseUserId : ${firebaseUser.user.getId()}, userId : ${userId}`
+        );
+        if (firebaseUser.user.getId().toString() == userId.toString()) {
           next();
         } else {
           respondError(response, firebaseAuthError);

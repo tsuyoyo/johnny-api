@@ -1,17 +1,17 @@
-import authenticate from "../../middleware/authentication";
+import authenticate from "../../../middleware/authentication";
 import * as admin from "firebase-admin";
 import { Request, Response, Router } from "express";
-import * as userRequestUtil from "./util";
+import * as userRequestUtil from "../util";
 import {
   PutUserCityRequest,
   GetUserCityResponse,
-} from "../../proto/userService_pb";
-import { RequestWrapper } from "../../gateway/requestWrapper";
-import * as userCityService from "../../service/userCity";
-import * as userCitiesTable from "../../database/user/cities";
-import * as areaTable from "../../database/areas";
-import { City } from "../../proto/area_pb";
-import { ResponseWrapper } from "../../gateway/responseWrapper";
+} from "../../../proto/userService_pb";
+import { RequestWrapper } from "../../../gateway/requestWrapper";
+import * as userCityService from "../../../service/userCity";
+import * as userCitiesTable from "../../../database/user/cities";
+import * as areaTable from "../../../database/areas";
+import { City } from "../../../proto/area_pb";
+import { ResponseWrapper } from "../../../gateway/responseWrapper";
 
 const updateUserCities = (
   userId: string,
@@ -58,7 +58,7 @@ const putUserCities = (request: Request, response: Response): void => {
 
 export function provideUserCityRouter(auth: admin.auth.Auth): Router {
   const router = Router();
-  router.get("/:id/city", authenticate(auth), getUserCities);
-  router.put("/:id/city", authenticate(auth), putUserCities);
+  router.get("/:id/profile/city", authenticate(auth), getUserCities);
+  router.put("/:id/profile/city", authenticate(auth), putUserCities);
   return router;
 }

@@ -9,13 +9,13 @@ export async function insertCities(
 ): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
     const oneValueQuery = (userId: string, cityId: string): string =>
-      `("${userId}, ${cityId}")`;
+      `(null, '${userId}', '${cityId}')`;
 
-    let query = `INSERT INTO ${USER_CITIES_TABLE} (user_id, area_id) VALUES (`;
+    let query = `INSERT INTO ${USER_CITIES_TABLE} (id, user_id, city_id) VALUES `;
     for (let i = 0; i < cities.length; i++) {
       query +=
         oneValueQuery(userId, cities[i].getId()) +
-        (i < cities.length - 1 ? "," : ")");
+        (i < cities.length - 1 ? "," : "");
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
@@ -30,7 +30,7 @@ export async function insertCities(
 
 export async function deleteCities(userId: string): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
-    const query = `DELETE ${USER_CITIES_TABLE} WHERE user_id="${userId}"`;
+    const query = `DELETE from ${USER_CITIES_TABLE} WHERE user_id='${userId}'`;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
