@@ -2,6 +2,10 @@
 
 ## How to start
 
+### (Only first time?) 
+
+- `$ bach ./scripts/init.sh`
+
 ### Configure env variables
 
 1. Copy files noted in `.gitignore` (from private folder on cloud strage)
