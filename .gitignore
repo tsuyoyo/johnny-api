@@ -1,3 +1,6 @@
 node_modules/
 env_values
 johnny-app-dev-firebase-adminsdk-8q1im-6b2b072cc2.json
+address/src/output
+address/src/__pycache__
+address/src/.vscode
