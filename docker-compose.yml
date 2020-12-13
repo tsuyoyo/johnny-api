@@ -18,12 +18,14 @@ services:
     volumes:
       - .:/app
   
-  johnny-address-data-generator:
-    container_name: johnny-address-data-generator
+  address-data-generator:
+    container_name: address-data-generator
     build:
       context: .
       dockerfile: ./address/Dockerfile
-    command: sh -c "pip install requests && python main.py"
+    environment:
+      DB_NAME: ${TEST_DB_NAME}
+    command: sh -c "pip install -r requirements.txt && python main.py"
     volumes: 
       - ./address/src:/workdir
 

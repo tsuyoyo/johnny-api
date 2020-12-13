@@ -7,8 +7,8 @@ import zipfile
 import csv
 import field
 import query
+import sys
 
-DB_NAME = 'test_db'
 TABLE_NAME = 'ad_address'
 
 def downloadFile(url, downloadDir):
@@ -60,10 +60,17 @@ def writeSqlFile(dataEntries, dbName, tableName, path, fileName):
 
 def main():
     DOWNLOAD_SAVE_DIR = "./tmp"
+
+    dbName = os.environ.get('DB_NAME', None)
+    if dbName is None:
+        print("No DB name is specified")
+        sys.exit()
+
     filePath = downloadFile("http://jusyo.jp/downloads/new/csv/csv_zenkoku.zip", DOWNLOAD_SAVE_DIR)
     csvFile = extractZipFile(filePath, DOWNLOAD_SAVE_DIR)
     entries = parseCsv(csvFile)
-    writeSqlFile(entries, DB_NAME, TABLE_NAME, "./output", "2_address.sql")
+    writeSqlFile(entries, dbName, TABLE_NAME, "./output", "2_address.sql")
+
     shutil.rmtree(DOWNLOAD_SAVE_DIR)
 
 if __name__ == "__main__":
