@@ -9,7 +9,7 @@ function buildCityFromJsObj(obj: object): City {
   const city = new City();
   city.setId(`${obj["city_id"]}`);
   city.setName(obj["city_name"]);
-  city.setPrefecture(obj["ken_id"]);
+  city.setPrefecture(obj["prefecture_id"]);
   return city;
 }
 

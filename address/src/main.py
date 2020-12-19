@@ -39,9 +39,15 @@ def parseCsv(csvFileName):
     prefectureCodeIndex = data[0].index(field.PREFECTURE_CODE)
     cityCodeIndex = data[0].index(field.CITY_CODE)
     cityNameIndex = data[0].index(field.CITY_NAME)
+    zipCodeIndex = data[0].index(field.ZIP_CODE)
 
     def getAddressValues(entry):
-        return (entry[cityCodeIndex], entry[cityNameIndex], entry[prefectureCodeIndex])
+        return (
+            entry[cityCodeIndex],
+            entry[cityNameIndex],
+            entry[prefectureCodeIndex],
+            entry[zipCodeIndex].replace('-', '')
+        )
 
     return set(list(map(getAddressValues, data[1:])))
 
@@ -52,7 +58,7 @@ def writeSqlFile(dataEntries, dbName, tableName, path, fileName):
         sqlFile.write(query.createTable(dbName, tableName))
         sqlFile.write(query.insertInto(dbName, tableName))
         for index, entry in enumerate(dataEntries):
-            sqlFile.write("  {}".format(query.value(entry[0], entry[1], entry[2])))
+            sqlFile.write("  {}".format(query.value(entry[0], entry[1], entry[2], entry[3])))
             if (index == len(dataEntries) - 1):
                 sqlFile.write(";\n")
             else:
@@ -75,4 +81,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
