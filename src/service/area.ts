@@ -14,16 +14,6 @@ export async function getCitiesByPrefecture(
   });
 }
 
-function normalizeZipCodeToQuery(zipCode: string): string {
-  let normalized = zipCode;
-  if (normalized.length > 3) {
-    const zipCode1 = normalized.slice(0, 3);
-    const zipCode2 = normalized.slice(3, normalized.length);
-    normalized = `${zipCode1}-${zipCode2}`;
-  }
-  return normalized;
-}
-
 function validateZipCode(zipCode: string): boolean {
   return zipCode && zipCode.length > 0 && zipCode.match(/^\d{1,7}$/) !== null;
 }
@@ -36,7 +26,7 @@ export async function getCitiesSuggestionByZipCode(
     if (!validateZipCode(zipCode)) {
       onReject(ApiException.invalidParameterError("Invalid zipCode"));
     }
-    onResolve(normalizeZipCodeToQuery(zipCode));
+    onResolve(zipCode);
   })
     .then((normalizedZipCode: string) => selectCities(normalizedZipCode))
     .then((cities: City[]) => {

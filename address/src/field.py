@@ -1,3 +1,4 @@
+ADDRESS_ID = "住所CD"
 PREFECTURE_CODE = "都道府県CD"
 CITY_CODE = "市区町村CD"
 CITY_NAME = "市区町村"

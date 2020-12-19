@@ -2,7 +2,7 @@ import { PrefectureMap, City } from "../proto/area_pb";
 import { runQuery } from "./mysqlWrapper";
 
 const ADDRESS_TABLE = "ad_address";
-const SELECT_FIELDS = "ken_id, city_name, city_id";
+const SELECT_FIELDS = "prefecture_id, city_name, city_id";
 const SELECT_QUERY = `SELECT DISTINCT ${SELECT_FIELDS} from ${ADDRESS_TABLE}`;
 
 function buildCityFromJsObj(obj: object): City {
@@ -22,24 +22,22 @@ function buildCitiesArrayFromJsObj(objects: any): Array<City> {
 }
 
 // E.g.
-// select DISTINCT ken_id, city_name, city_id, zip from ad_address where ken_id=12;
+// select DISTINCT prefecture_id, city_name, city_id, zip_code from ad_address where prefecture_id=12;
 export async function selectCitiesByPrefecture(
   prefecture: string
 ): Promise<Array<City>> {
   return new Promise<Array<City>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`where ken_id=${prefecture}`, onResolve, onReject);
+    runSelectQuery(`where prefecture_id=${prefecture}`, onResolve, onReject);
   });
 }
 
-// E.g.
-// select DISTINCT ken_id, city_name, city_id, zip from ad_address where ken_id=12 AND zip like '27%'
 export async function selectCitiesLikeZipCode(
   zipCode: string
 ): Promise<Array<City>> {
   return new Promise<Array<City>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`where zip like '${zipCode}%'`, onResolve, onReject);
+    runSelectQuery(`where zip_code like '${zipCode}%'`, onResolve, onReject);
   });
 }
 
@@ -48,7 +46,7 @@ export async function selectCitiesByZipCode(
 ): Promise<Array<City>> {
   return new Promise<Array<City>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`where zip=${zipCode}`, onResolve, onReject);
+    runSelectQuery(`where zip_code=${zipCode}`, onResolve, onReject);
   });
 }
 

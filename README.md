@@ -26,3 +26,10 @@
 ### Release docker containers
 
 - `$ bash ./scripts/releaseContainers.sh`
+
+## Debug notes
+
+### Enter DB server from console
+
+- Assume that DB name is `test-db` and user name is `root`
+- `$ docker run -it --network db-connection-test --rm mysql mysql -h test-db -uroot -p`

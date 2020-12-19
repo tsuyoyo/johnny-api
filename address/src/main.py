@@ -40,16 +40,20 @@ def parseCsv(csvFileName):
     cityCodeIndex = data[0].index(field.CITY_CODE)
     cityNameIndex = data[0].index(field.CITY_NAME)
     zipCodeIndex = data[0].index(field.ZIP_CODE)
+    addressIdIndex = data[0].index(field.ADDRESS_ID)
 
     def getAddressValues(entry):
         return (
             entry[cityCodeIndex],
             entry[cityNameIndex],
             entry[prefectureCodeIndex],
-            entry[zipCodeIndex].replace('-', '')
+            entry[zipCodeIndex].replace('-', ''),
+            entry[addressIdIndex],
         )
-
-    return set(list(map(getAddressValues, data[1:])))
+    
+    return sorted(
+        list(set(list(map(getAddressValues, data[1:])))), key=lambda a: a[0]
+    )
 
 def writeSqlFile(dataEntries, dbName, tableName, path, fileName):
     os.makedirs(path, exist_ok=True)
@@ -58,7 +62,7 @@ def writeSqlFile(dataEntries, dbName, tableName, path, fileName):
         sqlFile.write(query.createTable(dbName, tableName))
         sqlFile.write(query.insertInto(dbName, tableName))
         for index, entry in enumerate(dataEntries):
-            sqlFile.write("  {}".format(query.value(entry[0], entry[1], entry[2], entry[3])))
+            sqlFile.write("  {}".format(query.value(entry[0], entry[1], entry[2], entry[3], entry[4])))
             if (index == len(dataEntries) - 1):
                 sqlFile.write(";\n")
             else:

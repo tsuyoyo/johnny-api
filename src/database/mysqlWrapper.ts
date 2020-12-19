@@ -53,7 +53,7 @@ export function runQuery(
   connection.connect();
   connection.query(query, (err, rows, fields) => {
     if (err) {
-      console.log(`Database error - ${err.errorMessage}`);
+      console.log(`Database error - ${JSON.stringify(err)}`);
       onQueryDone(getApiExceptionForDbError(err), rows, fields);
     } else {
       onQueryDone(err, rows, fields);
