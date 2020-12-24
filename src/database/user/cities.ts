@@ -1,5 +1,7 @@
 import { runQuery } from "../mysqlWrapper";
-import { City } from "../../proto/area_pb";
+import { pj } from "../../proto/compiled";
+import proto = pj.sakuchin.percussion.proto
+import City = proto.City;
 
 const USER_CITIES_TABLE = "user_cities";
 
@@ -14,8 +16,8 @@ export async function insertCities(
     let query = `INSERT INTO ${USER_CITIES_TABLE} (id, user_id, city_id) VALUES `;
     for (let i = 0; i < cities.length; i++) {
       query +=
-        oneValueQuery(userId, cities[i].getId()) +
-        (i < cities.length - 1 ? "," : "");
+        oneValueQuery(userId, cities[i].id +
+        (i < cities.length - 1 ? "," : ""));
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
