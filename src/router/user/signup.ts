@@ -25,7 +25,7 @@ function signup(
         proto.SignupUserRequest.fromObject,
       ),
       getFirebaseUser(defaultAuth),
-      userTable.insertUser
+      userTable.insertUser,
     )
     .then((res: proto.SignupUserResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));

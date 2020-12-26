@@ -14,6 +14,9 @@ function getToken(request: proto.PostUserLoginRequest): Promise<string> {
   });
 }
 
+// TODO :
+// そもそもloginの仕組みの作り方がおかしい
+// https://firebase.google.com/docs/auth/admin/manage-cookies?hl=ja#create_session_cookie を参考にすべき
 export async function login(
   request: proto.PostUserLoginRequest,
   getFirebaseUser: (token: string) => Promise<FirebaseUser>,

@@ -26,7 +26,7 @@ function login(
     .login(
       loginRequest,
       getFirebaseUser(defaultAuth),
-      userTable.selectUserById
+      userTable.selectUserById,
     )
     .then((res: proto.PostUserLoginResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
