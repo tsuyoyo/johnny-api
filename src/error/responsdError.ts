@@ -1,19 +1,21 @@
 import { Response } from "express";
 import { ApiException } from "../error/apiException";
-import { PercussionApiError } from "../proto/error_pb";
 import * as base64 from "base64-arraybuffer";
+import { pj } from "../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
 
 export default function respondError(
   response: Response,
   apiException: ApiException
 ): void {
-  const apiError = new PercussionApiError();
-  apiError.setMessage(apiException.message);
-  apiError.setErrorcode(apiException.apiError);
+  const apiError = new proto.PercussionApiError({
+    message: apiException.message,
+    errorCode: apiException.apiError,
+  });
   console.log(
-    `ResponseError : errorCode = ${apiError.getErrorcode()} message = ${apiError.getMessage()}`
+    `ResponseError : errorCode = ${apiError.errorCode} message = ${apiError.message}`
   );
   response
     .status(apiException.statusCode)
-    .send(base64.encode(apiError.serializeBinary()));
+    .send(base64.encode(proto.PercussionApiError.encode(apiError).finish()));
 }

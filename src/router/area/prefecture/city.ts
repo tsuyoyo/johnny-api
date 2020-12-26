@@ -1,13 +1,17 @@
 import { Request, Response, Router } from "express";
 import * as areaService from "../../../service/area";
 import * as areaDb from "../../../database/areas";
-import { GetAreaCityResponse } from "../../../proto/areaService_pb";
-import { ResponseWrapper } from "../../../gateway/responseWrapper";
+import { pj } from "../../../proto/compiled";
+import { ResponseHandler } from "../../../response/handler";
 import * as ApiException from "../../../error/apiException";
+
+import GetAreaCityResponse = pj.sakuchin.percussion.proto.GetAreaCityResponse
 
 function handleGetCityRequest(request: Request, response: Response): void {
   const prefectureId = request.query["id"].toString();
-  const responseWrapper = new ResponseWrapper<GetAreaCityResponse>(response);
+  const responseWrapper = new ResponseHandler<GetAreaCityResponse>(
+    request, response, GetAreaCityResponse.encode
+  );
   if (prefectureId) {
     areaService
       .getCitiesByPrefecture(prefectureId, areaDb.selectCitiesByPrefecture)

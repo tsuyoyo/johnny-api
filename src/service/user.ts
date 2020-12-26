@@ -1,28 +1,31 @@
-import { UserProfile, User } from "../proto/user_pb";
-import { City } from "../proto/area_pb";
+import { pj } from "../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
 
 export function getUserProfile(
   userId: string,
-  getActivityArea: (userId: string) => Promise<Array<City>>
-): Promise<UserProfile> {
+  getActivityArea: (userId: string) => Promise<Array<proto.ICity>>
+): Promise<proto.IUserProfile> {
   const promises = [];
   promises.push(getActivityArea(userId));
 
   return Promise.all(promises).then((results) => {
-    const userProfile = new UserProfile();
-    userProfile.setActivecitiesList(results[0]);
-    return userProfile;
+    return new proto.UserProfile({
+      activeCities: results[0],
+    });
   });
 }
 
 export function updateUserProfile(
-  user: User,
-  userProfile: UserProfile,
-  updateActivityArea: (usreId: string, areas: Array<City>) => Promise<number>
+  user: proto.IUser,
+  userProfile: proto.IUserProfile,
+  updateActivityArea: (
+    usreId: string,
+    areas: Array<proto.ICity>
+  ) => Promise<number>
 ): Promise<any> {
   // note : when more attributes are defined in userProfile,
   // more Promise chains are necessary
-  return updateActivityArea(user.getId(), userProfile.getActivecitiesList());
+  return updateActivityArea(user.id, userProfile.activeCities);
 }
 
 export function deleteUserProfile(

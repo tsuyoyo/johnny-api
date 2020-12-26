@@ -3,31 +3,31 @@ import * as signupService from "../../service/signup";
 import * as userTable from "../../database/users";
 import * as admin from "firebase-admin";
 import { getFirebaseUser } from "../../firebase/getUser";
-import {
-  SignupUserResponse,
-  SignupUserRequest,
-} from "../../proto/userService_pb";
 import { ApiException } from "../../error/apiException";
-import { RequestWrapper } from "../../gateway/requestWrapper";
-import { ResponseWrapper } from "../../gateway/responseWrapper";
+import { pj } from "../../proto/compiled";
+import deserializeRequest from "../../request/deserialize";
+import { ResponseHandler } from "../../response/handler";
+import proto = pj.sakuchin.percussion.proto;
 
 function signup(
   request: Request,
   response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const requestWrapper = new RequestWrapper<SignupUserRequest>(
-    request,
-    SignupUserRequest.deserializeBinary
+  const responseWrapper = new ResponseHandler<proto.SignupUserResponse>(
+    request, response, proto.SignupUserResponse.encode
   );
-  const responseWrapper = new ResponseWrapper<SignupUserResponse>(response);
   signupService
     .signup(
-      requestWrapper.deserializeData(),
+      deserializeRequest(
+        request, 
+        proto.SignupUserRequest.decode, 
+        proto.SignupUserRequest.fromObject,
+      ),
       getFirebaseUser(defaultAuth),
-      userTable.insertUser
+      userTable.insertUser,
     )
-    .then((res: SignupUserResponse) => responseWrapper.respondSuccess(res))
+    .then((res: proto.SignupUserResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 

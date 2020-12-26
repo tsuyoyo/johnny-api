@@ -1,18 +1,23 @@
-import { City } from "../proto/area_pb";
+import { format } from "morgan";
+import { pj } from "../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
 
 export function getUserCitiesByUserId(
   userId: string,
   selectUserCities: (userId: string) => Promise<Array<number>>,
-  selectCitiesByIds: (ids: Array<number>) => Promise<Array<City>>
-): Promise<Array<City>> {
+  selectCitiesByIds: (ids: Array<number>) => Promise<Array<proto.ICity>>
+): Promise<Array<proto.ICity>> {
   return selectUserCities(userId).then(selectCitiesByIds);
 }
 
 export function updateUserCities(
   userId: string,
-  areas: Array<City>,
+  areas: Array<proto.ICity>,
   deleteUserCities: (userId: string) => Promise<number>,
-  insertUserCities: (userId: string, areas: Array<City>) => Promise<number>
+  insertUserCities: (
+    userId: string,
+    areas: Array<proto.ICity>
+  ) => Promise<number>
 ): Promise<number> {
   // return insertUserCities(userId, areas);
   return deleteUserCities(userId).then(() => insertUserCities(userId, areas));

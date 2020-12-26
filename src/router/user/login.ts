@@ -3,31 +3,32 @@ import * as admin from "firebase-admin";
 import * as userTable from "../../database/users";
 import { getFirebaseUser } from "../../firebase/getUser";
 import * as loginService from "../../service/login";
-import {
-  PostUserLoginResponse,
-  PostUserLoginRequest,
-} from "../../proto/userService_pb";
 import { ApiException } from "../../error/apiException";
-import { RequestWrapper } from "../../gateway/requestWrapper";
-import { ResponseWrapper } from "../../gateway/responseWrapper";
+import { ResponseHandler } from "../../response/handler";
+import deserialize from "../../request/deserialize";
+import { pj } from "../../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
 
 function login(
   request: Request,
   response: Response,
   defaultAuth: admin.auth.Auth
 ): void {
-  const responseWrapper = new ResponseWrapper<PostUserLoginResponse>(response);
-  const requestWrapper = new RequestWrapper<PostUserLoginRequest>(
+  const responseWrapper = new ResponseHandler<proto.PostUserLoginResponse>(
     request,
-    PostUserLoginRequest.deserializeBinary
+    response,
+    proto.PostUserLoginResponse.encode,
+  );
+  const loginRequest = deserialize(
+    request, proto.PostUserLoginRequest.decode, proto.PostUserLoginRequest.fromObject
   );
   loginService
     .login(
-      requestWrapper.deserializeData(),
+      loginRequest,
       getFirebaseUser(defaultAuth),
-      userTable.selectUserById
+      userTable.selectUserById,
     )
-    .then((res: PostUserLoginResponse) => responseWrapper.respondSuccess(res))
+    .then((res: proto.PostUserLoginResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 

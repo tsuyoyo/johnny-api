@@ -1,20 +1,25 @@
 import { Request, Response, Router } from "express";
 import * as areaDb from "../../database/areas";
 import * as areaService from "../../service/area";
-import { ResponseWrapper } from "../../gateway/responseWrapper";
-import { GetSuggestCityResponse } from "../../proto/suggestService_pb";
 import * as ApiException from "../../error/apiException";
+import { ResponseHandler } from "../../response/handler";
+import * as $p from "../../proto/compiled";
+import proto = $p.pj.sakuchin.percussion.proto;
 
 function handleGetCitySuggestionRequest(
   request: Request,
   response: Response
 ): void {
   const zipCode = request.query["zipCode"].toString();
-  const responseWrapper = new ResponseWrapper<GetSuggestCityResponse>(response);
+  const responseWrapper = new ResponseHandler<proto.GetSuggestCityResponse>(
+    request,
+    response,
+    proto.GetSuggestCityResponse.encode,
+  );
   if (zipCode) {
     areaService
       .getCitiesSuggestionByZipCode(zipCode, areaDb.selectCitiesLikeZipCode)
-      .then((response: GetSuggestCityResponse) => {
+      .then((response: proto.GetSuggestCityResponse) => {
         responseWrapper.respondSuccess(response);
       })
       .catch((e: ApiException.ApiException) => {

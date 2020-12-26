@@ -1,15 +1,16 @@
-import { City } from "../proto/area_pb";
-import { GetAreaCityResponse } from "../proto/areaService_pb";
-import { GetSuggestCityResponse } from "../proto/suggestService_pb";
+import { pj } from "../proto/compiled";
 import * as ApiException from "../error/apiException";
+
+import proto = pj.sakuchin.percussion.proto;
 
 export async function getCitiesByPrefecture(
   prefecture: string,
-  selectCities: (prefectureId: string) => Promise<Array<City>>
-): Promise<GetAreaCityResponse> {
-  return selectCities(prefecture).then((cities: Array<City>) => {
-    const response = new GetAreaCityResponse();
-    response.setCitiesList(cities);
+  selectCities: (prefectureId: string) => Promise<Array<proto.ICity>>
+): Promise<proto.GetAreaCityResponse> {
+  return selectCities(prefecture).then((cities: Array<proto.ICity>) => {
+    const response = new proto.GetAreaCityResponse({
+      cities: cities,
+    });
     return response;
   });
 }
@@ -20,8 +21,8 @@ function validateZipCode(zipCode: string): boolean {
 
 export async function getCitiesSuggestionByZipCode(
   zipCode: string,
-  selectCities: (zipCode: string) => Promise<Array<City>>
-): Promise<GetSuggestCityResponse> {
+  selectCities: (zipCode: string) => Promise<Array<proto.ICity>>
+): Promise<proto.GetSuggestCityResponse> {
   return new Promise<string>((onResolve, onReject) => {
     if (!validateZipCode(zipCode)) {
       onReject(ApiException.invalidParameterError("Invalid zipCode"));
@@ -29,9 +30,10 @@ export async function getCitiesSuggestionByZipCode(
     onResolve(zipCode);
   })
     .then((normalizedZipCode: string) => selectCities(normalizedZipCode))
-    .then((cities: City[]) => {
-      const res = new GetSuggestCityResponse();
-      res.setCitiesList(cities);
+    .then((cities: proto.ICity[]) => {
+      const res = new proto.GetSuggestCityResponse({
+        cities: cities,
+      });
       return res;
     });
 }

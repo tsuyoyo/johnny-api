@@ -1,7 +1,8 @@
-import { User } from "../proto/user_pb";
 import { runQuery } from "./mysqlWrapper";
 import { ApiException } from "../error/apiException";
-import { PercussionApiError } from "../proto/error_pb";
+import { pj } from "../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
+import User = proto.User;
 
 const USER_TABLE = "users";
 
@@ -9,9 +10,9 @@ export function insertUser(user: User, mail: string): Promise<User> {
   return new Promise<User>((onResolve, onReject) => {
     const query =
       `INSERT INTO ${USER_TABLE} VALUES (` +
-      `'${user.getId()}'` +
-      `,'${user.getName()}'` +
-      `,'${user.getPhoto()}'` +
+      `'${user.id}'` +
+      `,'${user.name}'` +
+      `,'${user.photo}'` +
       `,'${mail}'` +
       `)`;
 
@@ -28,15 +29,15 @@ export function insertUser(user: User, mail: string): Promise<User> {
 
 function getUserFromObj(userObj: object): User {
   const user = new User();
-  user.setId(userObj["id"]);
-  user.setName(userObj["name"]);
-  user.setPhoto(userObj["photo_url"]);
+  user.id = userObj["id"];
+  user.name = userObj["name"];
+  user.photo = userObj["photo_url"];
   return user;
 }
 
 function getNotFoundError(userId: string): ApiException {
   return new ApiException(
-    PercussionApiError.ErrorCode.DB_ERROR,
+    proto.PercussionApiError.ErrorCode.DB_ERROR,
     `User id=${userId} is not found`,
     404
   );

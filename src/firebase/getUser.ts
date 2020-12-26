@@ -1,13 +1,14 @@
 import * as admin from "firebase-admin";
-import { User } from "../proto/user_pb";
-import { PercussionApiError } from "../proto/error_pb";
 import { ApiException } from "../error/apiException";
 
+import { pj } from "../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
+
 export class FirebaseUser {
-  readonly user: User;
+  readonly user: proto.IUser;
   readonly email: string;
 
-  constructor(user: User, email: string) {
+  constructor(user: proto.IUser, email: string) {
     this.user = user;
     this.email = email;
   }
@@ -24,15 +25,16 @@ export function getFirebaseUser(
           auth.getUser(decodedIdToken.uid)
         )
         .then((userRecord: admin.auth.UserRecord) => {
-          const user = new User();
-          user.setId(userRecord.uid);
-          user.setName(userRecord.displayName);
-          user.setPhoto(userRecord.photoURL || "");
+          const user = new proto.User({
+            id: userRecord.uid,
+            name: userRecord.displayName,
+            photo: userRecord.photoURL || "",
+          });
           onResolve(new FirebaseUser(user, userRecord.email));
         })
         .catch((error) => {
           const apiException = new ApiException(
-            PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
+            proto.PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
             `Invalid firebase token - ${error}`,
             403
           );
