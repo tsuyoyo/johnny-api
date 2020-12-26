@@ -1,6 +1,5 @@
 import { runQuery } from "./mysqlWrapper";
 import { ApiException } from "../error/apiException";
-import { PercussionApiError } from "../proto/error_pb";
 import { pj } from "../proto/compiled";
 import proto = pj.sakuchin.percussion.proto;
 import User = proto.User;
@@ -38,7 +37,7 @@ function getUserFromObj(userObj: object): User {
 
 function getNotFoundError(userId: string): ApiException {
   return new ApiException(
-    PercussionApiError.ErrorCode.DB_ERROR,
+    proto.PercussionApiError.ErrorCode.DB_ERROR,
     `User id=${userId} is not found`,
     404
   );

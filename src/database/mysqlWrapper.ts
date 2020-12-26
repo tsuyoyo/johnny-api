@@ -1,6 +1,7 @@
 import * as mysql from "mysql";
-import { PercussionApiError } from "../proto/error_pb";
 import { ApiException } from "../error/apiException";
+import { pj } from "../proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
 
 const connectionParams = {
   host: process.env.MYSQL_HOST,
@@ -17,21 +18,21 @@ const ER_DUP_ENTRY = 1062;
 function mapApiErrorCodeWithDbError(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   err: any
-): PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap] {
-  let errorCode: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap];
+): proto.PercussionApiError.ErrorCode {
+  let errorCode: proto.PercussionApiError.ErrorCode;
   if (err.errno == ER_DUP_ENTRY) {
-    errorCode = PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED;
+    errorCode = proto.PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED;
   } else {
-    errorCode = PercussionApiError.ErrorCode.DB_ERROR;
+    errorCode = proto.PercussionApiError.ErrorCode.DB_ERROR;
   }
   return errorCode;
 }
 
 function getErrorMessage(
-  errorCode: PercussionApiError.ErrorCodeMap[keyof PercussionApiError.ErrorCodeMap]
+  errorCode: proto.PercussionApiError.ErrorCode
 ): string {
   switch (errorCode) {
-    case PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED:
+    case proto.PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED:
       return "このアカウントは登録済みです。Loginしてください。";
     default:
       return "データベースエラーが発生しました。再度時間を置いて試してください。";
