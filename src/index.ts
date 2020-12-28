@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/no-var-requires: "off" */
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as admin from "firebase-admin";
@@ -33,7 +34,10 @@ app.use(
     type: "application/protobuf",
   })
 );
-app.use("/", provideRouter(verifyToken(defaultAuth), authenticate(defaultAuth)));
+app.use(
+  "/",
+  provideRouter(verifyToken(defaultAuth), authenticate(defaultAuth))
+);
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // Example to test
