@@ -1,5 +1,3 @@
-import authenticate from "../../../middleware/authentication";
-import * as admin from "firebase-admin";
 import { Request, Response, Router } from "express";
 import * as userRequestUtil from "../util";
 import * as userCityService from "../../../service/userCity";
@@ -54,9 +52,11 @@ const putUserCities = (request: Request, response: Response): void => {
     .then((citiesNum: number) => response.send(citiesNum));
 };
 
-export function provideUserCityRouter(auth: admin.auth.Auth): Router {
+export function provideUserCityRouter(
+  authenticate: (Request, Response, NextFunction) => void,
+): Router {
   const router = Router();
-  router.get("/:id/profile/city", authenticate(auth), getUserCities);
-  router.put("/:id/profile/city", authenticate(auth), putUserCities);
+  router.get("/:id/profile/city", authenticate, getUserCities);
+  router.put("/:id/profile/city", authenticate, putUserCities);
   return router;
 }

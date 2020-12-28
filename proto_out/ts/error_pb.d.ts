@@ -34,6 +34,7 @@ export namespace PercussionApiError {
     DB_ERROR: 4;
     INVALID_PARAMETER: 5;
     AUTHENTICATION_ERROR: 6;
+    LOGIN_REQUIRED: 7;
   }
 
   export const ErrorCode: ErrorCodeMap;

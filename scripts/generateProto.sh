@@ -39,5 +39,5 @@ pbts -o $PROTOBUFJS_OUT_DIR/compiled.d.ts $PROTOBUFJS_OUT_DIR/compiled.js
 TS_SRC_DIR="./src/proto"
 rm -rf ${TS_SRC_DIR}
 mkdir ${TS_SRC_DIR}
-cp ${TS_OUT_DIR}/* ${TS_SRC_DIR}
+# cp ${TS_OUT_DIR}/* ${TS_SRC_DIR}
 cp ${PROTOBUFJS_OUT_DIR}/compiled.* ${TS_SRC_DIR}

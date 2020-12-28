@@ -171,7 +171,8 @@ proto.pj.sakuchin.percussion.proto.PercussionApiError.ErrorCode = {
   USER_HAS_BEEN_ALREADY_REGISTERED: 3,
   DB_ERROR: 4,
   INVALID_PARAMETER: 5,
-  AUTHENTICATION_ERROR: 6
+  AUTHENTICATION_ERROR: 6,
+  LOGIN_REQUIRED: 7
 };
 
 /**

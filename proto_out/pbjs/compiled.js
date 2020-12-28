@@ -1149,6 +1149,7 @@ $root.pj = (function() {
                             case 4:
                             case 5:
                             case 6:
+                            case 7:
                                 break;
                             }
                         if (message.message != null && message.hasOwnProperty("message"))
@@ -1197,6 +1198,10 @@ $root.pj = (function() {
                         case "AUTHENTICATION_ERROR":
                         case 6:
                             message.errorCode = 6;
+                            break;
+                        case "LOGIN_REQUIRED":
+                        case 7:
+                            message.errorCode = 7;
                             break;
                         }
                         if (object.message != null)
@@ -1250,6 +1255,7 @@ $root.pj = (function() {
                      * @property {number} DB_ERROR=4 DB_ERROR value
                      * @property {number} INVALID_PARAMETER=5 INVALID_PARAMETER value
                      * @property {number} AUTHENTICATION_ERROR=6 AUTHENTICATION_ERROR value
+                     * @property {number} LOGIN_REQUIRED=7 LOGIN_REQUIRED value
                      */
                     PercussionApiError.ErrorCode = (function() {
                         var valuesById = {}, values = Object.create(valuesById);
@@ -1260,6 +1266,7 @@ $root.pj = (function() {
                         values[valuesById[4] = "DB_ERROR"] = 4;
                         values[valuesById[5] = "INVALID_PARAMETER"] = 5;
                         values[valuesById[6] = "AUTHENTICATION_ERROR"] = 6;
+                        values[valuesById[7] = "LOGIN_REQUIRED"] = 7;
                         return values;
                     })();
 

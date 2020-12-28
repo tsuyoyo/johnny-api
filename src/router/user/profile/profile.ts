@@ -4,8 +4,6 @@ import * as userCityService from "../../../service/userCity";
 import * as userTable from "../../../database/users";
 import * as userCitiesTable from "../../../database/user/cities";
 import * as areaTable from "../../../database/areas";
-import * as admin from "firebase-admin";
-import authenticate from "../../../middleware/authentication";
 import { ApiException } from "../../../error/apiException";
 import { ResponseHandler } from "../../../response/handler"
 import * as userRequestUtil from "../util";
@@ -82,18 +80,20 @@ function updateUserProfile(request: Request, response: Response): void {
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
-export function provideUserProfileRouter(auth: admin.auth.Auth): Router {
+export function provideUserProfileRouter(
+  authenticate: (Request, Response, NextFunction) => void,
+): Router {
   const router = Router();
 
   // Profile
   router.get("/:id/profile", (request, response) =>
     getUserProfile(request, response)
   );
-  router.put("/:id/profile", authenticate(auth), (_request, response) => {
+  router.put("/:id/profile", authenticate, (_request, response) => {
     console.log("put : passed authentication");
     // updateUserProfile(request, response);
   });
-  router.delete("/:id/profile", authenticate(auth), (request, response) => {
+  router.delete("/:id/profile", authenticate, (request, response) => {
     const userId = request.params["id"];
   });
 

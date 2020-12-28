@@ -1,7 +1,6 @@
 import { Request, Response, Router } from "express";
-import * as admin from "firebase-admin";
 import * as userTable from "../../database/users";
-import { getFirebaseUser } from "../../firebase/getUser";
+import { FirebaseUser } from "../../firebase/verify";
 import * as loginService from "../../service/login";
 import { ApiException } from "../../error/apiException";
 import { ResponseHandler } from "../../response/handler";
@@ -12,7 +11,7 @@ import proto = pj.sakuchin.percussion.proto;
 function login(
   request: Request,
   response: Response,
-  defaultAuth: admin.auth.Auth
+  verifyToken: (token: string) => Promise<FirebaseUser>,
 ): void {
   const responseWrapper = new ResponseHandler<proto.PostUserLoginResponse>(
     request,
@@ -23,19 +22,17 @@ function login(
     request, proto.PostUserLoginRequest.decode, proto.PostUserLoginRequest.fromObject
   );
   loginService
-    .login(
-      loginRequest,
-      getFirebaseUser(defaultAuth),
-      userTable.selectUserById,
-    )
+    .login(loginRequest, verifyToken, userTable.selectUserById)
     .then((res: proto.PostUserLoginResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
-export function provideUserLoginRouter(defaultAuth: admin.auth.Auth): Router {
+export function provideUserLoginRouter(
+  verifyToken: (token: string) => Promise<FirebaseUser>,
+): Router {
   const router = Router();
   router.post("/", (request, response) =>
-    login(request, response, defaultAuth)
+    login(request, response, verifyToken)
   );
   return router;
 }

@@ -2,11 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import * as admin from "firebase-admin";
 import { ApiException } from "../error/apiException";
 import respondError from "../error/responsdError";
-import { getFirebaseUser } from "../firebase/getUser";
+import { verifyToken } from "../firebase/verify";
 import { pj } from "../proto/compiled";
 import proto = pj.sakuchin.percussion.proto;
 
-export default function authenticate(
+export function authenticate(
   auth: admin.auth.Auth
 ): (Request, Response, NextFunction) => void {
   return (request: Request, response: Response, next: NextFunction): void => {
@@ -15,8 +15,8 @@ export default function authenticate(
 
     if (!(token && userId)) {
       const authError = new ApiException(
-        proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-        "No token or userId",
+        proto.PercussionApiError.ErrorCode.LOGIN_REQUIRED,
+        "Loginしてください",
         401
       );
       respondError(response, authError);
@@ -25,10 +25,10 @@ export default function authenticate(
 
     const firebaseAuthError = new ApiException(
       proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-      "ログインに失敗しました",
+      "再認証してください",
       401
     );
-    getFirebaseUser(auth)(token.toString())
+    verifyToken(auth)(token.toString())
       .then((firebaseUser) => {
         console.log(
           `firebaseUserId : ${firebaseUser.user.id}, userId : ${userId}`

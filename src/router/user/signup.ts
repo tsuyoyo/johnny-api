@@ -1,8 +1,7 @@
 import { Request, Response, Router } from "express";
 import * as signupService from "../../service/signup";
 import * as userTable from "../../database/users";
-import * as admin from "firebase-admin";
-import { getFirebaseUser } from "../../firebase/getUser";
+import { FirebaseUser } from "../../firebase/verify";
 import { ApiException } from "../../error/apiException";
 import { pj } from "../../proto/compiled";
 import deserializeRequest from "../../request/deserialize";
@@ -12,7 +11,7 @@ import proto = pj.sakuchin.percussion.proto;
 function signup(
   request: Request,
   response: Response,
-  defaultAuth: admin.auth.Auth
+  verifyToken: (token: string) => Promise<FirebaseUser>,
 ): void {
   const responseWrapper = new ResponseHandler<proto.SignupUserResponse>(
     request, response, proto.SignupUserResponse.encode
@@ -24,17 +23,19 @@ function signup(
         proto.SignupUserRequest.decode, 
         proto.SignupUserRequest.fromObject,
       ),
-      getFirebaseUser(defaultAuth),
+      verifyToken,
       userTable.insertUser,
     )
     .then((res: proto.SignupUserResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
-export function provideUserSignupRouter(defaultAuth: admin.auth.Auth): Router {
+export function provideUserSignupRouter(
+  verifyToken: (token: string) => Promise<FirebaseUser>,
+): Router {
   const router = Router();
   router.post("/", (request, response) =>
-    signup(request, response, defaultAuth)
+    signup(request, response, verifyToken)
   );
   return router;
 }

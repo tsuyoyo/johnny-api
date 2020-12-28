@@ -1,41 +1,39 @@
 import * as signupService from "../../src/service/signup";
-import {
-  SignupUserRequest,
-  SignupUserResponse,
-} from "../../src/proto/userService_pb";
-import { PercussionApiError } from "../../src/proto/error_pb";
+import { pj } from "../../src/proto/compiled";
+import proto = pj.sakuchin.percussion.proto;
 import { ApiException } from "../../src/error/apiException";
-import { User } from "../../src/proto/user_pb";
-import { FirebaseUser } from "../../src/firebase/getUser";
+import { FirebaseUser } from "../../src/firebase/verify";
 
 describe("signup", function () {
   describe("when no token is set in the request", () => {
-    const request = new SignupUserRequest();
-    request.setToken("");
+    const request = new proto.SignupUserRequest({
+      token: "",
+    });
 
     it("should return NO_TOKEN as error", () => {
       const expectedError = new ApiException(
-        PercussionApiError.ErrorCode.NO_TOKEN,
+        proto.PercussionApiError.ErrorCode.NO_TOKEN,
         "Valid firebase token is necessary at sign-in",
         401
       );
-      expect(
-        signupService.signup(request, jest.fn(), jest.fn())
-      ).rejects.toThrow(expectedError);
+      expect(signupService.signup(request, jest.fn(), jest.fn()))
+        .rejects
+        .toThrow(expectedError);
     });
   });
 
   describe("when everything is fine", () => {
     // Token is set correctly.
     const dummyToken = "dummyToken";
-    const request = new SignupUserRequest();
-    request.setToken(dummyToken);
-
+    const request = new proto.SignupUserRequest({
+      token: dummyToken,
+    });
     // getFirebaseUser returns user.
-    const expectedUser = new User();
-    expectedUser.setId("dummyId");
-    expectedUser.setName("dummyName");
-    expectedUser.setPhoto("dummyPhoto");
+    const expectedUser = new proto.User({
+      id: "dummyId",
+      name: "dummyName",
+      photo: "dummyPhoto",
+    });
     const expectedEmail = "email@mail.com";
     const expectedFirebaseUser = new FirebaseUser(expectedUser, expectedEmail);
     const mockedGetFirebaseUser = jest.fn();
@@ -44,11 +42,12 @@ describe("signup", function () {
     );
 
     // registerUserToDatabase is success
-    const expectedResponse = new SignupUserResponse();
-    expectedResponse.setUser(expectedUser);
+    const expectedResponse = new proto.SignupUserResponse({
+      user: expectedUser,
+    });
     const mockedRegisterUserToDb = jest.fn();
     mockedRegisterUserToDb.mockReturnValueOnce(
-      new Promise<User>((onResolve) => onResolve(expectedUser))
+      new Promise<proto.IUser>((onResolve) => onResolve(expectedUser))
     );
 
     it("should return SignupResponse instance with registered user info", async () => {
