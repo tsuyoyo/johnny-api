@@ -6,7 +6,7 @@ import proto = pj.sakuchin.percussion.proto;
 export async function login(
   request: proto.PostUserLoginRequest,
   verifyFirebaseToken: (token: string) => Promise<FirebaseUser>,
-  selectUserById: (userId: string) => Promise<proto.IUser>,
+  selectUserById: (userId: string) => Promise<proto.IUser>
 ): Promise<proto.PostUserLoginResponse> {
   return verifyFirebaseToken(request.token)
     .then((firebaseUser: FirebaseUser) => selectUserById(firebaseUser.user.id))

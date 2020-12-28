@@ -25,7 +25,11 @@ export function invalidParameterError(msg: string): ApiException {
 }
 
 export function noTokenError(msg: string): ApiException {
-  return new ApiException(proto.PercussionApiError.ErrorCode.NO_TOKEN, msg, 401);
+  return new ApiException(
+    proto.PercussionApiError.ErrorCode.NO_TOKEN,
+    msg,
+    401
+  );
 }
 
 export function authorizationError(msg: string): ApiException {

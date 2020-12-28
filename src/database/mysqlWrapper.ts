@@ -21,7 +21,8 @@ function mapApiErrorCodeWithDbError(
 ): proto.PercussionApiError.ErrorCode {
   let errorCode: proto.PercussionApiError.ErrorCode;
   if (err.errno == ER_DUP_ENTRY) {
-    errorCode = proto.PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED;
+    errorCode =
+      proto.PercussionApiError.ErrorCode.USER_HAS_BEEN_ALREADY_REGISTERED;
   } else {
     errorCode = proto.PercussionApiError.ErrorCode.DB_ERROR;
   }

@@ -9,7 +9,7 @@ import { FirebaseUser } from "../firebase/verify";
 
 export function provideRouter(
   verifyToken: (token: string) => Promise<FirebaseUser>,
-  authenticate: (Request, Response, NextFunction) => void,
+  authenticate: (Request, Response, NextFunction) => void
 ): Router {
   const router = Router();
   router.use("/user/signup", provideUserSignupRouter(verifyToken));

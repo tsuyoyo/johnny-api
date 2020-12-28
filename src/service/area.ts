@@ -7,12 +7,12 @@ export async function getCitiesByPrefecture(
   prefecture: string,
   selectCities: (prefectureId: string) => Promise<Array<proto.ICity>>
 ): Promise<proto.GetAreaCityResponse> {
-  return selectCities(prefecture)
-    .then((cities: Array<proto.ICity>) =>
+  return selectCities(prefecture).then(
+    (cities: Array<proto.ICity>) =>
       new proto.GetAreaCityResponse({
         cities: cities,
       })
-    );
+  );
 }
 
 function validateZipCode(zipCode: string): boolean {

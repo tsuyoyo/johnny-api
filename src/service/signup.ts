@@ -10,19 +10,20 @@ export async function signup(
   insertUser: (user: proto.IUser, email: string) => Promise<proto.IUser>
 ): Promise<proto.SignupUserResponse> {
   return new Promise<string>((onResolve, onReject) => {
-      if (request.token && request.token.length > 0) {
-        onResolve(request.token);
-      } else {
-        onReject(noTokenError("Valid firebase token is necessary at sign-in"));
-      }
-    })
+    if (request.token && request.token.length > 0) {
+      onResolve(request.token);
+    } else {
+      onReject(noTokenError("Valid firebase token is necessary at sign-in"));
+    }
+  })
     .then((token: string) => verifyFirebaseToken(token))
     .then((firebaseUser: FirebaseUser) =>
       insertUser(firebaseUser.user, firebaseUser.email)
     )
-    .then((user: proto.IUser) => 
-      new proto.SignupUserResponse({
-        user: user,
-      })
+    .then(
+      (user: proto.IUser) =>
+        new proto.SignupUserResponse({
+          user: user,
+        })
     );
 }

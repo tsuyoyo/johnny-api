@@ -16,7 +16,7 @@ export class FirebaseUser {
 
 export function verifyToken(
   auth: admin.auth.Auth
-): ((token: string) => Promise<FirebaseUser>) {
+): (token: string) => Promise<FirebaseUser> {
   return (token: string): Promise<FirebaseUser> =>
     auth
       .verifyIdToken(token)
