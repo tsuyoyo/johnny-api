@@ -62,5 +62,5 @@
     "testMatch": [
       "**/__tests__/**/*.+(ts|tsx|js)"
     ]
-  }  
+  }
 }
