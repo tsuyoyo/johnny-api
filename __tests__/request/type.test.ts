@@ -8,7 +8,7 @@ describe("getRequestType", function () {
             headers: {
                 "x-api-request-type": ["application/protobuf"]
             }
-        } as unknown as Request
+        } as unknown as Request;
 
         it("should return PROTOBUF", function () {
             expect(getRequestType(request)).toBe(RequestType.PROTOBUF);  
@@ -20,7 +20,7 @@ describe("getRequestType", function () {
             headers: {
                 "x-api-request-type": ["application/json"]
             }
-        } as unknown as Request
+        } as unknown as Request;
 
         it("should return JSON", function () {
             expect(getRequestType(request)).toBe(RequestType.JSON);  
@@ -32,7 +32,7 @@ describe("getRequestType", function () {
             headers: {
                 "x-api-request-type": []
             }
-        } as unknown as Request
+        } as unknown as Request;
 
         it("should return JSON", function () {
             expect(getRequestType(request)).toBe(RequestType.JSON);  

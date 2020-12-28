@@ -15,6 +15,7 @@
   ],
   "exclude": [
     "./database/**/*",
-    "./proto_out/**/*"
+    "./proto_out/**/*",
+    "./test/**/*",
   ]
 }

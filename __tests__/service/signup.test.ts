@@ -5,17 +5,17 @@ import { ApiException } from "../../src/error/apiException";
 import { FirebaseUser } from "../../src/firebase/verify";
 
 describe("signup", function () {
+
   describe("when no token is set in the request", () => {
     const request = new proto.SignupUserRequest({
       token: "",
     });
-
+    const expectedError = new ApiException(
+      proto.PercussionApiError.ErrorCode.NO_TOKEN,
+      "Valid firebase token is necessary at sign-in",
+      401
+    );
     it("should return NO_TOKEN as error", () => {
-      const expectedError = new ApiException(
-        proto.PercussionApiError.ErrorCode.NO_TOKEN,
-        "Valid firebase token is necessary at sign-in",
-        401
-      );
       expect(signupService.signup(request, jest.fn(), jest.fn()))
         .rejects
         .toThrow(expectedError);
@@ -40,7 +40,6 @@ describe("signup", function () {
     mockedGetFirebaseUser.mockReturnValueOnce(
       new Promise<FirebaseUser>((onResolve) => onResolve(expectedFirebaseUser))
     );
-
     // registerUserToDatabase is success
     const expectedResponse = new proto.SignupUserResponse({
       user: expectedUser,
