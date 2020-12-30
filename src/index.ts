@@ -36,7 +36,10 @@ app.use(
 );
 app.use(
   "/",
-  provideRouter(verifyToken(defaultAuth), authenticate(defaultAuth))
+  provideRouter(
+    verifyToken(defaultAuth),
+    authenticate(verifyToken(defaultAuth))
+  ),
 );
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 

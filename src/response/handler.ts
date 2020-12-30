@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
-import { Message } from "google-protobuf";
 import { ApiException } from "../error/apiException";
-import respondError from "../error/responsdError";
+import { respondError } from "../error/responsdError";
 import * as base64 from "base64-arraybuffer";
 import { RequestType } from "../request/type";
 import { getRequestType } from "../request/type";

@@ -4,7 +4,7 @@ import * as base64 from "base64-arraybuffer";
 import { pj } from "../proto/compiled";
 import proto = pj.sakuchin.percussion.proto;
 
-export default function respondError(
+export function respondError(
   response: Response,
   apiException: ApiException
 ): void {

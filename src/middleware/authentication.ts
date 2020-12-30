@@ -1,13 +1,12 @@
 import { Request, Response, NextFunction } from "express";
-import * as admin from "firebase-admin";
 import { ApiException } from "../error/apiException";
-import respondError from "../error/responsdError";
-import { verifyToken } from "../firebase/verify";
+import { respondError } from "../error/responsdError";
+import { FirebaseUser } from "../firebase/verify";
 import { pj } from "../proto/compiled";
 import proto = pj.sakuchin.percussion.proto;
 
 export function authenticate(
-  auth: admin.auth.Auth
+  verifyToken: (token: string) => Promise<FirebaseUser>
 ): (Request, Response, NextFunction) => void {
   return (request: Request, response: Response, next: NextFunction): void => {
     const token = request.headers["x-api-token"];
@@ -28,7 +27,7 @@ export function authenticate(
       "再認証してください",
       401
     );
-    verifyToken(auth)(token.toString())
+    verifyToken(token.toString())
       .then((firebaseUser) => {
         console.log(
           `firebaseUserId : ${firebaseUser.user.id}, userId : ${userId}`
