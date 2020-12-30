@@ -1,4 +1,5 @@
 /* eslint @typescript-eslint/no-var-requires: "off" */
+/* eslint @typescript-eslint/no-unused-vars: "off" */
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as admin from "firebase-admin";
@@ -39,7 +40,7 @@ app.use(
   provideRouter(
     verifyToken(defaultAuth),
     authenticate(verifyToken(defaultAuth))
-  ),
+  )
 );
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
