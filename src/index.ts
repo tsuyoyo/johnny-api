@@ -4,7 +4,7 @@ import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as admin from "firebase-admin";
 import { provideRouter } from "./router/root";
-import { verifyToken } from "./firebase/verify";
+import * as firebaseVerify from "./firebase/verify";
 import { authenticate } from "./middleware/authentication";
 
 import * as morgan from "morgan";
@@ -35,11 +35,15 @@ app.use(
     type: "application/protobuf",
   })
 );
+
+const verifyToken = firebaseVerify.verifyToken(
+  defaultAuth.verifyIdToken, defaultAuth.getUser
+);
 app.use(
   "/",
   provideRouter(
-    verifyToken(defaultAuth),
-    authenticate(verifyToken(defaultAuth))
+    verifyToken,
+    authenticate(verifyToken)
   )
 );
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

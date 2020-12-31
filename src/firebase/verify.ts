@@ -1,6 +1,5 @@
 import * as admin from "firebase-admin";
 import { ApiException } from "../error/apiException";
-
 import { pj } from "../proto/compiled";
 import proto = pj.sakuchin.percussion.proto;
 
@@ -15,13 +14,13 @@ export class FirebaseUser {
 }
 
 export function verifyToken(
-  auth: admin.auth.Auth
+  verifyIdToken: (token: string) => Promise<admin.auth.DecodedIdToken>,
+  getUser: (uid: string) => Promise<admin.auth.UserRecord>
 ): (token: string) => Promise<FirebaseUser> {
   return (token: string): Promise<FirebaseUser> =>
-    auth
-      .verifyIdToken(token)
+    verifyIdToken(token)
       .then((decodedIdToken: admin.auth.DecodedIdToken) =>
-        auth.getUser(decodedIdToken.uid)
+        getUser(decodedIdToken.uid)
       )
       .then((userRecord: admin.auth.UserRecord) => {
         const user = new proto.User({
@@ -35,7 +34,7 @@ export function verifyToken(
         console.log(`Failed to get firebase user - ${error.message}`);
         throw new ApiException(
           proto.PercussionApiError.ErrorCode.INVALID_FIREBASE_TOKEN,
-          `Invalid firebase token - ${error}`,
+          `Invalid firebase token - ${error.message}`,
           403
         );
       });
