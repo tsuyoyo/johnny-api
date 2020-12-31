@@ -37,15 +37,10 @@ app.use(
 );
 
 const verifyToken = firebaseVerify.verifyToken(
-  defaultAuth.verifyIdToken, defaultAuth.getUser
+  defaultAuth.verifyIdToken,
+  defaultAuth.getUser
 );
-app.use(
-  "/",
-  provideRouter(
-    verifyToken,
-    authenticate(verifyToken)
-  )
-);
+app.use("/", provideRouter(verifyToken, authenticate(verifyToken)));
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 // Example to test
