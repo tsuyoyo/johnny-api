@@ -23,6 +23,7 @@
     "express": "^4.17.1",
     "firebase-admin": "^9.4.2",
     "google-protobuf": "^3.14.0",
+    "johnny-proto": "tsuyoyo/johnny-protobuf.git",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "protobufjs": "^6.10.2",

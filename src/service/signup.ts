@@ -1,7 +1,7 @@
 import { noTokenError } from "../error/apiException";
 import { FirebaseUser } from "../firebase/verify";
 
-import * as $p from "../proto/compiled";
+import * as $p from "johnny-proto";
 import proto = $p.pj.sakuchin.percussion.proto;
 
 export async function signup(

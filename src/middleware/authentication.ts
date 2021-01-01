@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ApiException } from "../error/apiException";
 import { respondError } from "../error/responsdError";
 import { FirebaseUser } from "../firebase/verify";
-import { pj } from "../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export function authenticate(

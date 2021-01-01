@@ -3,10 +3,10 @@ import * as userRequestUtil from "../util";
 import * as userCityService from "../../../service/userCity";
 import * as userCitiesTable from "../../../database/user/cities";
 import * as areaTable from "../../../database/areas";
-import { ResponseWrapper } from "../../../gateway/responseWrapper";
+import { ResponseHandler } from "../../../response/handler";
 
 import deserialize, {} from "../../../request/deserialize"
-import { pj } from "../../../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 const updateUserCities = (
@@ -28,7 +28,11 @@ const getUserCitiesByUserId = (userId: string): Promise<Array<proto.ICity>> =>
   );
 
 const getUserCities = (request: Request, response: Response): void => {
-  const responseWrapper = new ResponseWrapper<proto.GetUserCityResponse>(response);
+  const responseHandler = new ResponseHandler<proto.GetUserCityResponse>(
+    request, 
+    response, 
+    proto.GetUserCityResponse.encode
+  )
   userRequestUtil
     .getUserIdFromRequest(request)
     .then(getUserCitiesByUserId)
@@ -37,7 +41,7 @@ const getUserCities = (request: Request, response: Response): void => {
         cities: cities,
       });
     })
-    .then(responseWrapper.respondSuccess);
+    .then(responseHandler.respondSuccess);
 };
 
 const putUserCities = (request: Request, response: Response): void => {

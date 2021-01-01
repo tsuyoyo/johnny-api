@@ -1,7 +1,7 @@
 import { Request, Response, Router } from "express";
 import * as areaService from "../../../service/area";
 import * as areaDb from "../../../database/areas";
-import { pj } from "../../../proto/compiled";
+import { pj } from "johnny-proto";
 import { ResponseHandler } from "../../../response/handler";
 import * as ApiException from "../../../error/apiException";
 

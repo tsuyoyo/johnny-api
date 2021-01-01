@@ -8,7 +8,7 @@ import { ApiException } from "../../../error/apiException";
 import { ResponseHandler } from "../../../response/handler"
 import * as userRequestUtil from "../util";
 import deserializeRequest from "../../../request/deserialize";
-import { pj } from "../../../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto
 
 const getActivityArea = (userId: string): Promise<Array<proto.ICity>> =>

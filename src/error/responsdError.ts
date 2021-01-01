@@ -1,7 +1,7 @@
 import { Response } from "express";
 import { ApiException } from "../error/apiException";
 import * as base64 from "base64-arraybuffer";
-import { pj } from "../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export function respondError(

@@ -1,4 +1,4 @@
-import { pj } from "../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export class ApiException extends Error {

@@ -1,6 +1,5 @@
-import { pj } from "../proto/compiled";
 import * as ApiException from "../error/apiException";
-
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export async function getCitiesByPrefecture(

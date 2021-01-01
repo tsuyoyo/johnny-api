@@ -1,5 +1,5 @@
 import { runQuery } from "./mysqlWrapper";
-import { pj } from "../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 const ADDRESS_TABLE = "ad_address";
