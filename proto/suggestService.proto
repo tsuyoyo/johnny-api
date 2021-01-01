@@ -1,8 +1,0 @@
-syntax = "proto3";
-package pj.sakuchin.percussion.proto;
-
-import "proto/area.proto";
-
-message GetSuggestCityResponse {
-  repeated City cities = 1;
-}

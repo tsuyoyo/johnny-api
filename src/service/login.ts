@@ -1,6 +1,6 @@
 import { authenticationError } from "../error/apiException";
 import { FirebaseUser } from "../firebase/verify";
-import { pj } from "../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export async function login(

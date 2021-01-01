@@ -1,5 +1,5 @@
 import * as signupService from "../../src/service/signup";
-import { pj } from "../../src/proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import { ApiException } from "../../src/error/apiException";
 import { FirebaseUser } from "../../src/firebase/verify";

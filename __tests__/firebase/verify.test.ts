@@ -1,7 +1,7 @@
 import { auth } from "firebase-admin";
 import { ApiException } from "../../src/error/apiException";
 import { FirebaseUser, verifyToken } from "../../src/firebase/verify";
-import { pj } from "../../src/proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 describe("verifyToken", () => {

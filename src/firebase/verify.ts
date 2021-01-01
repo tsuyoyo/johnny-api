@@ -1,6 +1,6 @@
 import * as admin from "firebase-admin";
 import { ApiException } from "../error/apiException";
-import { pj } from "../proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export class FirebaseUser {

@@ -1,6 +1,6 @@
 import { authenticate } from "../../src/middleware/authentication";
 import { ApiException } from "../../src/error/apiException";
-import { pj } from "../../src/proto/compiled";
+import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import { mocked } from 'ts-jest/utils'
 import { respondError } from "../../src/error/responsdError";

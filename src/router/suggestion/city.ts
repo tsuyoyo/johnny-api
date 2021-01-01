@@ -3,8 +3,8 @@ import * as areaDb from "../../database/areas";
 import * as areaService from "../../service/area";
 import * as ApiException from "../../error/apiException";
 import { ResponseHandler } from "../../response/handler";
-import * as $p from "../../proto/compiled";
-import proto = $p.pj.sakuchin.percussion.proto;
+import { pj } from "johnny-proto";
+import proto = pj.sakuchin.percussion.proto;
 
 function handleGetCitySuggestionRequest(
   request: Request,
