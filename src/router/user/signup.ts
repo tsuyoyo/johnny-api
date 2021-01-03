@@ -3,7 +3,7 @@ import * as signupService from "../../service/signup";
 import * as userTable from "../../database/users";
 import { FirebaseUser } from "../../firebase/verify";
 import { ApiException } from "../../error/apiException";
-import { pj } from "../../proto/compiled";
+import { pj } from "johnny-proto";
 import deserializeRequest from "../../request/deserialize";
 import { ResponseHandler } from "../../response/handler";
 import proto = pj.sakuchin.percussion.proto;
