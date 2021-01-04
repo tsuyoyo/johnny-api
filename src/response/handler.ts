@@ -10,15 +10,18 @@ export class ResponseHandler<T> {
   private response: Response;
   private requestType: RequestType;
   private toBinary: (message: T) => $protobuf.Writer;
+  private toObject: (message: T) => object;
 
   constructor(
     request: Request,
     response: Response,
-    toBinary: (message: T) => $protobuf.Writer
+    toBinary: (message: T) => $protobuf.Writer,
+    toObject: (message: T) => object
   ) {
     this.response = response;
     this.requestType = getRequestType(request);
     this.toBinary = toBinary;
+    this.toObject = toObject;
   }
 
   public respondSuccess(message: T): void {
@@ -28,12 +31,10 @@ export class ResponseHandler<T> {
         .contentType("application/protobuf")
         .send(base64.encode(this.toBinary(message).finish()));
     } else {
-      // toJson、message.toJson()でしか呼べない
-      // toObjectが使えるかもしれないのでやりながら調べる
-      // this.response
-      // .status(200)
-      // .contentType("application/json")
-      // .send(message.toJson());
+      this.response
+        .status(200)
+        .contentType("application/json")
+        .send(this.toObject(message));
     }
   }
 

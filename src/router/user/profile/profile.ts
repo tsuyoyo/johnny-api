@@ -30,7 +30,10 @@ const buildGetUserProfileResponse = (
 
 function getUserProfile(request: Request, response: Response): void {
   const responseWrapper = new ResponseHandler<proto.GetUserProfileResponse>(
-    request, response, proto.GetUserProfileResponse.encode
+    request, 
+    response, 
+    proto.GetUserProfileResponse.encode,
+    proto.GetUserProfileResponse.toObject,
   );
   userRequestUtil
     .getUserIdFromRequest(request)
@@ -62,7 +65,10 @@ const updateUserActivityArea = (
 
 function updateUserProfile(request: Request, response: Response): void {
   const responseWrapper = new ResponseHandler<proto.EmptyResponse>(
-    request, response, proto.EmptyResponse.encode
+    request, 
+    response, 
+    proto.EmptyResponse.encode,
+    proto.EmptyResponse.toObject,
   );
   const putUserProfileRequest = deserializeRequest(
     request, 

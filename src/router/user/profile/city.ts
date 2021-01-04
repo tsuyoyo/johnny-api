@@ -31,7 +31,8 @@ const getUserCities = (request: Request, response: Response): void => {
   const responseHandler = new ResponseHandler<proto.GetUserCityResponse>(
     request, 
     response, 
-    proto.GetUserCityResponse.encode
+    proto.GetUserCityResponse.encode,
+    proto.GetUserCityResponse.toObject,
   )
   userRequestUtil
     .getUserIdFromRequest(request)

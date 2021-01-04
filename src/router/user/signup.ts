@@ -14,7 +14,10 @@ function signup(
   verifyToken: (token: string) => Promise<FirebaseUser>,
 ): void {
   const responseWrapper = new ResponseHandler<proto.SignupUserResponse>(
-    request, response, proto.SignupUserResponse.encode
+    request, 
+    response, 
+    proto.SignupUserResponse.encode,
+    proto.SignupUserResponse.toObject,
   );
   signupService
     .signup(

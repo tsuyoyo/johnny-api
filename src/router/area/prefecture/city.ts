@@ -10,7 +10,10 @@ import GetAreaCityResponse = pj.sakuchin.percussion.proto.GetAreaCityResponse
 function handleGetCityRequest(request: Request, response: Response): void {
   const prefectureId = request.query["id"].toString();
   const responseWrapper = new ResponseHandler<GetAreaCityResponse>(
-    request, response, GetAreaCityResponse.encode
+    request, 
+    response, 
+    GetAreaCityResponse.encode,
+    GetAreaCityResponse.toObject
   );
   if (prefectureId) {
     areaService

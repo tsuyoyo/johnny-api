@@ -17,6 +17,7 @@ function login(
     request,
     response,
     proto.PostUserLoginResponse.encode,
+    proto.PostUserLoginResponse.toObject,
   );
   const loginRequest = deserialize(
     request, proto.PostUserLoginRequest.decode, proto.PostUserLoginRequest.fromObject

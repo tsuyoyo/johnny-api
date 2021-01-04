@@ -15,6 +15,7 @@ function handleGetCitySuggestionRequest(
     request,
     response,
     proto.GetSuggestCityResponse.encode,
+    proto.GetSuggestCityResponse.toObject,
   );
   if (zipCode) {
     areaService
