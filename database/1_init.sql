@@ -15,9 +15,9 @@ CREATE TABLE test_db.users (
     mail varchar(100) unique
 );
 START TRANSACTION;
-INSERT INTO test_db.users VALUES ('id_a', 'あああああ', 'http://photo.com', 'test_a@mail.com');
-INSERT INTO test_db.users VALUES ('id_b', 'test_b', 'http://photo.com', 'test_b@mail.com');
-INSERT INTO test_db.users VALUES ('id_c', 'test_c', 'http://photo.com', 'test_c@mail.com');
+INSERT INTO test_db.users VALUES ('test_user_a', 'あああああ', 'http://photo.com', 'test_a@mail.com');
+INSERT INTO test_db.users VALUES ('test_user_b', 'test_b', 'http://photo.com', 'test_b@mail.com');
+INSERT INTO test_db.users VALUES ('test_user_c', 'test_c', 'http://photo.com', 'test_c@mail.com');
 COMMIT;
 
 -- ************************
@@ -49,8 +49,8 @@ CREATE TABLE test_db.user_cities (
     city_id VARCHAR(16) not null
  ) AUTO_INCREMENT = 1;
 START TRANSACTION;
-INSERT INTO test_db.user_cities(user_id, city_id) VALUE ('id_a', '50');
-INSERT INTO test_db.user_cities(user_id, city_id) VALUE ('id_a', '60');
+INSERT INTO test_db.user_cities(user_id, city_id) VALUE ('test_user_a', '10201');
+INSERT INTO test_db.user_cities(user_id, city_id) VALUE ('test_user_a', '10207');
 COMMIT;
 
 -- ************************

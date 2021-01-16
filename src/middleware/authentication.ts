@@ -6,11 +6,17 @@ import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export function authenticate(
-  verifyToken: (token: string) => Promise<FirebaseUser>
+  verifyToken: (token: string) => Promise<FirebaseUser>,
+  isDevelopment: boolean,
 ): (Request, Response, NextFunction) => void {
   return (request: Request, response: Response, next: NextFunction): void => {
     const token = request.headers["x-api-token"];
     const userId = request.headers["x-user-id"];
+
+    if (isDevelopment && userId.includes('test_user_')) {
+      next();
+      return;
+    }
 
     if (!(token && userId)) {
       const authError = new ApiException(
@@ -27,6 +33,7 @@ export function authenticate(
       "再認証してください",
       401
     );
+
     verifyToken(token.toString())
       .then((firebaseUser) => {
         console.log(

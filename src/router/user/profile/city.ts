@@ -42,7 +42,7 @@ const getUserCities = (request: Request, response: Response): void => {
         cities: cities,
       });
     })
-    .then(responseHandler.respondSuccess);
+    .then((res : proto.GetUserCityResponse) => responseHandler.respondSuccess(res));
 };
 
 const putUserCities = (request: Request, response: Response): void => {

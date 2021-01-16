@@ -54,6 +54,9 @@ export async function selectCitiesByZipCode(
 export async function selectCitiesByIds(
   ids: Array<number>
 ): Promise<Array<proto.ICity>> {
+  if (ids.length == 0) {
+    return new Promise<Array<proto.ICity>>((onResolve) => onResolve([]));
+  }
   return new Promise<Array<proto.ICity>>((onResolve, onReject) => {
     let query = `where city_id in (`;
     for (let i = 0; i < ids.length; i++) {

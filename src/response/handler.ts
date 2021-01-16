@@ -39,6 +39,7 @@ export class ResponseHandler<T> {
   }
 
   public respondError(apiException: ApiException): void {
+    // TODO : Support json
     console.log(`Error - ${apiException.apiError} : ${apiException.message}`);
     respondError(this.response, apiException);
   }
