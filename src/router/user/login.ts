@@ -8,6 +8,14 @@ import deserialize from "../../request/deserialize";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
+function deserializePostUserLoginRequest(request: Request) {
+  return deserialize(
+    request, 
+    proto.PostUserLoginRequest.decode, 
+    proto.PostUserLoginRequest.fromObject
+  );
+}
+
 function login(
   request: Request,
   response: Response,
@@ -18,16 +26,17 @@ function login(
     response,
     proto.PostUserLoginResponse.encode,
   );
-  const loginRequest = deserialize(
-    request, proto.PostUserLoginRequest.decode, proto.PostUserLoginRequest.fromObject
-  );
   loginService
-    .login(loginRequest, verifyToken, userTable.selectUserById)
+    .login(
+      deserializePostUserLoginRequest(request),
+      verifyToken,
+      userTable.selectUserById
+    )
     .then((res: proto.PostUserLoginResponse) => responseWrapper.respondSuccess(res))
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
-export function provideUserLoginRouter(
+export function provideLoginRouter(
   verifyToken: (token: string) => Promise<FirebaseUser>,
 ): Router {
   const router = Router();

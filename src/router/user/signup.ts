@@ -8,21 +8,27 @@ import deserializeRequest from "../../request/deserialize";
 import { ResponseHandler } from "../../response/handler";
 import proto = pj.sakuchin.percussion.proto;
 
+function deserializeSignupUserRequest(request: Request) {
+  return deserializeRequest(
+    request, 
+    proto.SignupUserRequest.decode, 
+    proto.SignupUserRequest.fromObject,
+  );
+}
+
 function signup(
   request: Request,
   response: Response,
   verifyToken: (token: string) => Promise<FirebaseUser>,
 ): void {
   const responseWrapper = new ResponseHandler<proto.SignupUserResponse>(
-    request, response, proto.SignupUserResponse.encode
+    request, 
+    response, 
+    proto.SignupUserResponse.encode
   );
   signupService
     .signup(
-      deserializeRequest(
-        request, 
-        proto.SignupUserRequest.decode, 
-        proto.SignupUserRequest.fromObject,
-      ),
+      deserializeSignupUserRequest(request),
       verifyToken,
       userTable.insertUser,
     )
@@ -30,7 +36,7 @@ function signup(
     .catch((error: ApiException) => responseWrapper.respondError(error));
 }
 
-export function provideUserSignupRouter(
+export function provideSignupRouter(
   verifyToken: (token: string) => Promise<FirebaseUser>,
 ): Router {
   const router = Router();
