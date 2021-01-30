@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ApiException } from "../error/apiException";
 import { respondError } from "../error/responsdError";
 import { FirebaseUser } from "../firebase/verify";
+import { getToken, getUserId} from "../request/header";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
@@ -9,9 +10,8 @@ export function authenticate(
   verifyToken: (token: string) => Promise<FirebaseUser>
 ): (Request, Response, NextFunction) => void {
   return (request: Request, response: Response, next: NextFunction): void => {
-    const token = request.headers["x-api-token"];
-    const userId = request.headers["x-user-id"];
-
+    const token = getToken(request);
+    const userId = getUserId(request);
     if (!(token && userId)) {
       const authError = new ApiException(
         proto.PercussionApiError.ErrorCode.LOGIN_REQUIRED,

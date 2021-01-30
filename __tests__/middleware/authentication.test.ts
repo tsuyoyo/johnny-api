@@ -4,12 +4,13 @@ import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import { mocked } from 'ts-jest/utils'
 import { respondError } from "../../src/error/responsdError";
-import { Request } from "express";
 import { FirebaseUser } from "../../src/firebase/verify";
+import * as headerLogic from "../../src/request/header";
 
 jest.mock("../../src/error/responsdError");
 
 describe("authenticate", function() {
+    const request = jest.fn();
     const response = jest.fn();
     const next = jest.fn();
 
@@ -23,14 +24,10 @@ describe("authenticate", function() {
             "Loginしてください",
             401
         );
-        describe("when token is empty", function() {
-            const request = {
-                headers: {
-                    "x-user-id": "user",
-                }
-            } as unknown as Request;
-    
+        describe("when token is empty", function() {    
             beforeEach(function() {
+                jest.spyOn(headerLogic, 'getUserId').mockReturnValueOnce('user');
+                jest.spyOn(headerLogic, 'getToken').mockReturnValueOnce('');
                 authenticate(jest.fn())(request, response, next);
             });
             it("should call responsdError with LOGIN_REQUIRED", function() {
@@ -39,13 +36,9 @@ describe("authenticate", function() {
         });
     
         describe("when userId is empty", function() {
-            const request = {
-                headers: {
-                    "x-api-token": "token",
-                }
-            } as unknown as Request;
-
-            beforeEach(function() {            
+            beforeEach(function() {
+                jest.spyOn(headerLogic, 'getUserId').mockReturnValueOnce('');
+                jest.spyOn(headerLogic, 'getToken').mockReturnValueOnce('token');
                 authenticate(jest.fn())(request, response, next);
             });
             it("should call responsdError with LOGIN_REQUIRED", function() {
@@ -59,12 +52,6 @@ describe("authenticate", function() {
             id: "userId",
             name: "name",
         });
-        const request = {
-            headers: {
-                "x-api-token": "token",
-                "x-user-id": user.id,
-            }
-        } as unknown as Request;
 
         describe("when user ID is found", function() {
             const mockedVerifyToken = jest.fn()
@@ -75,6 +62,8 @@ describe("authenticate", function() {
                 );
             });
             beforeEach(function() {            
+                jest.spyOn(headerLogic, 'getUserId').mockReturnValueOnce(user.id);
+                jest.spyOn(headerLogic, 'getToken').mockReturnValueOnce('ttttttoken');
                 authenticate(mockedVerifyToken)(request, response, next);
             });
             it("should call next", function() {
@@ -92,13 +81,16 @@ describe("authenticate", function() {
                         });
                         onResolve(new FirebaseUser(differentUser, "mail@mail.com"))
                     });
-                });   
+                });
             const expectedError = new ApiException(
                 proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
                 "再認証してください",
                 401
             );
-            beforeEach(function() {            
+
+            beforeEach(function() {        
+                jest.spyOn(headerLogic, 'getUserId').mockReturnValueOnce('user');
+                jest.spyOn(headerLogic, 'getToken').mockReturnValueOnce('ttttttoken');
                 authenticate(mockedVerifyToken)(request, response, next);
             });
             it("should call respondError", function() {
@@ -111,21 +103,16 @@ describe("authenticate", function() {
     });
 
     describe("when token is NOT verified", function() {
-        const request = {
-            headers: {
-                "x-api-token": "token",
-                "x-user-id": "id",
-            }
-        } as unknown as Request;
-        
         const mockedVerifyToken = jest.fn()
             .mockImplementation((token: string) => {            
                 return new Promise<FirebaseUser>((onResolve, onReject) => {
                     onReject()
                 });
             });
-        
-        beforeEach(function() {            
+
+        beforeEach(function() {
+            jest.spyOn(headerLogic, 'getUserId').mockReturnValueOnce('user');
+            jest.spyOn(headerLogic, 'getToken').mockReturnValueOnce('token');
             authenticate(mockedVerifyToken)(request, response, next);
         });
         it("should call respondError", function() {
