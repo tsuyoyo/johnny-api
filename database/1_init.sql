@@ -11,7 +11,7 @@ ALTER USER "root" IDENTIFIED WITH mysql_native_password BY 'passpass';
 CREATE TABLE test_db.users (
     id VARCHAR(256) primary key unique not null,
     name varchar(30) not null,
-    photo_url varchar(256),
+    icon varchar(256),
     mail varchar(100) unique
 );
 START TRANSACTION;

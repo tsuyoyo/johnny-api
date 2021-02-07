@@ -49,14 +49,14 @@ function insertQuery(player: proto.IPlayer, mail: string) {
 }
 
 function selectQuery(playerId: string) {
-  return `SELECT * FROM ${USER_TABLE} WHERE id="${playerId}"`;
+  return `SELECT * FROM ${USER_TABLE} WHERE id='${playerId}'`;
 }
 
 function getPlayerFromObj(obj: object): proto.IPlayer {
   const player = new proto.Player();
   player.id = obj["id"];
   player.name = obj["name"];
-  player.icon = obj["photo_url"];
+  player.icon = obj[""];
   return player;
 }
 
