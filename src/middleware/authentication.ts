@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { ApiException } from "../error/apiException";
 import { respondError } from "../error/responsdError";
 import { FirebaseUser } from "../firebase/verify";
-import { getToken, getUserId} from "../request/header";
+import { getToken, getUserId } from "../request/header";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 

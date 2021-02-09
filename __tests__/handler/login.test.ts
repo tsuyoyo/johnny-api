@@ -20,7 +20,7 @@ describe("login", () => {
             return new Promise<proto.IPostLoginResponse>((onResolve, onReject) => {
                 onResolve(response)
             })
-        }        
+        }
         beforeEach(() => {
             spyLogin = jest.spyOn(loginService, 'login')
                 .mockImplementation(mockLoginService);
@@ -37,7 +37,7 @@ describe("login", () => {
         })
         afterEach(() => {
             jest.clearAllMocks();
-        })        
+        })
     })
 
     describe("when loginService throws exception", () => {
@@ -53,7 +53,7 @@ describe("login", () => {
             return new Promise<proto.IPostLoginResponse>((onResolve, onReject) => {
                 onReject(error)
             })
-        }                
+        }
         beforeEach(() => {
             spyLogin = jest.spyOn(loginService, 'login')
                 .mockImplementation(mockLoginService);
@@ -65,6 +65,6 @@ describe("login", () => {
         })
         afterEach(() => {
             jest.clearAllMocks();
-        })        
+        })
     })
 })
