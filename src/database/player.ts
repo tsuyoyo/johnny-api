@@ -20,7 +20,7 @@ function getPlayerFromObj(obj: object): proto.IPlayer {
   const player = new proto.Player();
   player.id = obj["id"];
   player.name = obj["name"];
-  player.icon = obj[""];
+  player.icon = obj["icon"];
   return player;
 }
 
@@ -55,7 +55,6 @@ export function selectPlayerById(playerId: string): Promise<proto.IPlayer> {
       if (err) {
         onReject(err);
       } else if (rows.length > 0) {
-        console.log(`selectPlayerById - onSelectPlayer`);
         onResolve(getPlayerFromObj(rows[0]));
       } else {
         onReject(getNotFoundError(playerId));

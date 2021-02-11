@@ -4,6 +4,7 @@ import * as playerTable from "../database/player";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
+// Deprecated. Login service is not required anymore.
 export async function login(
   request: proto.IPostLoginRequest,
   verifyFirebaseToken: (token: string) => Promise<FirebaseUser>

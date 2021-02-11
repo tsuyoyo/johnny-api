@@ -1,70 +1,76 @@
-import * as loginService from "../../src/service/login";
+import * as playerRespository from "../../src/repository/player";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import { FirebaseUser } from "../../src/firebase/verify";
 import * as target from "../../src/handler/login";
+import { ApiException } from "../../src/error/apiException";
 
 describe("login", () => {
-    let spyLogin;
+  const request = new proto.PostLoginRequest({});
 
-    describe("when loginService returns success", () => {
-        const request = new proto.PostLoginRequest({});
-        const response = new proto.PostLoginResponse({});
-        const verifyToken = jest.fn();
-        let result;
+  describe("when verifyToken returns FirebaseUser", () => {
+      const firebaseUser = new FirebaseUser(new proto.User({}), "mail");
+      const mockedVerifyToken = (token: string) => new Promise<FirebaseUser>((onResolve, onReject) => {
+        onResolve(firebaseUser);
+      });
+      let spyGetPlayer;
+      let result;
 
-        function mockLoginService(
-            _request: proto.IPostLoginRequest, 
-            _verifyFirebaseToken: (token: string) => Promise<FirebaseUser>
-        ) {
-            return new Promise<proto.IPostLoginResponse>((onResolve, onReject) => {
-                onResolve(response)
-            })
-        }
+      describe("when playerRepository returns Player instance", () => {
+        const player = new proto.Player({ id: "id", name: "aaa", icon: "icon" });
+        const expectedResponse = new proto.PostLoginResponse({ player })
+
         beforeEach(() => {
-            spyLogin = jest.spyOn(loginService, 'login')
-                .mockImplementation(mockLoginService);
+          spyGetPlayer = jest.spyOn(playerRespository, 'getPlayer').mockImplementation(
+            (id: string) => new Promise<proto.IPlayer>((onResolve) => {onResolve(player)})
+          );
+          result = expect(target.login(request, mockedVerifyToken)).resolves;
+        })
+        it("should return PostLoginResponse with the player", () => {
+          result.toMatchObject(expectedResponse);
+        });
+        afterEach(() => {
+          jest.clearAllMocks();
+        })
+      })
 
-            result = expect(target.login(request, verifyToken)).resolves
+      describe("when playerRepository throws error", () => {
+        const responsitoryException = new ApiException(proto.PercussionApiError.ErrorCode.DB_ERROR, "aaa", 400);
+
+        beforeEach(() => {
+          spyGetPlayer = jest.spyOn(playerRespository, 'getPlayer').mockImplementation(
+            (id: string) => new Promise<proto.IPlayer>((onResolve, onReject) => {onReject(responsitoryException)})
+          );
+          result = expect(target.login(request, mockedVerifyToken)).rejects;
         })
-        it("should return response instance", () => {
-            result.toMatchObject(response)
-        })
-        it("should call login service by input values", () => {
-            expect(spyLogin.mock.calls.length).toBe(1)
-            expect(spyLogin.mock.calls[0][0]).toBe(request)
-            expect(spyLogin.mock.calls[0][1]).toBe(verifyToken)
+        it("should throw ApiException with ErrorCode.AUTHENTICATION_ERROR", () => {
+          result.toMatchObject({
+            apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+            statusCode: 404,
+          })
         })
         afterEach(() => {
-            jest.clearAllMocks();
+          jest.clearAllMocks();
         })
+      })
     })
 
-    describe("when loginService throws exception", () => {
-        const request = new proto.PostLoginRequest({});
-        const error = { error: "aaa" };
-        const verifyToken = jest.fn();
-        let result;
-
-        function mockLoginService(
-            _request: proto.IPostLoginRequest, 
-            _verifyFirebaseToken: (token: string) => Promise<FirebaseUser>
-        ) {
-            return new Promise<proto.IPostLoginResponse>((onResolve, onReject) => {
-                onReject(error)
-            })
-        }
-        beforeEach(() => {
-            spyLogin = jest.spyOn(loginService, 'login')
-                .mockImplementation(mockLoginService);
-
-            result = expect(target.login(request, verifyToken)).resolves
+    describe("when verifyToken throws error", () => {
+      const mockedVerifyToken = (token: string) => new Promise<FirebaseUser>((onResolve, onReject) => {
+        onReject({message : "dummyError"});
+      });
+      let result;
+      beforeEach(() => {
+        result = expect(target.login(request, mockedVerifyToken)).rejects;
+      })
+      it("should throw ApiException with ErrorCode.AUTHENTICATION_ERROR", () => {
+        result.toMatchObject({
+          apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+          statusCode: 404,
         })
-        it("should throw error which was thrown by login service", () => {
-            result.toMatchObject(error)
-        })
-        afterEach(() => {
-            jest.clearAllMocks();
-        })
+      })
+      afterEach(() => {
+        jest.clearAllMocks();
+      })
     })
 })

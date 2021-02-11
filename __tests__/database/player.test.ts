@@ -18,7 +18,6 @@ describe("insertPlayer", () => {
                 .mockImplementation(
                     (query, onQueryDone) => onQueryDone(null, null, null)
                 );
-            
             // Verify it's called once.
             expect(playerDb.insertPlayer(player, "mail")).resolves
         })
@@ -44,7 +43,7 @@ describe("selectPlayerById", () => {
     });
     const queryResult = [
         player.toJSON(),
-    ]    
+    ]
     describe("query is success", () => {
         beforeEach(() => {
             runQuery = jest.spyOn(sqlWrapper, 'runQuery')
