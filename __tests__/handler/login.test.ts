@@ -15,7 +15,6 @@ describe("login", () => {
         onResolve(firebaseUser);
       });
     let spyGetPlayer;
-    let result;
 
     describe("when playerRepository returns Player instance", () => {
       const player = new proto.Player({ id: "id", name: "aaa", icon: "icon" });
@@ -30,10 +29,11 @@ describe("login", () => {
                 onResolve(player);
               })
           );
-        result = expect(target.login(request, mockedVerifyToken)).resolves;
       });
       it("should return PostLoginResponse with the player", () => {
-        result.toMatchObject(expectedResponse);
+        return expect(target.login(request, mockedVerifyToken))
+          .resolves
+          .toMatchObject(expectedResponse);
       });
       afterEach(() => {
         jest.clearAllMocks();
@@ -46,7 +46,6 @@ describe("login", () => {
         "aaa",
         400
       );
-
       beforeEach(() => {
         spyGetPlayer = jest
           .spyOn(playerRespository, "getPlayer")
@@ -56,13 +55,14 @@ describe("login", () => {
                 onReject(responsitoryException);
               })
           );
-        result = expect(target.login(request, mockedVerifyToken)).rejects;
       });
       it("should throw ApiException with ErrorCode.AUTHENTICATION_ERROR", () => {
-        result.toMatchObject({
-          apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-          statusCode: 404,
-        });
+        return expect(target.login(request, mockedVerifyToken))
+          .rejects
+          .toMatchObject({
+            apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+            statusCode: 404,
+          });
       });
       afterEach(() => {
         jest.clearAllMocks();
@@ -75,15 +75,13 @@ describe("login", () => {
       new Promise<FirebaseUser>((onResolve, onReject) => {
         onReject({ message: "dummyError" });
       });
-    let result;
-    beforeEach(() => {
-      result = expect(target.login(request, mockedVerifyToken)).rejects;
-    });
     it("should throw ApiException with ErrorCode.AUTHENTICATION_ERROR", () => {
-      result.toMatchObject({
-        apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-        statusCode: 404,
-      });
+      return expect(target.login(request, mockedVerifyToken))
+        .rejects
+        .toMatchObject({
+          apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+          statusCode: 404,
+        });
     });
     afterEach(() => {
       jest.clearAllMocks();

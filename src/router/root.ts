@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { provideSignupRouter } from "./user/signup";
-import { provideLoginRouter } from "./user/login";
+import { provideLoginRouter } from "./login/root";
+import { provideSignupRouter } from "./signup/root";
 import { provideUserProfileRouter } from "./user/profile/profile";
 import { provideUserCityRouter } from "./user/profile/city";
 import { provideAreaCityRouter } from "./area/prefecture/city";

@@ -4,6 +4,8 @@ import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import deserialize from "../../request/deserialize";
 import { ResponseHandler } from "../../response/handler";
+import * as loginHandler from "../../handler/login"
+import { ApiException } from "../../error/apiException";
 
 function deserializePostUserLoginRequest(request: Request) {
   return deserialize(
@@ -18,25 +20,19 @@ function login(
   response: Response,
   verifyToken: (token: string) => Promise<FirebaseUser>,
 ) {
-  const responseWrapper = new ResponseHandler<proto.PostUserLoginResponse>(
-    request,
-    response,
-    proto.PostUserLoginResponse.encode,
+  const loginRequest = deserializePostUserLoginRequest(request)
+  const responseHandler = new ResponseHandler<proto.IPostLoginResponse>(
+    request, response, proto.PostLoginResponse.encode
   );
-
-  // TODO : deserialize request
-
-  // TODO : Call login server
-
-  // TODO : respond result
+  loginHandler.login(loginRequest, verifyToken)
+    .then((res: proto.IPostLoginResponse) => responseHandler.respondSuccess(res))
+    .catch((err: ApiException) => responseHandler.respondError(err))
 }
 
 export function provideLoginRouter(
   verifyToken: (token: string) => Promise<FirebaseUser>,
 ): Router {
   const router = Router();
-  router.post("/", (request, response) =>
-    login(request, response, verifyToken)
-  );
+  router.post("/", (request, response) => login(request, response, verifyToken));
   return router;
 }
