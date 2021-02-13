@@ -1,6 +1,5 @@
-import { request, Request, Response, Router } from "express";
+import { Request, Response, Router } from "express";
 import { getUserId } from "../../../request/header";
-import { FirebaseUser } from "../../../firebase/verify";
 import * as userCityService from "../../../service/userCity";
 import * as userCitiesTable from "../../../database/user/cities";
 import * as areaTable from "../../../database/areas";

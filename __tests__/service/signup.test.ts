@@ -5,7 +5,6 @@ import { ApiException } from "../../src/error/apiException";
 import { FirebaseUser } from "../../src/firebase/verify";
 
 describe("signup", function () {
-
   describe("when no token is set in the request", () => {
     const request = new proto.SignupUserRequest({
       token: "",
@@ -16,9 +15,9 @@ describe("signup", function () {
       401
     );
     it("should return NO_TOKEN as error", () => {
-      expect(signupService.signup(request, jest.fn(), jest.fn()))
-        .rejects
-        .toThrow(expectedError);
+      expect(
+        signupService.signup(request, jest.fn(), jest.fn())
+      ).rejects.toThrow(expectedError);
     });
   });
 

@@ -7,8 +7,8 @@
     "tsc": "tsc",
     "dev": "nodemon -L",
     "ts-node": "ts-node",
-    "lint": "eslint src/index.ts",
-    "lint:fix": "eslint --fix src/**/*.ts",
+    "lint": "eslint src/**/*.ts __tests__/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts __tests__/**/*.ts --fix",
     "test": "jest",
     "testCoverage": "jest --collectCoverage"
   },
