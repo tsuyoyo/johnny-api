@@ -31,9 +31,9 @@ describe("login", () => {
           );
       });
       it("should return PostLoginResponse with the player", () => {
-        return expect(target.login(request, mockedVerifyToken))
-          .resolves
-          .toMatchObject(expectedResponse);
+        return expect(
+          target.login(request, mockedVerifyToken)
+        ).resolves.toMatchObject(expectedResponse);
       });
       afterEach(() => {
         jest.clearAllMocks();
@@ -57,12 +57,12 @@ describe("login", () => {
           );
       });
       it("should throw ApiException with ErrorCode.AUTHENTICATION_ERROR", () => {
-        return expect(target.login(request, mockedVerifyToken))
-          .rejects
-          .toMatchObject({
-            apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-            statusCode: 404,
-          });
+        return expect(
+          target.login(request, mockedVerifyToken)
+        ).rejects.toMatchObject({
+          apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+          statusCode: 404,
+        });
       });
       afterEach(() => {
         jest.clearAllMocks();
@@ -76,12 +76,12 @@ describe("login", () => {
         onReject({ message: "dummyError" });
       });
     it("should throw ApiException with ErrorCode.AUTHENTICATION_ERROR", () => {
-      return expect(target.login(request, mockedVerifyToken))
-        .rejects
-        .toMatchObject({
-          apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
-          statusCode: 404,
-        });
+      return expect(
+        target.login(request, mockedVerifyToken)
+      ).rejects.toMatchObject({
+        apiError: proto.PercussionApiError.ErrorCode.AUTHENTICATION_ERROR,
+        statusCode: 404,
+      });
     });
     afterEach(() => {
       jest.clearAllMocks();

@@ -14,16 +14,19 @@ describe("insertPlayer", () => {
     beforeEach(() => {
       runQuery = jest
         .spyOn(sqlWrapper, "runQuery")
-        .mockImplementation((query, onQueryDone) => onQueryDone(null, null, null));
+        .mockImplementation((query, onQueryDone) =>
+          onQueryDone(null, null, null)
+        );
     });
     it("should return player object inserted", () => {
-      return expect(playerDb.insertPlayer(player, "mail"))
-        .resolves
-        .toMatchObject(player)
-    })
+      return expect(
+        playerDb.insertPlayer(player, "mail")
+      ).resolves.toMatchObject(player);
+    });
 
     it("should call insertQuery with expected SQL", () => {
-      return playerDb.insertPlayer(player, "mail")
+      return playerDb
+        .insertPlayer(player, "mail")
         .then((_player: proto.IPlayer) => {
           expect(runQuery.mock.calls.length).toBe(1);
           expect(runQuery.mock.calls[0][0]).toBe(
@@ -55,12 +58,13 @@ describe("selectPlayerById", () => {
         );
     });
     it("should return player instance got from DB", () => {
-      return expect(playerDb.selectPlayerById(player.id))
-        .resolves
-        .toMatchObject(player);
+      return expect(
+        playerDb.selectPlayerById(player.id)
+      ).resolves.toMatchObject(player);
     });
     it("should call runQuery with expected SQL", () => {
-      return playerDb.selectPlayerById(player.id)
+      return playerDb
+        .selectPlayerById(player.id)
         .then((_player: proto.IPlayer) => {
           expect(runQuery.mock.calls.length).toBe(1);
           expect(runQuery.mock.calls[0][0]).toBe(

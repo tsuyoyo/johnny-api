@@ -16,7 +16,7 @@ function verifyRequestToken(token: string) {
 
 export function signup(
   request: proto.ISignupUserRequest,
-  verifyFirebaseToken: (token: string) => Promise<FirebaseUser>,
+  verifyFirebaseToken: (token: string) => Promise<FirebaseUser>
 ): Promise<proto.IPostSignupResponse> {
   return verifyRequestToken(request.token)
     .then((token: string) => verifyFirebaseToken(token))
