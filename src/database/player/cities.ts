@@ -2,6 +2,8 @@ import { runQuery } from "../mysqlWrapper";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto
 import City = proto.City;
+import { johnnyDb } from "../../database/fields";
+import table = johnnyDb.tables.player.AREA;
 
 const USER_CITIES_TABLE = "user_cities";
 
@@ -13,7 +15,7 @@ export async function insertCities(
     const oneValueQuery = (userId: string, cityId: string): string =>
       `(null, '${userId}', '${cityId}')`;
 
-    let query = `INSERT INTO ${USER_CITIES_TABLE} (id, user_id, city_id) VALUES `;
+    let query = `INSERT INTO ${USER_CITIES_TABLE} (${table.ID}, ${table.PLAYER_ID}, ${table.AREA_ID}) VALUES `;
     for (let i = 0; i < cities.length; i++) {
       query +=
         oneValueQuery(playerId, cities[i].id) +
@@ -32,7 +34,7 @@ export async function insertCities(
 
 export async function deleteCities(playerId: string): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
-    const query = `DELETE from ${USER_CITIES_TABLE} WHERE user_id='${playerId}'`;
+    const query = `DELETE from ${USER_CITIES_TABLE} WHERE ${table.PLAYER_ID}='${playerId}'`;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
@@ -47,7 +49,7 @@ export async function deleteCities(playerId: string): Promise<number> {
 
 export async function selectCities(userId: string): Promise<Array<number>> {
   return new Promise<Array<number>>((onResolve, onReject) => {
-    const query = `SELECT * FROM ${USER_CITIES_TABLE} WHERE user_id='${userId}'`;
+    const query = `SELECT * FROM ${USER_CITIES_TABLE} WHERE ${table.PLAYER_ID}='${userId}'`;
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     runQuery(query, (err, rows, _fields) => {
@@ -58,7 +60,7 @@ export async function selectCities(userId: string): Promise<Array<number>> {
       } else {
         const cityIds = new Array<number>();
         for (const cityObj of rows) {
-          cityIds.push(cityObj["city_id"]);
+          cityIds.push(cityObj[table.AREA_ID]);
         }
         onResolve(cityIds);
       }
