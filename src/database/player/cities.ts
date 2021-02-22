@@ -21,8 +21,7 @@ export async function insertCities(
         oneValueQuery(playerId, cities[i].id) +
         (i < cities.length - 1 ? "," : "");
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(query, (err, rows, _fields) => {
+    runQuery(query, (err, rows) => {
       if (err) {
         onReject(err);
       } else {
@@ -36,8 +35,7 @@ export async function deleteCities(playerId: string): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
     const query = `DELETE from ${USER_CITIES_TABLE} WHERE ${table.PLAYER_ID}='${playerId}'`;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(query, (err, rows, _fields) => {
+    runQuery(query, (err, rows) => {
       if (err) {
         onReject(err);
       } else {
@@ -51,8 +49,7 @@ export async function selectCities(userId: string): Promise<Array<number>> {
   return new Promise<Array<number>>((onResolve, onReject) => {
     const query = `SELECT * FROM ${USER_CITIES_TABLE} WHERE ${table.PLAYER_ID}='${userId}'`;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(query, (err, rows, _fields) => {
+    runQuery(query, (err, rows) => {
       if (err) {
         onReject(err);
       } else if (!rows || rows.length == 0) {

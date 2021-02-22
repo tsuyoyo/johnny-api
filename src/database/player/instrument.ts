@@ -1,22 +1,17 @@
 import { runQuery } from "../mysqlWrapper";
 import { pj } from "johnny-proto";
-import proto = pj.sakuchin.percussion.proto
-import City = proto.City;
-import { insertCities } from "../user/cities";
-
 import { johnnyDb } from "../../database/fields";
+import proto = pj.sakuchin.percussion.proto
 import table = johnnyDb.tables.player.INSTRUMENT;
-
-const TABLE_NAME = "";
 
 function queryInsertOneValue(playerId: string, instrumentId: number): string {
   return `(null, '${playerId}', '${instrumentId}')`;
 }
 
-function queryInsert(playerId: string, values: Array<proto.IInstrument>): string {
-  let query = `INSERT INTO ${TABLE_NAME} (id, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES `;
-  for (let i = 0; i < values.length; i++) {
-    query += queryInsertOneValue(playerId, values[i].id) + (i < values.length - 1 ? "," : "");
+function queryInsert(playerId: string, ids: Array<number>): string {
+  let query = `INSERT INTO ${table.TABLE_NAME} (id, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES `;
+  for (let i = 0; i < ids.length; i++) {
+    query += queryInsertOneValue(playerId, ids[i]) + (i < ids.length - 1 ? "," : "");
   }
   return query;
 }
@@ -29,29 +24,20 @@ function querySelect(playerId: string): string {
   return `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`;
 }
 
-function buildTypedObject(obj: object): proto.IInstrument {
-  return new proto.Instrument({
-    id: obj[table.ID],
-    name: obj[table.NAME],
-    authorId: obj[table.AUTHOR_ID],
-  });
-}
-
-function buildTypedObjectArray(objects: object[]): Array<proto.IInstrument> {
+function buildTypedObjectArray(objects: object[]): Array<number> {
   if (!objects) {
     return [];
   }
-  const values = new Array<proto.IInstrument>();
+  const values = new Array<number>();
   for (const obj of objects) {
-    values.push(buildTypedObject(obj));
+    values.push(obj[table.INSTRUMENT_ID]);
   }
   return values;
 }
 
-export function select(playerId: string): Promise<Array<proto.IInstrument>> {
-  return new Promise<Array<proto.IInstrument>>((onResolve, onReject) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(querySelect(playerId), (err, rows, _fields) => {
+export function select(playerId: string): Promise<Array<number>> {
+  return new Promise<Array<number>>((onResolve, onReject) => {
+    runQuery(querySelect(playerId), (err, rows) => {
       if (err) {
         onReject(err);
       } else {
@@ -63,11 +49,10 @@ export function select(playerId: string): Promise<Array<proto.IInstrument>> {
 
 export function insert(
   playerId: string,
-  instruments: Array<proto.IInstrument>
+  instrumentIds: Array<number>
 ): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(queryInsert(playerId, instruments), (err, rows, _fields) => {
+    runQuery(queryInsert(playerId, instrumentIds), (err, rows) => {
       if (err) {
         onReject(err);
       } else {
@@ -79,8 +64,7 @@ export function insert(
 
 export function deleteEntries(playerId: string): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    runQuery(queryDelete(playerId), (err, rows, _fields) => {
+    runQuery(queryDelete(playerId), (err, rows) => {
       if (err) {
         onReject(err);
       } else {

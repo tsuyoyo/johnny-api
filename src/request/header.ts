@@ -4,6 +4,6 @@ export function getUserId(request: Request): string {
   return request.headers["x-user-id"].toString();
 }
 
-export function getToken(request: Request) {
+export function getToken(request: Request): string {
   return request.headers["x-api-token"].toString();
 }
