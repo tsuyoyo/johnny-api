@@ -12,7 +12,11 @@ export namespace johnnyDb {
     INSTRUMENT_ID: "instrument_id",
     STUDIO_ID: "studio_id",
     FOLLOWING_PLAYER_ID: "following_player_id",
+    REGISTERED_DATE_TIME: "registered_date_time",
+    POSTED_DATE_TIME: "posted_date_time",
+    UPDATED_DATE_TIME: "updated_date_time",
     DATE: "date",
+    INTRODUCTION: "introduction"
   };
 
   export namespace tables {
