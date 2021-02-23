@@ -1,4 +1,4 @@
-import * as target from "../../../src/database/player/cities";
+import * as target from "../../../src/database/player/area";
 import * as sqlWrapper from "../../../src/database/mysqlWrapper";
 import { mocked } from "ts-jest/utils";
 import { pj } from "johnny-proto";
@@ -35,7 +35,7 @@ describe("insertCities", () => {
           expect(numOfRows).toBe(3)
           expect(runQuery.mock.calls.length).toBe(1);
           expect(runQuery.mock.calls[0][0]).toBe(
-            `INSERT INTO user_cities ` + 
+            `INSERT INTO player_area ` + 
             `(${table.ID}, ${table.PLAYER_ID}, ${table.AREA_ID}) VALUES ` +
             "(null, 'playerId', '1'),(null, 'playerId', '2'),(null, 'playerId', '3')"
           );

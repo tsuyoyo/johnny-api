@@ -11,7 +11,7 @@ CREATE TABLE test_db.player (
     icon varchar(256),
     mail varchar(100) unique,
     introduction VARCHAR(1000),
-    registered_date DATETIME not null
+    registered_date_time DATETIME not null
 );
 
 CREATE TABLE test_db.area (
@@ -27,6 +27,13 @@ CREATE TABLE test_db.instrument (
     registered_date_time DATETIME not null
 ) AUTO_INCREMENT = 1;
 
+CREATE TABLE test_db.instrument_image (
+    id INT primary key AUTO_INCREMENT,
+    instrument_id INT,
+    url varchar(256),
+    posted_date_time DATETIME not null
+) AUTO_INCREMENT = 1;
+
 CREATE TABLE test_db.studio (
     id INT primary key AUTO_INCREMENT,
     name VARCHAR(30) unique not null,
@@ -34,14 +41,14 @@ CREATE TABLE test_db.studio (
     registered_date_time DATETIME not null
 ) AUTO_INCREMENT = 100;
 
-CREATE TABLE test_db.follow (
+CREATE TABLE test_db.studio_image (
     id INT primary key AUTO_INCREMENT,
-    player_id VARCHAR(256),
-    following_player_id VARCHAR(256),
-    updated_date_time DATETIME not null
-) AUTO_INCREMENT = 100;
+    studio_id INT,
+    url varchar(256),
+    posted_date_time DATETIME not null
+) AUTO_INCREMENT = 1;
 
-CREATE TABLE test_db.studio_ratings (
+CREATE TABLE test_db.studio_rating (
     id INT primary key AUTO_INCREMENT,
     studio_id INT,
     rating INT not null,
@@ -49,6 +56,13 @@ CREATE TABLE test_db.studio_ratings (
     player_id VARCHAR(256),
     posted_date_time DATETIME not null
 ) AUTO_INCREMENT = 1;
+
+CREATE TABLE test_db.follow (
+    id INT primary key AUTO_INCREMENT,
+    player_id VARCHAR(256),
+    following_player_id VARCHAR(256),
+    follow_since_date_time DATETIME not null
+) AUTO_INCREMENT = 100;
 
 CREATE TABLE test_db.player_area (
     id BIGINT primary key AUTO_INCREMENT,

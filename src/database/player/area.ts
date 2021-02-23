@@ -2,10 +2,8 @@ import { runQuery } from "../mysqlWrapper";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto
 import City = proto.City;
-import { johnnyDb } from "../../database/fields";
+import { johnnyDb } from "../fields";
 import table = johnnyDb.tables.player.AREA;
-
-const USER_CITIES_TABLE = "user_cities";
 
 export async function insertCities(
   playerId: string,
@@ -15,7 +13,7 @@ export async function insertCities(
     const oneValueQuery = (userId: string, cityId: string): string =>
       `(null, '${userId}', '${cityId}')`;
 
-    let query = `INSERT INTO ${USER_CITIES_TABLE} (${table.ID}, ${table.PLAYER_ID}, ${table.AREA_ID}) VALUES `;
+    let query = `INSERT INTO ${table.TABLE_NAME} (${table.ID}, ${table.PLAYER_ID}, ${table.AREA_ID}) VALUES `;
     for (let i = 0; i < cities.length; i++) {
       query +=
         oneValueQuery(playerId, cities[i].id) +
@@ -33,7 +31,7 @@ export async function insertCities(
 
 export async function deleteCities(playerId: string): Promise<number> {
   return new Promise<number>((onResolve, onReject) => {
-    const query = `DELETE from ${USER_CITIES_TABLE} WHERE ${table.PLAYER_ID}='${playerId}'`;
+    const query = `DELETE from ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`;
 
     runQuery(query, (err, rows) => {
       if (err) {
@@ -47,7 +45,7 @@ export async function deleteCities(playerId: string): Promise<number> {
 
 export async function selectCities(userId: string): Promise<Array<number>> {
   return new Promise<Array<number>>((onResolve, onReject) => {
-    const query = `SELECT * FROM ${USER_CITIES_TABLE} WHERE ${table.PLAYER_ID}='${userId}'`;
+    const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${userId}'`;
 
     runQuery(query, (err, rows) => {
       if (err) {

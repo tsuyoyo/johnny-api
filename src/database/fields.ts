@@ -7,6 +7,13 @@ export namespace johnnyDb {
     ID: "id",
     PLAYER_ID: "player_id",
     NAME: "name",
+    URL: "url",
+    ICON: "icon",
+    MAIL: "mail",
+    RATING: "rating",
+    COMMENT: "comment",
+    INTRODUCTION: "introduction",
+    PREFECTURE: "prefecture",
     AUTHOR_ID: "author_id",
     AREA_ID: "city_id",
     INSTRUMENT_ID: "instrument_id",
@@ -15,14 +22,22 @@ export namespace johnnyDb {
     REGISTERED_DATE_TIME: "registered_date_time",
     POSTED_DATE_TIME: "posted_date_time",
     UPDATED_DATE_TIME: "updated_date_time",
-    DATE: "date",
-    INTRODUCTION: "introduction"
+    FOLLOW_SINCE_DATE_TIME: "follow_since_date_time",
   };
 
   export namespace tables {
+
+    export const PLAYER ={
+      ID: FIELDS.ID,
+      NAME: FIELDS.NAME,
+      ICON: FIELDS.ICON,
+      MAIL: FIELDS.MAIL,
+      INTRODUCTION: FIELDS.INTRODUCTION,
+      REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
+    }
     export namespace player {
       export const AREA = {
-        TABLE_NAME: "user_cities",
+        TABLE_NAME: "player_area",
         ID: FIELDS.ID,
         PLAYER_ID: FIELDS.PLAYER_ID,
         AREA_ID: FIELDS.AREA_ID,
@@ -41,22 +56,67 @@ export namespace johnnyDb {
         PLAYER_ID: FIELDS.PLAYER_ID,
         STUDIO_ID: FIELDS.STUDIO_ID,
       };
+    }
 
-      export const FOLLOW = {
-        TABLE_NAME: "player_follow",
+    export const AREA = {
+      TABLE_NAME: "area",
+      ID: FIELDS.ID,
+      NAME: FIELDS.NAME,
+      PREFECTURE: FIELDS.PREFECTURE,
+      REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
+    }
+
+    export const INSTRUMENT = {
+      TABLE_NAME: "instrument",
+      ID: FIELDS.ID,
+      NAME: FIELDS.NAME,
+      REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
+    }
+
+    export namespace instrument {
+      export const IMAGE = {
+        TABLE_NAME: "instrument_image",
         ID: FIELDS.ID,
-        PLAYER_ID: FIELDS.PLAYER_ID,
-        FOLLOWING_PLAYER_ID: FIELDS.FOLLOWING_PLAYER_ID,
-        START_FOLLOWING_DATE: FIELDS.DATE,
+        INSTRUMENT_ID: FIELDS.INSTRUMENT_ID,
+        URL: FIELDS.URL,
+        POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
       }
     }
 
-    export namespace area {}
+    export const STUDIO = {
+      TABLE_NAME: "studio",
+      ID: FIELDS.ID,
+      NAME: FIELDS.NAME,
+      AREA_ID: FIELDS.AREA_ID,
+      REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
+    }
 
-    export namespace instrument {}
+    export namespace studio {
+      export const IMAGE = {
+        TABLE_NAME: "studio_image",
+        ID: FIELDS.ID,
+        STUDIO_ID: FIELDS.STUDIO_ID,
+        URL: FIELDS.URL,
+        POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
+      }
 
-    export namespace studio {}
+      export const RATING = {
+        TABLE_NAME: "studio_rating",
+        ID: FIELDS.ID,
+        STUDIO_ID: FIELDS.STUDIO_ID,
+        RATING: FIELDS.RATING,
+        COMMENT: FIELDS.COMMENT,
+        PLAYER_ID: FIELDS.PLAYER_ID,
+        POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
+      }
+    }
 
-    export namespace follow {}
+    export const FOLLOW = {
+      TABLE_NAME: "follow",
+      ID: FIELDS.ID,
+      PLAYER_ID: FIELDS.PLAYER_ID,
+      FOLLOWING_PLAYER_ID: FIELDS.FOLLOWING_PLAYER_ID,
+      FOLLOW_SINCE_DATE_TIME: FIELDS.FOLLOW_SINCE_DATE_TIME,
+    }
   }
 }
