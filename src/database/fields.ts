@@ -15,7 +15,7 @@ export namespace johnnyDb {
     INTRODUCTION: "introduction",
     PREFECTURE: "prefecture",
     AUTHOR_ID: "author_id",
-    AREA_ID: "city_id",
+    AREA_ID: "area_id",
     INSTRUMENT_ID: "instrument_id",
     STUDIO_ID: "studio_id",
     FOLLOWING_PLAYER_ID: "following_player_id",
@@ -23,17 +23,24 @@ export namespace johnnyDb {
     POSTED_DATE_TIME: "posted_date_time",
     UPDATED_DATE_TIME: "updated_date_time",
     FOLLOW_SINCE_DATE_TIME: "follow_since_date_time",
+    CITY_ID: "city_id",
+    CITY_NAME: "city_name",
+    ZIP_CODE: "zip_code",
+    ADDRESS_ID: "address_id",
   };
 
+  export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:MM:ss"
   export namespace tables {
 
     export const PLAYER ={
+      TABLE_NAME: "player",
       ID: FIELDS.ID,
       NAME: FIELDS.NAME,
       ICON: FIELDS.ICON,
       MAIL: FIELDS.MAIL,
       INTRODUCTION: FIELDS.INTRODUCTION,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
+      UPDATED_DATE_TIME: FIELDS.UPDATED_DATE_TIME,
     }
     export namespace player {
       export const AREA = {
@@ -56,6 +63,15 @@ export namespace johnnyDb {
         PLAYER_ID: FIELDS.PLAYER_ID,
         STUDIO_ID: FIELDS.STUDIO_ID,
       };
+    }
+
+    export const ADDRESS = {
+      TABLE_NAME: "address",
+      CITY_ID: FIELDS.CITY_ID,
+      CITY_NAME: FIELDS.CITY_NAME,
+      PREFECTURE: FIELDS.PREFECTURE,
+      ZIP_CODE: FIELDS.ZIP_CODE,
+      ADDRESS_ID: FIELDS.ADDRESS_ID,
     }
 
     export const AREA = {

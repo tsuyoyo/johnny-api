@@ -1,4 +1,4 @@
-import { runQuery } from "../mysqlWrapper";
+import { runQuery, runSelectQuery, runSingleQuery } from "../mysqlWrapper";
 import { pj } from "johnny-proto";
 import { johnnyDb } from "../../database/fields";
 import proto = pj.sakuchin.percussion.proto
@@ -9,7 +9,9 @@ function queryInsertOneValue(playerId: string, instrumentId: number): string {
 }
 
 function queryInsert(playerId: string, ids: Array<number>): string {
-  let query = `INSERT INTO ${table.TABLE_NAME} (id, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES `;
+  let query = `INSERT INTO ${table.TABLE_NAME} ` +
+    `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) ` +
+    `VALUES `;
   for (let i = 0; i < ids.length; i++) {
     query += queryInsertOneValue(playerId, ids[i]) + (i < ids.length - 1 ? "," : "");
   }
@@ -36,40 +38,16 @@ function buildTypedObjectArray(objects: object[]): Array<number> {
 }
 
 export function select(playerId: string): Promise<Array<number>> {
-  return new Promise<Array<number>>((onResolve, onReject) => {
-    runQuery(querySelect(playerId), (err, rows) => {
-      if (err) {
-        onReject(err);
-      } else {
-        onResolve(buildTypedObjectArray(rows));
-      }
-    });
-  });
+  return runSelectQuery(querySelect(playerId), buildTypedObjectArray);
 }
 
 export function insert(
   playerId: string,
   instrumentIds: Array<number>
 ): Promise<number> {
-  return new Promise<number>((onResolve, onReject) => {
-    runQuery(queryInsert(playerId, instrumentIds), (err, rows) => {
-      if (err) {
-        onReject(err);
-      } else {
-        onResolve(rows.length);
-      }
-    });
-  });
+  return runSingleQuery(queryInsert(playerId, instrumentIds));
 }
 
 export function deleteEntries(playerId: string): Promise<number> {
-  return new Promise<number>((onResolve, onReject) => {
-    runQuery(queryDelete(playerId), (err, rows) => {
-      if (err) {
-        onReject(err);
-      } else {
-        onResolve(rows.length);
-      }
-    });
-  });
+  return runSingleQuery(queryDelete(playerId));
 }

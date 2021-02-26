@@ -63,3 +63,33 @@ export function runQuery(
   });
   connection.end();
 }
+
+export function runSingleQuery(query: string): Promise<number> {
+  return new Promise<number>((onResolve, onReject) => {
+    runQuery(query, (err, rows) => {
+      if (err) {
+        onReject(err);
+      } else {
+        onResolve(rows.length);
+      }
+    });
+  });
+}
+
+export function runSelectQuery<T>(
+  query: string,
+  deserialize: (objects) => Array<T>
+): Promise<Array<T>> {
+  return new Promise<Array<T>>((onResolve, onReject) => {
+    runQuery(query, (err, rows) => {
+      if (err) {
+        onReject(err);
+      } else {
+        onResolve(deserialize(rows));
+      }
+    });
+  });
+}
+
+// TODO : Support transaction
+// https://tech.chakapoko.com/nodejs/mysql/promise.html

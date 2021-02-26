@@ -11,7 +11,8 @@ CREATE TABLE test_db.player (
     icon varchar(256),
     mail varchar(100) unique,
     introduction VARCHAR(1000),
-    registered_date_time DATETIME not null
+    registered_date_time DATETIME not null,
+    updated_date_time DATETIME not null
 );
 
 CREATE TABLE test_db.area (
@@ -88,11 +89,11 @@ CREATE TABLE test_db.player_studio (
 
 START TRANSACTION;
 INSERT INTO test_db.player
-  (id, name, icon, mail, registered_date)
+  (id, name, icon, mail, registered_date_time, updated_date_time)
 VALUES
-  ('id_a', 'あああああ', 'http://photo.com', 'test_a@mail.com', '2020-02-22 10:00:00'),
-  ('id_b', 'test_b', 'http://photo.com', 'test_b@mail.com', '2020-02-22 10:10:00'),
-  ('id_c', 'test_c', 'http://photo.com', 'test_c@mail.com', '2020-02-22 11:25:00');
+  ('id_a', 'あああああ', 'http://photo.com', 'test_a@mail.com', '2020-02-22 10:00:00', '2020-02-22 10:00:00'),
+  ('id_b', 'test_b', 'http://photo.com', 'test_b@mail.com', '2020-02-22 10:10:00', '2020-02-22 10:10:00'),
+  ('id_c', 'test_c', 'http://photo.com', 'test_c@mail.com', '2020-02-22 11:25:00', '2020-02-22 11:25:00');
 COMMIT;
 
 -- START TRANSACTION;

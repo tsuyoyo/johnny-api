@@ -1,16 +1,17 @@
 import { runQuery } from "./mysqlWrapper";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
+import { johnnyDb } from "./fields";
+import table = johnnyDb.tables.ADDRESS;
 
-const ADDRESS_TABLE = "ad_address";
-const SELECT_FIELDS = "prefecture_id, city_name, city_id";
-const SELECT_QUERY = `SELECT DISTINCT ${SELECT_FIELDS} from ${ADDRESS_TABLE}`;
+const SELECT_FIELDS = `${table.PREFECTURE}, ${table.CITY_NAME}, ${table.CITY_ID}`;
+const SELECT_QUERY = `SELECT DISTINCT ${SELECT_FIELDS} from ${table.TABLE_NAME}`;
 
 function buildCityFromJsObj(obj: object): proto.ICity {
   return new proto.City({
-    id: `${obj["city_id"]}`,
-    name: obj["city_name"],
-    prefecture: obj["prefecture_id"],
+    id: `${obj[table.CITY_ID]}`,
+    name: obj[table.CITY_NAME],
+    prefecture: obj[table.PREFECTURE],
   });
 }
 
@@ -29,7 +30,7 @@ export async function selectCitiesByPrefecture(
 ): Promise<Array<proto.ICity>> {
   return new Promise<Array<proto.ICity>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`where prefecture_id=${prefecture}`, onResolve, onReject);
+    runSelectQuery(`WHERE ${table.PREFECTURE}=${prefecture}`, onResolve, onReject);
   });
 }
 
@@ -38,7 +39,7 @@ export async function selectCitiesLikeZipCode(
 ): Promise<Array<proto.ICity>> {
   return new Promise<Array<proto.ICity>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`where zip_code like '${zipCode}%'`, onResolve, onReject);
+    runSelectQuery(`WHERE ${table.ZIP_CODE} like '${zipCode}%'`, onResolve, onReject);
   });
 }
 
@@ -47,7 +48,7 @@ export async function selectCitiesByZipCode(
 ): Promise<Array<proto.ICity>> {
   return new Promise<Array<proto.ICity>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`where zip_code=${zipCode}`, onResolve, onReject);
+    runSelectQuery(`WHERE ${table.ZIP_CODE}=${zipCode}`, onResolve, onReject);
   });
 }
 

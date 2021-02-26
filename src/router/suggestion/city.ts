@@ -1,5 +1,5 @@
 import { Request, Response, Router } from "express";
-import * as areaDb from "../../database/areas";
+import * as areaDb from "../../database/address";
 import * as areaService from "../../service/area";
 import * as ApiException from "../../error/apiException";
 import { ResponseHandler } from "../../response/handler";
