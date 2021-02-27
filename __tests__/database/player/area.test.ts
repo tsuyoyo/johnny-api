@@ -28,7 +28,6 @@ describe("insertCities", () => {
         .resolves
         .toBe(3)
     })
-
     it("should call insertQuery with expected SQL", () => {
       return target.insertCities(playerId, cities)
         .then((numOfRows: number) => {
@@ -42,10 +41,10 @@ describe("insertCities", () => {
         });
     });
   });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
-
 })
 
 describe("deleteCities", () => {
@@ -126,6 +125,7 @@ describe("selectCities", () => {
         });
     });
   });
+
   afterEach(() => {
     jest.clearAllMocks();
   });

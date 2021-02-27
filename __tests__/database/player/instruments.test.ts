@@ -8,14 +8,12 @@ import { johnnyDb } from "../../../src/database/fields";
 import table = johnnyDb.tables.player.INSTRUMENT;
 
 describe("insert", () => {
-  let runQuery;
-
   const instrumentIds = [1, 2, 3];
   const playerId = "playerId";
 
   describe("query is success", () => {
-    const inserted = [{}, {}, {}];
     let runSingleQuery;
+    const inserted = [{}, {}, {}];
 
     beforeEach(() => {
       runSingleQuery = jest
@@ -29,7 +27,6 @@ describe("insert", () => {
         .resolves
         .toBe(3);
     })
-
     it("should call insertQuery with expected SQL", () => {
       return target.insert(playerId, instrumentIds)
         .then((numOfRows: number) => {
@@ -43,10 +40,10 @@ describe("insert", () => {
         });
     });
   });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
-
 })
 
 describe("deleteEntries", () => {
@@ -101,6 +98,7 @@ describe("deleteEntries", () => {
 
 describe("select", () => {
   let runSelectQuery;
+
   const instrumentIds = [
     {"instrument_id": 1},
     {"instrument_id": 2},
@@ -132,6 +130,7 @@ describe("select", () => {
         });
     });
   });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
