@@ -30,9 +30,9 @@ export function authenticate(
     verifyToken(token.toString())
       .then((firebaseUser) => {
         console.log(
-          `firebaseUserId : ${firebaseUser.user.id}, userId : ${userId}`
+          `firebaseUserId : ${firebaseUser.player.id}, userId : ${userId}`
         );
-        if (firebaseUser.user.id.toString() == userId.toString()) {
+        if (firebaseUser.player.id.toString() == userId.toString()) {
           next();
         } else {
           respondError(response, firebaseAuthError);

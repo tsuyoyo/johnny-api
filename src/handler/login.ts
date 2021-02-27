@@ -9,7 +9,7 @@ export function login(
   verifyToken: (token: string) => Promise<FirebaseUser>
 ): Promise<proto.IPostLoginResponse> {
   return verifyToken(request.token)
-    .then((fbUser: FirebaseUser) => playerRepository.getPlayer(fbUser.user.id))
+    .then((fbUser: FirebaseUser) => playerRepository.getPlayer(fbUser.player.id))
     .then((player: proto.IPlayer) => new proto.PostLoginResponse({ player }))
     .catch((error) => {
       console.log(`Error : login service - ${error.message}`);

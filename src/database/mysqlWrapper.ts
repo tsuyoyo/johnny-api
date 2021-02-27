@@ -76,16 +76,13 @@ export function runSingleQuery(query: string): Promise<number> {
   });
 }
 
-export function runSelectQuery<T>(
-  query: string,
-  deserialize: (objects) => Array<T>
-): Promise<Array<T>> {
-  return new Promise<Array<T>>((onResolve, onReject) => {
+export function runSelectQuery(query: string): Promise<Array<object>> {
+  return new Promise<Array<object>>((onResolve, onReject) => {
     runQuery(query, (err, rows) => {
       if (err) {
         onReject(err);
       } else {
-        onResolve(deserialize(rows));
+        onResolve(rows);
       }
     });
   });

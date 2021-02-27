@@ -100,7 +100,7 @@ describe("deleteCities", () => {
 
 describe("selectCities", () => {
   let runQuery;
-  const cityIds = [{"city_id": 1}, {"city_id": 2}, {"city_id": 3}];
+  const cityIds = [{"area_id": 1}, {"area_id": 2}, {"area_id": 3}];
   const playerId = "playerId"
 
   describe("query is success", () => {

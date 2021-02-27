@@ -44,10 +44,11 @@ describe("signup", function () {
           player: expectedUser,
         });
         beforeEach(() => {
-          jest.spyOn(playerRepository, "addPlayer").mockImplementation(
-            (_player: proto.IPlayer, _email: string) =>
-              new Promise<proto.IPlayer>((onResolve) => onResolve(expectedUser))
-          );
+          jest
+            .spyOn(playerRepository, "addPlayer")
+            .mockImplementation(() => 
+              new Promise<number>((onResolve) => onResolve(1))
+            );
         });
         it("should return response object", () => {
           return expect(
@@ -61,12 +62,11 @@ describe("signup", function () {
       describe("when playerRepository fails adding player", () => {
         const expectedError = { message: "dummyError" };
         beforeEach(() => {
-          jest.spyOn(playerRepository, "addPlayer").mockImplementation(
-            (_player: proto.IPlayer, _email: string) =>
-              new Promise<proto.IPlayer>((_onResolve, onReject) =>
-                onReject(expectedError)
-              )
-          );
+          jest
+            .spyOn(playerRepository, "addPlayer")
+            .mockImplementation(() => 
+              new Promise<number>((_onResolve, onReject) => onReject(expectedError))
+            );
         });
         test("should return error returned from responsitory", () => {
           return expect(

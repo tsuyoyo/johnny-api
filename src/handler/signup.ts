@@ -21,7 +21,8 @@ export function signup(
   return verifyRequestToken(request.token)
     .then((token: string) => verifyFirebaseToken(token))
     .then((firebaseUser: FirebaseUser) =>
-      playerRepository.addPlayer(firebaseUser.user, firebaseUser.email)
+      playerRepository
+        .addPlayer(firebaseUser.player, firebaseUser.email)
+        .then(() => new proto.PostSignupResponse({ player: firebaseUser.player }))
     )
-    .then((player: proto.IPlayer) => new proto.PostSignupResponse({ player }));
 }

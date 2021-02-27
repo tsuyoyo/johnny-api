@@ -38,7 +38,8 @@ function buildTypedObjectArray(objects: object[]): Array<number> {
 }
 
 export function select(playerId: string): Promise<Array<number>> {
-  return runSelectQuery(querySelect(playerId), buildTypedObjectArray);
+  return runSelectQuery(querySelect(playerId))
+    .then((objects: Array<object>) => buildTypedObjectArray(objects));
 }
 
 export function insert(

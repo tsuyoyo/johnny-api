@@ -48,7 +48,7 @@ describe("authenticate", function () {
   });
 
   describe("when token is verified", function () {
-    const user = new proto.User({
+    const player = new proto.Player({
       id: "userId",
       name: "name",
     });
@@ -58,11 +58,11 @@ describe("authenticate", function () {
         .fn()
         .mockImplementation((token: string) => {
           return new Promise<FirebaseUser>((onResolve) => {
-            onResolve(new FirebaseUser(user, "mail@mail.com"));
+            onResolve(new FirebaseUser(player, "mail@mail.com"));
           });
         });
       beforeEach(function () {
-        jest.spyOn(headerLogic, "getUserId").mockReturnValueOnce(user.id);
+        jest.spyOn(headerLogic, "getUserId").mockReturnValueOnce(player.id);
         jest.spyOn(headerLogic, "getToken").mockReturnValueOnce("ttttttoken");
         authenticate(mockedVerifyToken)(request, response, next);
       });

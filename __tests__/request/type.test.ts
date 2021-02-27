@@ -10,7 +10,7 @@ describe("getRequestType", function () {
     } as unknown) as Request;
 
     it("should return PROTOBUF", function () {
-      expect(getRequestType(request)).toBe(RequestType.PROTOBUF);
+      return expect(getRequestType(request)).toBe(RequestType.PROTOBUF);
     });
   });
 
@@ -22,7 +22,7 @@ describe("getRequestType", function () {
     } as unknown) as Request;
 
     it("should return JSON", function () {
-      expect(getRequestType(request)).toBe(RequestType.JSON);
+      return expect(getRequestType(request)).toBe(RequestType.JSON);
     });
   });
 
@@ -34,7 +34,7 @@ describe("getRequestType", function () {
     } as unknown) as Request;
 
     it("should return JSON", function () {
-      expect(getRequestType(request)).toBe(RequestType.JSON);
+      return expect(getRequestType(request)).toBe(RequestType.JSON);
     });
   });
 });

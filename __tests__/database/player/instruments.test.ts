@@ -9,28 +9,33 @@ import table = johnnyDb.tables.player.INSTRUMENT;
 
 describe("insert", () => {
   let runQuery;
+
   const instrumentIds = [1, 2, 3];
-  const inserted = [{}, {}, {}];
   const playerId = "playerId";
 
   describe("query is success", () => {
+    const inserted = [{}, {}, {}];
+    let runSingleQuery;
+
     beforeEach(() => {
-      runQuery = jest
-        .spyOn(sqlWrapper, "runQuery")
-        .mockImplementation((query, onQueryDone) => onQueryDone(null, inserted, null));
+      runSingleQuery = jest
+        .spyOn(sqlWrapper, "runSingleQuery")
+        .mockImplementation(() => 
+          new Promise<number>((onResolve) => onResolve(inserted.length))
+        );
     });
     it("should return the number of inserted entries", () => {
       return expect(target.insert(playerId, instrumentIds))
         .resolves
-        .toBe(3)
+        .toBe(3);
     })
 
     it("should call insertQuery with expected SQL", () => {
       return target.insert(playerId, instrumentIds)
         .then((numOfRows: number) => {
           expect(numOfRows).toBe(3)
-          expect(runQuery.mock.calls.length).toBe(1);
-          expect(runQuery.mock.calls[0][0]).toBe(
+          expect(runSingleQuery.mock.calls.length).toBe(1);
+          expect(runSingleQuery.mock.calls[0][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` + 
             `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES ` +
             `(null, '${playerId}', '1'),(null, '${playerId}', '2'),(null, '${playerId}', '3')`
@@ -44,17 +49,17 @@ describe("insert", () => {
 
 })
 
-describe("deleteCities", () => {
-  let runQuery;
+describe("deleteEntries", () => {
+  let runSingleQuery;
 
   describe("query is success", () => {
     const deletedEntries = [{}, {}, {}] // 3 rows are deleted
 
     beforeEach(() => {
-      runQuery = jest
-        .spyOn(sqlWrapper, "runQuery")
-        .mockImplementation((query, onQueryDone) =>
-          onQueryDone(null, deletedEntries, null)
+      runSingleQuery = jest
+        .spyOn(sqlWrapper, "runSingleQuery")
+        .mockImplementation(() => 
+          new Promise<number>((onResolve) => onResolve(deletedEntries.length))
         );
     });
     it("should return the number of deleted entry", () => {
@@ -64,8 +69,8 @@ describe("deleteCities", () => {
     });
     it("should call insertQuery with expected SQL", () => {
       return target.deleteEntries("id").then((rows: number) => {
-        expect(runQuery.mock.calls.length).toBe(1);
-        expect(runQuery.mock.calls[0][0]).toBe(
+        expect(runSingleQuery.mock.calls.length).toBe(1);
+        expect(runSingleQuery.mock.calls[0][0]).toBe(
           `DELETE from ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='id'`
         );
       })
@@ -76,10 +81,10 @@ describe("deleteCities", () => {
     const error = new ApiException(proto.PercussionApiError.ErrorCode.DB_ERROR, "", 500);
 
     beforeEach(() => {
-      runQuery = jest
-        .spyOn(sqlWrapper, "runQuery")
-        .mockImplementation((query, onQueryDone) =>
-          onQueryDone(error, null, null)
+      runSingleQuery = jest
+        .spyOn(sqlWrapper, "runSingleQuery")
+        .mockImplementation(() => 
+          new Promise<number>((_onResolve, onReject) => onReject(error))
         );
     });
     it("should return the number of deleted entry", () => {
@@ -94,8 +99,8 @@ describe("deleteCities", () => {
   });
 });
 
-describe("selectCities", () => {
-  let runQuery;
+describe("select", () => {
+  let runSelectQuery;
   const instrumentIds = [
     {"instrument_id": 1},
     {"instrument_id": 2},
@@ -105,10 +110,10 @@ describe("selectCities", () => {
 
   describe("query is success", () => {
     beforeEach(() => {
-      runQuery = jest
-        .spyOn(sqlWrapper, "runQuery")
-        .mockImplementation((query, onQueryDone) =>
-          onQueryDone(null, instrumentIds, null)
+      runSelectQuery = jest
+        .spyOn(sqlWrapper, "runSelectQuery")
+        .mockImplementation(() =>
+          new Promise<Array<object>>((onResolve) => onResolve(instrumentIds))
         );
     });
     it("should return city IDs found in DB", () => {
@@ -119,8 +124,9 @@ describe("selectCities", () => {
     it("should call runQuery with expected SQL", () => {
       return target.select(playerId)
         .then((ids: Array<number>) => {
-          expect(runQuery.mock.calls.length).toBe(1);
-          expect(runQuery.mock.calls[0][0]).toBe(
+          expect(ids.length).toBe(3)
+          expect(runSelectQuery.mock.calls.length).toBe(1);
+          expect(runSelectQuery.mock.calls[0][0]).toBe(
             `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
           );
         });

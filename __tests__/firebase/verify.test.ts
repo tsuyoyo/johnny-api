@@ -75,10 +75,10 @@ describe("verifyToken", () => {
       );
 
       const expectedFirebaseUser = new FirebaseUser(
-        new proto.User({
+        new proto.Player({
           id: expectedUserRecord.uid,
           name: expectedUserRecord.displayName,
-          photo: expectedUserRecord.photoURL,
+          icon: expectedUserRecord.photoURL,
         }),
         expectedUserRecord.email
       );

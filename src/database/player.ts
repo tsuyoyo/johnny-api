@@ -34,18 +34,17 @@ function insertQuery(
   );
 }
 
-// memo : UPDATE player SET name='test_bbb',icon='http://photo.com/bbb' where id='id_b';
 function updateQueryForPlayer(
   player: proto.IPlayer,
   date: Date
 ) {
   const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)
   return `UPDATE ${table.TABLE_NAME} ` +
-  `SET ` +
-  `${table.NAME}=${player.name},` +
-  `${table.ICON}=${player.icon},` +
-  `${table.UPDATED_DATE_TIME}=${formatDate}` +
-  ` WHERE ${table.ID}=${player.id}`
+    `SET ` +
+    `${table.NAME}=${player.name},` +
+    `${table.ICON}=${player.icon},` +
+    `${table.UPDATED_DATE_TIME}=${formatDate}` +
+    ` WHERE ${table.ID}=${player.id}`
 }
 
 function updateQueryForPlayerDetail(
@@ -54,12 +53,12 @@ function updateQueryForPlayerDetail(
 ) {
   const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)
   return `UPDATE ${table.TABLE_NAME} ` +
-  `SET ` +
-  `${table.NAME}=${player.name},` +
-  `${table.ICON}=${player.icon},` +
-  `${table.INTRODUCTION}=${player.introduction},` +
-  `${table.UPDATED_DATE_TIME}=${formatDate}` +
-  ` WHERE ${table.ID}=${player.id}`;
+    `SET ` +
+    `${table.NAME}=${player.name},` +
+    `${table.ICON}=${player.icon},` +
+    `${table.INTRODUCTION}=${player.introduction},` +
+    `${table.UPDATED_DATE_TIME}=${formatDate}` +
+    ` WHERE ${table.ID}=${player.id}`;
 }
 
 function updateQueryForMail(
@@ -147,18 +146,19 @@ export function insert(
 }
 
 export function selectPlayers(): Promise<Array<proto.IPlayer>> {
-  return runSelectQuery(selectQuery(), buildPlayersArray);
+  return runSelectQuery(selectQuery())
+    .then((objects: Array<object>) => buildPlayersArray(objects));
 }
 
 export function selectPlayerById(playerId: string): Promise<proto.IPlayer> {
-  return runSelectQuery(selectQueryById(playerId), buildPlayersArray)
-    .then((players: Array<proto.IPlayer>) => {
-      if (players.length = 0) {
+  return runSelectQuery(selectQueryById(playerId))
+    .then((objects: Array<object>) => {
+      if (objects.length == 0) {
         throw getNotFoundError(playerId);
-      } else if (players.length > 1) {
+      } else if (objects.length > 1) {
         throw getMultiplePlayersFoundError(playerId);
       } else {
-        return players[0];
+        return buildPlayerObject(objects[0]);
       }
     });
 }
@@ -166,16 +166,16 @@ export function selectPlayerById(playerId: string): Promise<proto.IPlayer> {
 export function selectPlayerDetailById(
   playerId: string
 ): Promise<proto.IPlayerDetail> {
-  return runSelectQuery(selectQueryById(playerId), buildPlayerDetailsArray)
-    .then((details: Array<proto.IPlayerDetail>) => {
-      if (details.length = 0) {
+  return runSelectQuery(selectQueryById(playerId))
+    .then((objects: Array<object>) => {
+      if (objects.length == 0) {
         throw getNotFoundError(playerId);
-      } else if (details.length > 1) {
+      } else if (objects.length > 1) {
         throw getMultiplePlayersFoundError(playerId);
       } else {
-        return details[0];
+        return buildPlayerDetailObject(objects[0]);
       }
-    });
+    })
 }
 
 export function updateEntryByPlayer(
