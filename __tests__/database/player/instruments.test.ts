@@ -40,7 +40,6 @@ describe("insert", () => {
         });
     });
   });
-
   afterEach(() => {
     jest.clearAllMocks();
   });

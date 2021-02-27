@@ -88,5 +88,18 @@ export function runSelectQuery(query: string): Promise<Array<object>> {
   });
 }
 
-// TODO : Support transaction
-// https://tech.chakapoko.com/nodejs/mysql/promise.html
+export function queryInTransaction(runQuery: (connection) => Promise<void>) {
+  const connection = mysql.createConnection(connectionParams);
+  connection.connect();
+
+  return new Promise<void>((onResolve, onReject) => {
+    connection.beginTransaction((err) => {
+      if (err) {
+        onReject(err)
+      } else {
+        runQuery(connection).then(() => onResolve())
+      }
+    })
+  })
+  .finally(() => connection.end())
+}
