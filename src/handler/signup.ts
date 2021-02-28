@@ -23,6 +23,8 @@ export function signup(
     .then((firebaseUser: FirebaseUser) =>
       playerRepository
         .addPlayer(firebaseUser.player, firebaseUser.email)
-        .then(() => new proto.PostSignupResponse({ player: firebaseUser.player }))
-    )
+        .then(
+          () => new proto.PostSignupResponse({ player: firebaseUser.player })
+        )
+    );
 }

@@ -6,6 +6,7 @@ import { ApiException } from "../../../src/error/apiException";
 
 import { johnnyDb } from "../../../src/database/fields";
 import table = johnnyDb.tables.player.INSTRUMENT;
+import { JsxEmit } from "typescript";
 
 describe("insert", () => {
   const instrumentIds = [1, 2, 3];
@@ -134,3 +135,162 @@ describe("select", () => {
     jest.clearAllMocks();
   });
 });
+
+describe("update", () =>{
+  let runSingleQueryOnConnection;
+  let runSelectQueryOnConnection;
+  const playerId = "playerId";
+
+  beforeEach(() => {
+    jest.spyOn(sqlWrapper, "queryInTransaction")
+      .mockImplementation((callback) => callback({}))
+  })
+
+  describe("when some entries should be deleted and new entry should be made", () => {
+    const ids = [1, 2, 3];
+    const existingIds = [3, 5, 6];
+    const selectResults = Array.from(
+      existingIds.map(id => Object({ instrument_id: id }))
+    );
+
+    beforeEach(() => {
+      runSelectQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSelectQueryOnConnection")
+        .mockImplementation(() =>
+          new Promise<Array<object>>((onResolve) => onResolve(selectResults))
+        )
+      runSingleQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSingleQueryOnConnection")
+        .mockImplementation(() => Promise.resolve(3))
+
+      jest.spyOn(sqlWrapper, "commitTransaction")
+        .mockImplementation(() => Promise.resolve())
+    })
+    it("should call SQL DB by expected query", () => {
+      return target.update(playerId, ids)
+        .then(() => {
+          expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
+          expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+          );
+          expect(runSingleQueryOnConnection.mock.calls.length).toBe(2);
+          expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
+            `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${[5, 6].join(',')})`
+          );            
+          expect(runSingleQueryOnConnection.mock.calls[1][0]).toBe(
+            `INSERT INTO ${table.TABLE_NAME} ` + 
+            `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES ` +
+            `(null, '${playerId}', '1'),(null, '${playerId}', '2')`
+          );                      
+        })
+    })
+  })
+
+  describe("when some entries should be deleted and no entry is made", () => {
+    const ids = [2];
+    const existingIds = [2, 3, 4];
+    const selectResults = Array.from(
+      existingIds.map(id => Object({ instrument_id: id }))
+    );
+
+    beforeEach(() => {
+      runSelectQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSelectQueryOnConnection")
+        .mockImplementation(() =>
+          new Promise<Array<object>>((onResolve) => onResolve(selectResults))
+        )
+      runSingleQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSingleQueryOnConnection")
+        .mockImplementation(() => Promise.resolve(3))
+
+      jest.spyOn(sqlWrapper, "commitTransaction")
+        .mockImplementation(() => Promise.resolve())
+    })
+    it("should call SQL DB by expected query", () => {
+      return target.update(playerId, ids)
+        .then(() => {
+          expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
+          expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+          );
+          expect(runSingleQueryOnConnection.mock.calls.length).toBe(1);
+          expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
+            `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${[3, 4].join(',')})`
+          );            
+        })
+    })
+  })
+
+  describe("when no entry should be deleted and some entries are made", () => {
+    const ids = [2, 3, 4, 5];
+    const existingIds = [2, 3];
+    const selectResults = Array.from(
+      existingIds.map(id => Object({ instrument_id: id }))
+    );
+
+    beforeEach(() => {
+      runSelectQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSelectQueryOnConnection")
+        .mockImplementation(() =>
+          new Promise<Array<object>>((onResolve) => onResolve(selectResults))
+        )
+      runSingleQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSingleQueryOnConnection")
+        .mockImplementation(() => Promise.resolve(3))
+
+      jest.spyOn(sqlWrapper, "commitTransaction")
+        .mockImplementation(() => Promise.resolve())
+    })
+    it("should call SQL DB by expected query", () => {
+      return target.update(playerId, ids)
+        .then(() => {
+          expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
+          expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+          );
+          expect(runSingleQueryOnConnection.mock.calls.length).toBe(1);
+          expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
+            `INSERT INTO ${table.TABLE_NAME} ` + 
+            `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES ` +
+            `(null, '${playerId}', '4'),(null, '${playerId}', '5')`
+          );            
+        })
+    })
+  })
+
+  describe("when neither delete nor insert is not necessary", () => {
+    const ids = [2, 3, 4];
+    const existingIds = [2, 3, 4];
+    const selectResults = Array.from(
+      existingIds.map(id => Object({ instrument_id: id }))
+    );
+
+    beforeEach(() => {
+      runSelectQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSelectQueryOnConnection")
+        .mockImplementation(() =>
+          new Promise<Array<object>>((onResolve) => onResolve(selectResults))
+        )
+      runSingleQueryOnConnection = jest
+        .spyOn(sqlWrapper, "runSingleQueryOnConnection")
+        .mockImplementation(() => Promise.resolve(3))
+
+      jest.spyOn(sqlWrapper, "commitTransaction")
+        .mockImplementation(() => Promise.resolve())
+    })
+    it("should call SQL DB by expected query", () => {
+      return target.update(playerId, ids)
+        .then(() => {
+          expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
+          expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+          );
+          expect(runSingleQueryOnConnection.mock.calls.length).toBe(0);
+        })
+    })
+  })
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+})

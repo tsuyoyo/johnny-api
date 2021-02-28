@@ -30,7 +30,11 @@ export async function selectCitiesByPrefecture(
 ): Promise<Array<proto.ICity>> {
   return new Promise<Array<proto.ICity>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`WHERE ${table.PREFECTURE}=${prefecture}`, onResolve, onReject);
+    runSelectQuery(
+      `WHERE ${table.PREFECTURE}=${prefecture}`,
+      onResolve,
+      onReject
+    );
   });
 }
 
@@ -39,7 +43,11 @@ export async function selectCitiesLikeZipCode(
 ): Promise<Array<proto.ICity>> {
   return new Promise<Array<proto.ICity>>((onResolve, onReject) => {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    runSelectQuery(`WHERE ${table.ZIP_CODE} like '${zipCode}%'`, onResolve, onReject);
+    runSelectQuery(
+      `WHERE ${table.ZIP_CODE} like '${zipCode}%'`,
+      onResolve,
+      onReject
+    );
   });
 }
 

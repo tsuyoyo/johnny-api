@@ -29,10 +29,9 @@ export namespace johnnyDb {
     ADDRESS_ID: "address_id",
   };
 
-  export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:MM:ss"
+  export const DATE_TIME_FORMAT = "YYYY-MM-DD HH:MM:ss";
   export namespace tables {
-
-    export const PLAYER ={
+    export const PLAYER = {
       TABLE_NAME: "player",
       ID: FIELDS.ID,
       NAME: FIELDS.NAME,
@@ -41,7 +40,7 @@ export namespace johnnyDb {
       INTRODUCTION: FIELDS.INTRODUCTION,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
       UPDATED_DATE_TIME: FIELDS.UPDATED_DATE_TIME,
-    }
+    };
     export namespace player {
       export const AREA = {
         TABLE_NAME: "player_area",
@@ -72,7 +71,7 @@ export namespace johnnyDb {
       PREFECTURE: FIELDS.PREFECTURE,
       ZIP_CODE: FIELDS.ZIP_CODE,
       ADDRESS_ID: FIELDS.ADDRESS_ID,
-    }
+    };
 
     export const AREA = {
       TABLE_NAME: "area",
@@ -80,14 +79,14 @@ export namespace johnnyDb {
       NAME: FIELDS.NAME,
       PREFECTURE: FIELDS.PREFECTURE,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
-    }
+    };
 
     export const INSTRUMENT = {
       TABLE_NAME: "instrument",
       ID: FIELDS.ID,
       NAME: FIELDS.NAME,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
-    }
+    };
 
     export namespace instrument {
       export const IMAGE = {
@@ -96,7 +95,7 @@ export namespace johnnyDb {
         INSTRUMENT_ID: FIELDS.INSTRUMENT_ID,
         URL: FIELDS.URL,
         POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
-      }
+      };
     }
 
     export const STUDIO = {
@@ -105,7 +104,7 @@ export namespace johnnyDb {
       NAME: FIELDS.NAME,
       AREA_ID: FIELDS.AREA_ID,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
-    }
+    };
 
     export namespace studio {
       export const IMAGE = {
@@ -114,7 +113,7 @@ export namespace johnnyDb {
         STUDIO_ID: FIELDS.STUDIO_ID,
         URL: FIELDS.URL,
         POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
-      }
+      };
 
       export const RATING = {
         TABLE_NAME: "studio_rating",
@@ -124,7 +123,7 @@ export namespace johnnyDb {
         COMMENT: FIELDS.COMMENT,
         PLAYER_ID: FIELDS.PLAYER_ID,
         POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
-      }
+      };
     }
 
     export const FOLLOW = {
@@ -133,6 +132,6 @@ export namespace johnnyDb {
       PLAYER_ID: FIELDS.PLAYER_ID,
       FOLLOWING_PLAYER_ID: FIELDS.FOLLOWING_PLAYER_ID,
       FOLLOW_SINCE_DATE_TIME: FIELDS.FOLLOW_SINCE_DATE_TIME,
-    }
+    };
   }
 }

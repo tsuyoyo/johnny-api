@@ -6,72 +6,64 @@ import proto = pj.sakuchin.percussion.proto;
 import { johnnyDb } from "./fields";
 import table = johnnyDb.tables.PLAYER;
 
-function insertQuery(
-  player: proto.IPlayer,
-  mail: string,
-  date: Date
-) {
-  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)
+function insertQuery(player: proto.IPlayer, mail: string, date: Date) {
+  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT);
   return (
     `INSERT INTO ${table.TABLE_NAME} ` +
-    `(`+
-    `${table.ID},`+
-    `${table.NAME},`+
-    `${table.ICON},`+
-    `${table.MAIL},`+
-    `${table.REGISTERED_DATE_TIME},`+
-    `${table.UPDATED_DATE_TIME}`+
+    `(` +
+    `${table.ID},` +
+    `${table.NAME},` +
+    `${table.ICON},` +
+    `${table.MAIL},` +
+    `${table.REGISTERED_DATE_TIME},` +
+    `${table.UPDATED_DATE_TIME}` +
     `) ` +
     `VALUES ` +
-    `(`+
-    `'${player.id}',`+
-    `'${player.name}',`+
-    `'${player.icon}',`+
-    `'${mail}',`+
-    `'${formatDate},`+
-    `'${formatDate}'`+
+    `(` +
+    `'${player.id}',` +
+    `'${player.name}',` +
+    `'${player.icon}',` +
+    `'${mail}',` +
+    `'${formatDate},` +
+    `'${formatDate}'` +
     `)`
   );
 }
 
-function updateQueryForPlayer(
-  player: proto.IPlayer,
-  date: Date
-) {
-  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)
-  return `UPDATE ${table.TABLE_NAME} ` +
+function updateQueryForPlayer(player: proto.IPlayer, date: Date) {
+  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT);
+  return (
+    `UPDATE ${table.TABLE_NAME} ` +
     `SET ` +
     `${table.NAME}=${player.name},` +
     `${table.ICON}=${player.icon},` +
     `${table.UPDATED_DATE_TIME}=${formatDate}` +
     ` WHERE ${table.ID}=${player.id}`
+  );
 }
 
-function updateQueryForPlayerDetail(
-  player: proto.IPlayerDetail,
-  date: Date
-) {
-  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)
-  return `UPDATE ${table.TABLE_NAME} ` +
+function updateQueryForPlayerDetail(player: proto.IPlayerDetail, date: Date) {
+  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT);
+  return (
+    `UPDATE ${table.TABLE_NAME} ` +
     `SET ` +
     `${table.NAME}=${player.name},` +
     `${table.ICON}=${player.icon},` +
     `${table.INTRODUCTION}=${player.introduction},` +
     `${table.UPDATED_DATE_TIME}=${formatDate}` +
-    ` WHERE ${table.ID}=${player.id}`;
+    ` WHERE ${table.ID}=${player.id}`
+  );
 }
 
-function updateQueryForMail(
-  playerId: string,
-  mail: string,
-  date: Date
-) {
-  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)
-  return `UPDATE ${table.TABLE_NAME} ` +
-  `SET ` +
-  `${table.MAIL}=${mail},` +
-  `${table.UPDATED_DATE_TIME}=${formatDate}` +
-  ` WHERE ${table.ID}=${playerId}`;
+function updateQueryForMail(playerId: string, mail: string, date: Date) {
+  const formatDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT);
+  return (
+    `UPDATE ${table.TABLE_NAME} ` +
+    `SET ` +
+    `${table.MAIL}=${mail},` +
+    `${table.UPDATED_DATE_TIME}=${formatDate}` +
+    ` WHERE ${table.ID}=${playerId}`
+  );
 }
 
 function selectQuery() {
@@ -110,7 +102,9 @@ function buildPlayersArray(objects: object[]): Array<proto.IPlayer> {
   return values;
 }
 
-function buildPlayerDetailsArray(objects: object[]): Array<proto.IPlayerDetail> {
+function buildPlayerDetailsArray(
+  objects: object[]
+): Array<proto.IPlayerDetail> {
   if (!objects) {
     return [];
   }
@@ -140,19 +134,20 @@ function getMultiplePlayersFoundError(playerId: string): ApiException {
 export function insert(
   player: proto.IPlayer,
   mail: string,
-  date: Date,
+  date: Date
 ): Promise<number> {
   return runSingleQuery(insertQuery(player, mail, date));
 }
 
 export function selectPlayers(): Promise<Array<proto.IPlayer>> {
-  return runSelectQuery(selectQuery())
-    .then((objects: Array<object>) => buildPlayersArray(objects));
+  return runSelectQuery(selectQuery()).then((objects: Array<object>) =>
+    buildPlayersArray(objects)
+  );
 }
 
 export function selectPlayerById(playerId: string): Promise<proto.IPlayer> {
-  return runSelectQuery(selectQueryById(playerId))
-    .then((objects: Array<object>) => {
+  return runSelectQuery(selectQueryById(playerId)).then(
+    (objects: Array<object>) => {
       if (objects.length == 0) {
         throw getNotFoundError(playerId);
       } else if (objects.length > 1) {
@@ -160,14 +155,15 @@ export function selectPlayerById(playerId: string): Promise<proto.IPlayer> {
       } else {
         return buildPlayerObject(objects[0]);
       }
-    });
+    }
+  );
 }
 
 export function selectPlayerDetailById(
   playerId: string
 ): Promise<proto.IPlayerDetail> {
-  return runSelectQuery(selectQueryById(playerId))
-    .then((objects: Array<object>) => {
+  return runSelectQuery(selectQueryById(playerId)).then(
+    (objects: Array<object>) => {
       if (objects.length == 0) {
         throw getNotFoundError(playerId);
       } else if (objects.length > 1) {
@@ -175,28 +171,22 @@ export function selectPlayerDetailById(
       } else {
         return buildPlayerDetailObject(objects[0]);
       }
-    })
+    }
+  );
 }
 
-export function updateEntryByPlayer(
-  player: proto.IPlayer,
-  date: Date,
-) {
+export function updateEntryByPlayer(player: proto.IPlayer, date: Date) {
   return runSingleQuery(updateQueryForPlayer(player, date));
 }
 
 export function updateEntryByPlayerDetail(
   playerDetail: proto.IPlayerDetail,
-  date: Date,
+  date: Date
 ) {
   return runSingleQuery(updateQueryForPlayerDetail(playerDetail, date));
 }
 
-export function updateMailOfEntry(
-  playerId: string,
-  mail: string,
-  date: Date,
-) {
+export function updateMailOfEntry(playerId: string, mail: string, date: Date) {
   return runSingleQuery(updateQueryForMail(playerId, mail, date));
 }
 
