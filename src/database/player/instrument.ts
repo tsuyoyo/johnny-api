@@ -1,6 +1,6 @@
-import { 
-  runSelectQuery, 
-  runSingleQuery, 
+import {
+  runSelectQuery,
+  runSingleQuery,
   runSelectQueryOnConnection,
   runSingleQueryOnConnection,
   queryInTransaction,
@@ -68,13 +68,13 @@ export function deleteEntries(playerId: string): Promise<number> {
 }
 
 export function update(playerId: string, ids: Array<number>): Promise<void> {
-  return queryInTransaction((connection: Connection) => 
+  return queryInTransaction((connection: Connection) =>
       runSelectQueryOnConnection(querySelect(playerId), connection)
         .then((objects) => buildTypedObjectArray(objects))
         .then((currentIds: Array<number>) => {
           const removedIds = currentIds.filter(id => !ids.includes(id));
           const newIds = ids.filter(id => !currentIds.includes(id))
-          
+
           const deleteQuery = (removedIds.length > 0) ? queryDeleteByIds(removedIds) : null;
           const insertQuery = (newIds.length > 0) ? queryInsert(playerId, newIds) : null;
 
