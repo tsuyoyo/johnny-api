@@ -22,7 +22,7 @@ export function signup(
     .then((token: string) => verifyFirebaseToken(token))
     .then((firebaseUser: FirebaseUser) =>
       playerRepository
-        .addPlayer(firebaseUser.player, firebaseUser.email)
+        .addPlayer(firebaseUser.player, firebaseUser.email, new Date())
         .then(
           () => new proto.PostSignupResponse({ player: firebaseUser.player })
         )

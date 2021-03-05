@@ -7,9 +7,9 @@ import {
   commitTransaction,
   rollbackTransaction,
 } from "../mysqlWrapper";
-import table = johnnyDb.tables.player.INSTRUMENT;
-import { johnnyDb } from "../../database/fields";
 import { Connection } from "mysql";
+import { johnnyDb } from "../../database/fields";
+import table = johnnyDb.tables.player.INSTRUMENT;
 
 function queryInsertOneValue(playerId: string, instrumentId: number): string {
   return `(null, '${playerId}', '${instrumentId}')`;
