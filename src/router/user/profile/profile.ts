@@ -3,7 +3,7 @@ import * as userService from "../../../service/user";
 import * as userCityService from "../../../service/userCity";
 import * as userTable from "../../../database/users";
 import * as userCitiesTable from "../../../database/user/cities";
-import * as areaTable from "../../../database/address";
+import * as areaTable from "../../../database/city";
 import { ApiException } from "../../../error/apiException";
 import { ResponseHandler } from "../../../response/handler"
 import * as userRequestUtil from "../util";
@@ -65,8 +65,8 @@ function updateUserProfile(request: Request, response: Response): void {
     request, response, proto.EmptyResponse.encode
   );
   const putUserProfileRequest = deserializeRequest(
-    request, 
-    proto.PutUserProfileRequest.decode, 
+    request,
+    proto.PutUserProfileRequest.decode,
     proto.PutUserProfileRequest.fromObject,
   );
 

@@ -25,6 +25,7 @@ CREATE TABLE test_db.area (
 CREATE TABLE test_db.instrument (
     id INT primary key AUTO_INCREMENT,
     name VARCHAR(30) unique not null,
+    author_id VARCHAR(256) not null,
     registered_date_time DATETIME not null
 ) AUTO_INCREMENT = 1;
 

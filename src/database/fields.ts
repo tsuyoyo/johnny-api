@@ -85,6 +85,7 @@ export namespace johnnyDb {
       TABLE_NAME: "instrument",
       ID: FIELDS.ID,
       NAME: FIELDS.NAME,
+      AUTHOR_ID: FIELDS.AUTHOR_ID,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
     };
 
@@ -95,6 +96,14 @@ export namespace johnnyDb {
         INSTRUMENT_ID: FIELDS.INSTRUMENT_ID,
         URL: FIELDS.URL,
         POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
+      };
+
+      export const HISTORY = {
+        TABLE_NAME: "instrument_history",
+        ID: FIELDS.ID,
+        INSTRUMENT_ID: FIELDS.INSTRUMENT_ID,
+        PLAYER_ID: FIELDS.PLAYER_ID,
+        UPDATED_DATE_TIME: FIELDS.UPDATED_DATE_TIME,
       };
     }
 
