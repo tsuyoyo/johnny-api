@@ -7,11 +7,8 @@ import {
   commitTransaction,
   rollbackTransaction,
 } from "../mysqlWrapper";
-import { pj } from "johnny-proto";
-import { johnnyDb } from "../../database/fields";
-import proto = pj.sakuchin.percussion.proto
 import table = johnnyDb.tables.player.INSTRUMENT;
-import { selectCities } from "../user/cities";
+import { johnnyDb } from "../../database/fields";
 import { Connection } from "mysql";
 
 function queryInsertOneValue(playerId: string, instrumentId: number): string {
