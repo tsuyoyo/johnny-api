@@ -1,13 +1,13 @@
-import * as target from "../../../src/database/player/instrument";
+import * as target from "../../../src/database/player/studio";
 import * as sqlWrapper from "../../../src/database/mysqlWrapper";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import { ApiException } from "../../../src/error/apiException";
 import { johnnyDb } from "../../../src/database/fields";
-import table = johnnyDb.tables.player.INSTRUMENT;
+import table = johnnyDb.tables.player.STUDIO;
 
 describe("insert", () => {
-  const instrumentIds = [1, 2, 3];
+  const studioIds = [1, 2, 3];
   const playerId = "playerId";
 
   describe("query is success", () => {
@@ -22,18 +22,18 @@ describe("insert", () => {
         );
     });
     it("should return the number of inserted entries", () => {
-      return expect(target.insert(playerId, instrumentIds))
+      return expect(target.insert(playerId, studioIds))
         .resolves
         .toBe(3);
     })
     it("should call insertQuery with expected SQL", () => {
-      return target.insert(playerId, instrumentIds)
+      return target.insert(playerId, studioIds)
         .then((numOfRows: number) => {
           expect(numOfRows).toBe(3)
           expect(runSingleQuery.mock.calls.length).toBe(1);
           expect(runSingleQuery.mock.calls[0][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` +
-            `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES ` +
+            `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) VALUES ` +
             `(null, '${playerId}', '1'),(null, '${playerId}', '2'),(null, '${playerId}', '3')`
           );
         });
@@ -97,10 +97,10 @@ describe("deleteEntries", () => {
 describe("select", () => {
   let runSelectQuery;
 
-  const instrumentIds = [
-    {"instrument_id": 1},
-    {"instrument_id": 2},
-    {"instrument_id": 3}
+  const studioIds = [
+    {"studio_id": 1},
+    {"studio_id": 2},
+    {"studio_id": 3}
   ];
   const playerId = "playerId"
 
@@ -109,7 +109,7 @@ describe("select", () => {
       runSelectQuery = jest
         .spyOn(sqlWrapper, "runSelectQuery")
         .mockImplementation(() =>
-          new Promise<Array<object>>((onResolve) => onResolve(instrumentIds))
+          new Promise<Array<object>>((onResolve) => onResolve(studioIds))
         );
     });
     it("should return city IDs found in DB", () => {
@@ -148,7 +148,7 @@ describe("update", () =>{
     const ids = [1, 2, 3];
     const existingIds = [3, 5, 6];
     const selectResults = Array.from(
-      existingIds.map(id => Object({ instrument_id: id }))
+      existingIds.map(id => Object({ studio_id: id }))
     );
 
     beforeEach(() => {
@@ -177,7 +177,7 @@ describe("update", () =>{
           );
           expect(runSingleQueryOnConnection.mock.calls[1][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` +
-            `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES ` +
+            `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) VALUES ` +
             `(null, '${playerId}', '1'),(null, '${playerId}', '2')`
           );
         })
@@ -188,7 +188,7 @@ describe("update", () =>{
     const ids = [2];
     const existingIds = [2, 3, 4];
     const selectResults = Array.from(
-      existingIds.map(id => Object({ instrument_id: id }))
+      existingIds.map(id => Object({ studio_id: id }))
     );
 
     beforeEach(() => {
@@ -223,7 +223,7 @@ describe("update", () =>{
     const ids = [2, 3, 4, 5];
     const existingIds = [2, 3];
     const selectResults = Array.from(
-      existingIds.map(id => Object({ instrument_id: id }))
+      existingIds.map(id => Object({ studio_id: id }))
     );
 
     beforeEach(() => {
@@ -249,7 +249,7 @@ describe("update", () =>{
           expect(runSingleQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` +
-            `(${table.ID}, ${table.PLAYER_ID}, ${table.INSTRUMENT_ID}) VALUES ` +
+            `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) VALUES ` +
             `(null, '${playerId}', '4'),(null, '${playerId}', '5')`
           );
         })
@@ -260,7 +260,7 @@ describe("update", () =>{
     const ids = [2, 3, 4];
     const existingIds = [2, 3, 4];
     const selectResults = Array.from(
-      existingIds.map(id => Object({ instrument_id: id }))
+      existingIds.map(id => Object({ studio_id: id }))
     );
 
     beforeEach(() => {

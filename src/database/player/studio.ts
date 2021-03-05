@@ -7,19 +7,17 @@ import {
   commitTransaction,
   rollbackTransaction,
 } from "../mysqlWrapper";
-import { pj } from "johnny-proto";
 import { johnnyDb } from "../../database/fields";
-import proto = pj.sakuchin.percussion.proto
-import table = johnnyDb.tables.player.AREA;
+import table = johnnyDb.tables.player.STUDIO;
 import { Connection } from "mysql";
 
-function queryInsertOneValue(playerId: string, areaId: number): string {
-  return `(null, '${playerId}', '${areaId}')`;
+function queryInsertOneValue(playerId: string, studioId: number): string {
+  return `(null, '${playerId}', '${studioId}')`;
 }
 
 function queryInsert(playerId: string, ids: Array<number>): string {
   let query = `INSERT INTO ${table.TABLE_NAME} ` +
-    `(${table.ID}, ${table.PLAYER_ID}, ${table.AREA_ID}) ` +
+    `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) ` +
     `VALUES `;
   for (let i = 0; i < ids.length; i++) {
     query += queryInsertOneValue(playerId, ids[i]) + (i < ids.length - 1 ? "," : "");
@@ -44,9 +42,7 @@ function buildTypedObjectArray(objects: object[]): Array<number> {
     return new Array();
   }
   const values = new Array<number>();
-  for (const obj of objects) {
-    values.push(obj[table.AREA_ID]);
-  }
+  objects.forEach((obj) => values.push(obj[table.STUDIO_ID]))
   return values;
 }
 
@@ -57,9 +53,9 @@ export function select(playerId: string): Promise<Array<number>> {
 
 export function insert(
   playerId: string,
-  areaIds: Array<number>
+  studioIds: Array<number>
 ): Promise<number> {
-  return runSingleQuery(queryInsert(playerId, areaIds));
+  return runSingleQuery(queryInsert(playerId, studioIds));
 }
 
 export function deleteEntries(playerId: string): Promise<number> {
