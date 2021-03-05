@@ -102,19 +102,6 @@ function buildPlayersArray(objects: object[]): Array<proto.IPlayer> {
   return values;
 }
 
-function buildPlayerDetailsArray(
-  objects: object[]
-): Array<proto.IPlayerDetail> {
-  if (!objects) {
-    return [];
-  }
-  const values = new Array<proto.IPlayerDetail>();
-  for (const obj of objects) {
-    values.push(buildPlayerDetailObject(obj));
-  }
-  return values;
-}
-
 function getNotFoundError(playerId: string): ApiException {
   return new ApiException(
     proto.PercussionApiError.ErrorCode.DB_ERROR,
