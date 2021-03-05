@@ -95,6 +95,7 @@ export namespace johnnyDb {
         ID: FIELDS.ID,
         INSTRUMENT_ID: FIELDS.INSTRUMENT_ID,
         URL: FIELDS.URL,
+        AUTHOR_ID: FIELDS.AUTHOR_ID,
         POSTED_DATE_TIME: FIELDS.POSTED_DATE_TIME,
       };
 
