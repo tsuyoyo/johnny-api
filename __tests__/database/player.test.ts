@@ -253,14 +253,11 @@ describe("selectPlayerDetailById", () => {
   });
 
   describe("player is NOT found", () => {
-    let runSelectQuery;
     const objects = [];
     beforeEach(() => {
-      runSelectQuery = jest
-        .spyOn(sqlWrapper, "runSelectQuery")
-        .mockImplementation(
-          () => new Promise<Array<object>>((onResolve) => onResolve(objects))
-        );
+      jest.spyOn(sqlWrapper, "runSelectQuery").mockImplementation(
+        () => new Promise<Array<object>>((onResolve) => onResolve(objects))
+      );
     });
     it("should return error", () => {
       return expect(
@@ -276,7 +273,6 @@ describe("selectPlayerDetailById", () => {
   });
 
   describe("multiple players are found", () => {
-    let runSelectQuery;
     const objects = [
       {
         id: "id_1",
@@ -290,11 +286,9 @@ describe("selectPlayerDetailById", () => {
       },
     ];
     beforeEach(() => {
-      runSelectQuery = jest
-        .spyOn(sqlWrapper, "runSelectQuery")
-        .mockImplementation(
-          () => new Promise<Array<object>>((onResolve) => onResolve(objects))
-        );
+      jest.spyOn(sqlWrapper, "runSelectQuery").mockImplementation(
+        () => new Promise<Array<object>>((onResolve) => onResolve(objects))
+      );
     });
     it("should return error", () => {
       return expect(

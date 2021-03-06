@@ -26,22 +26,25 @@ function buildCitiesArrayFromJsObj(objects: Array<object>): Array<proto.ICity> {
 export async function selectCitiesByPrefecture(
   prefecture: proto.Prefecture
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.PREFECTURE}=${proto.Prefecture[prefecture]}`)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(
+    `${SELECT_QUERY} WHERE ${table.PREFECTURE}=${proto.Prefecture[prefecture]}`
+  ).then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
 export async function selectCitiesLikeZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.ZIP_CODE} like '${zipCode}%'`)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(
+    `${SELECT_QUERY} WHERE ${table.ZIP_CODE} like '${zipCode}%'`
+  ).then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
 export async function selectCitiesByZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.ZIP_CODE}='${zipCode}'`)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(
+    `${SELECT_QUERY} WHERE ${table.ZIP_CODE}='${zipCode}'`
+  ).then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
 export async function selectCitiesByIds(
@@ -53,6 +56,7 @@ export async function selectCitiesByIds(
   }
   query += ")";
 
-  return runSelectQuery(query)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(query).then((objects: Array<object>) =>
+    buildCitiesArrayFromJsObj(objects)
+  );
 }

@@ -7,12 +7,9 @@ import proto = pj.sakuchin.percussion.proto;
 describe("verifyToken", () => {
   describe("when verifyIdToken throwns error", () => {
     const expectedError = { message: "aaaaa" };
-    const mockedVerifyIdToken = jest.fn().mockImplementation(
-      (_token: string) =>
-        new Promise<auth.DecodedIdToken>((_onResolve, onReject) => {
-          onReject(expectedError);
-        })
-    );
+    const mockedVerifyIdToken = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(expectedError));
 
     it("should NOT call next", function () {
       const expectedError = new ApiException(
@@ -31,12 +28,9 @@ describe("verifyToken", () => {
       uuid: "dummyUuid",
     } as unknown) as auth.DecodedIdToken;
 
-    const mockedVerifyIdToken = jest.fn().mockImplementation(
-      (_token: string) =>
-        new Promise<auth.DecodedIdToken>((onResolve) => {
-          onResolve(mockedDecodedIdToken);
-        })
-    );
+    const mockedVerifyIdToken = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(mockedDecodedIdToken));
 
     describe("when getUser throws exception", () => {
       const mockedGetUser = jest.fn().mockImplementation(

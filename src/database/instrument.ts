@@ -1,7 +1,4 @@
-import {
-  runSelectQuery,
-  runSingleQuery,
-} from "./mysqlWrapper";
+import { runSelectQuery, runSingleQuery } from "./mysqlWrapper";
 import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 import { johnnyDb } from "./fields";
@@ -16,7 +13,9 @@ function buildInstrumentObject(obj: object): proto.IInstrument {
   });
 }
 
-function buildInstrumentObjects(objects: Array<object>): Array<proto.IInstrument> {
+function buildInstrumentObjects(
+  objects: Array<object>
+): Array<proto.IInstrument> {
   if (!objects) {
     return [];
   }
@@ -27,8 +26,12 @@ function buildInstrumentObjects(objects: Array<object>): Array<proto.IInstrument
   return values;
 }
 
-export function insert(name: string, playerId: string, date: Date): Promise<number> {
-  const query = (
+export function insert(
+  name: string,
+  playerId: string,
+  date: Date
+): Promise<number> {
+  const query =
     `INSERT INTO ${table.TABLE_NAME} ` +
     `(` +
     `${table.ID},` +
@@ -42,27 +45,28 @@ export function insert(name: string, playerId: string, date: Date): Promise<numb
     `'${name},` +
     `'${playerId},` +
     `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)},` +
-    `)`
-  );
+    `)`;
   return runSingleQuery(query);
 }
 
 export function selectById(id: number): Promise<proto.IInstrument> {
   const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=${id}`;
-  return runSelectQuery(query)
-    .then((objects: Array<object>) =>
-      (objects.length > 0) ? buildInstrumentObject(objects[0]) : null
-    );
+  return runSelectQuery(query).then((objects: Array<object>) =>
+    objects.length > 0 ? buildInstrumentObject(objects[0]) : null
+  );
 }
 
-export function selectByIds(ids: Array<number>): Promise<Array<proto.IInstrument>> {
+export function selectByIds(
+  ids: Array<number>
+): Promise<Array<proto.IInstrument>> {
   let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (`;
   for (let i = 0; i < ids.length; i++) {
     query += `'${ids[i]}'` + (i < ids.length - 1 ? "," : "");
   }
   query += ")";
-  return runSelectQuery(query)
-    .then((objects: Array<object>) => buildInstrumentObjects(objects));
+  return runSelectQuery(query).then((objects: Array<object>) =>
+    buildInstrumentObjects(objects)
+  );
 }
 
 export function update(id: number, name: string): Promise<number> {

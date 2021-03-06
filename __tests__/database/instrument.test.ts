@@ -1,3 +1,4 @@
+/* eslint @typescript-eslint/camelcase: 0 */
 import * as target from "../../src/database/instrument";
 import * as sqlWrapper from "../../src/database/mysqlWrapper";
 import { pj } from "johnny-proto";
@@ -25,19 +26,19 @@ describe("insert", () => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(
         `INSERT INTO ${table.TABLE_NAME} ` +
-        `(` +
-        `${table.ID},` +
-        `${table.NAME},` +
-        `${table.AUTHOR_ID},` +
-        `${table.REGISTERED_DATE_TIME}` +
-        `) ` +
-        `VALUES ` +
-        `(` +
-        `'null,` +
-        `'${instrumentName},` +
-        `'${playerId},` +
-        `'${formatDate},` +
-        `)`
+          `(` +
+          `${table.ID},` +
+          `${table.NAME},` +
+          `${table.AUTHOR_ID},` +
+          `${table.REGISTERED_DATE_TIME}` +
+          `) ` +
+          `VALUES ` +
+          `(` +
+          `'null,` +
+          `'${instrumentName},` +
+          `'${playerId},` +
+          `'${formatDate},` +
+          `)`
       );
     });
   });
@@ -54,13 +55,13 @@ describe("select", () => {
     const typedObject = new proto.Instrument({
       id: 1,
       name: "name_1",
-      authorId : "author_1",
+      authorId: "author_1",
     });
     const objects = [
       {
         id: 1,
         name: "name_1",
-        author_id : "author_1",
+        author_id: "author_1",
       },
     ];
 
@@ -80,7 +81,9 @@ describe("select", () => {
       });
     });
     it("should return typed objects", () => {
-      return expect(target.selectById(instrumentId)).resolves.toMatchObject(typedObject);
+      return expect(target.selectById(instrumentId)).resolves.toMatchObject(
+        typedObject
+      );
     });
   });
 
@@ -90,34 +93,34 @@ describe("select", () => {
       new proto.Instrument({
         id: 1,
         name: "name_1",
-        authorId : "author_1",
+        authorId: "author_1",
       }),
       new proto.Instrument({
         id: 2,
         name: "name_2",
-        authorId : "author_2",
+        authorId: "author_2",
       }),
       new proto.Instrument({
         id: 3,
         name: "name_3",
-        authorId : "author_3",
-      }),  
+        authorId: "author_3",
+      }),
     ];
     const objects = [
       {
         id: 1,
         name: "name_1",
-        author_id : "author_1",
+        author_id: "author_1",
       },
       {
         id: 2,
         name: "name_2",
-        author_id : "author_2",
+        author_id: "author_2",
       },
       {
         id: 3,
         name: "name_3",
-        author_id : "author_3",
+        author_id: "author_3",
       },
     ];
     beforeEach(() => {
@@ -131,7 +134,8 @@ describe("select", () => {
       return target.selectByIds(instrumentIds).then(() => {
         let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (`;
         for (let i = 0; i < instrumentIds.length; i++) {
-          query += `'${instrumentIds[i]}'` + (i < instrumentIds.length - 1 ? "," : "");
+          query +=
+            `'${instrumentIds[i]}'` + (i < instrumentIds.length - 1 ? "," : "");
         }
         query += ")";
 
@@ -140,18 +144,20 @@ describe("select", () => {
       });
     });
     it("should return typed objects", () => {
-      return expect(target.selectByIds(instrumentIds)).resolves.toMatchObject(typedObjects);
-    });    
+      return expect(target.selectByIds(instrumentIds)).resolves.toMatchObject(
+        typedObjects
+      );
+    });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
-})
+});
 
 describe("update", () => {
   let runSingleQuery;
-  const instrumentId = 1
+  const instrumentId = 1;
   const instrumentName = "guiter";
 
   beforeEach(() => {
@@ -162,10 +168,11 @@ describe("update", () => {
       );
   });
   it("should pass expected query", () => {
-    const query = `UPDATE ${table.TABLE_NAME} ` + 
+    const query =
+      `UPDATE ${table.TABLE_NAME} ` +
       `SET ${table.NAME}=${instrumentName} ` +
       `WHERE ${table.ID}=${instrumentId}`;
-    
+
     return target.update(instrumentId, instrumentName).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);
@@ -178,7 +185,7 @@ describe("update", () => {
 
 describe("delete", () => {
   let runSingleQuery;
-  const instrumentId = 1
+  const instrumentId = 1;
 
   beforeEach(() => {
     runSingleQuery = jest
@@ -189,7 +196,7 @@ describe("delete", () => {
   });
   it("should pass expected query", () => {
     const query = `DELETE WHERE ${table.ID}=${instrumentId}`;
-    
+
     return target.deleteEntry(instrumentId).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);

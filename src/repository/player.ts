@@ -5,7 +5,7 @@ import * as playerDb from "../database/player";
 export function addPlayer(
   player: proto.IPlayer,
   mail: string,
-  date: Date,
+  date: Date
 ): Promise<number> {
   return playerDb.insert(player, mail, date);
 }
