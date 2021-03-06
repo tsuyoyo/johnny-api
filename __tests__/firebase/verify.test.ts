@@ -9,7 +9,7 @@ describe("verifyToken", () => {
     const expectedError = { message: "aaaaa" };
     const mockedVerifyIdToken = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(expectedError));
+      .mockImplementation(() => Promise.reject(expectedError));
 
     it("should NOT call next", function () {
       const expectedError = new ApiException(
