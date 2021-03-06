@@ -62,11 +62,11 @@ export function insert(
     `) ` +
     `VALUES ` +
     `(` +
-    `'null,` +
-    `'${url},` +
-    `'${instrumentId},` +
-    `'${playerId},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)},` +
+    `null,` +
+    `'${url}',` +
+    `${instrumentId},` +
+    `${playerId},` +
+    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
     `)`
   );
   return runSingleQuery(query);

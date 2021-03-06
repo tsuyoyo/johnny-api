@@ -43,7 +43,7 @@ describe("insert", () => {
           `'${player.name}',` +
           `'${player.icon}',` +
           `'${mail}',` +
-          `'${formatDate},` +
+          `'${formatDate}',` +
           `'${formatDate}'` +
           `)`
       );

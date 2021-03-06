@@ -35,11 +35,11 @@ describe("insert", () => {
         `) ` +
         `VALUES ` +
         `(` +
-        `'null,` +
-        `'${url},` +
-        `'${instrumentId},` +
-        `'${playerId},` +
-        `'${formatDate},` +
+        `null,` +
+        `'${url}',` +
+        `${instrumentId},` +
+        `${playerId},` +
+        `'${formatDate}'` +
         `)`
       );
     });

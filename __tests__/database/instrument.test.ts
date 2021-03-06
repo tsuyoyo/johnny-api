@@ -34,10 +34,10 @@ describe("insert", () => {
           `) ` +
           `VALUES ` +
           `(` +
-          `'null,` +
-          `'${instrumentName},` +
-          `'${playerId},` +
-          `'${formatDate},` +
+          `null,` +
+          `'${instrumentName}',` +
+          `${playerId},` +
+          `'${formatDate}'` +
           `)`
       );
     });

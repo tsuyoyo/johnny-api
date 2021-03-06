@@ -112,7 +112,9 @@ export namespace johnnyDb {
       TABLE_NAME: "studio",
       ID: FIELDS.ID,
       NAME: FIELDS.NAME,
-      AREA_ID: FIELDS.AREA_ID,
+      CITY_ID: FIELDS.CITY_NAME,
+      URL: FIELDS.URL,
+      AUTHOR_ID: FIELDS.AUTHOR_ID,
       REGISTERED_DATE_TIME: FIELDS.REGISTERED_DATE_TIME,
     };
 

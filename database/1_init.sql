@@ -39,7 +39,9 @@ CREATE TABLE test_db.instrument_image (
 CREATE TABLE test_db.studio (
     id INT primary key AUTO_INCREMENT,
     name VARCHAR(30) unique not null,
-    area_id INT not null,
+    city_id INT not null,
+    url varchar(256),
+    author_id VARCHAR(256) not null,
     registered_date_time DATETIME not null
 ) AUTO_INCREMENT = 100;
 

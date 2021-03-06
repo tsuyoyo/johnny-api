@@ -41,10 +41,10 @@ export function insert(
     `) ` +
     `VALUES ` +
     `(` +
-    `'null,` +
-    `'${name},` +
-    `'${playerId},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)},` +
+    `null,` +
+    `'${name}',` +
+    `${playerId},` +
+    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
     `)`;
   return runSingleQuery(query);
 }

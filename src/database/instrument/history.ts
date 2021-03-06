@@ -53,10 +53,10 @@ export function insert(instrumentId: number, playerId: string, date: Date): Prom
     `) ` +
     `VALUES ` +
     `(` +
-    `'null,` +
-    `'${instrumentId},` +
-    `'${playerId},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)},` +
+    `null,` +
+    `${instrumentId},` +
+    `${playerId},` +
+    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
     `)`
   );
   return runSingleQuery(query);

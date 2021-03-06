@@ -24,7 +24,7 @@ function insertQuery(player: proto.IPlayer, mail: string, date: Date): string {
     `'${player.name}',` +
     `'${player.icon}',` +
     `'${mail}',` +
-    `'${formatDate},` +
+    `'${formatDate}',` +
     `'${formatDate}'` +
     `)`
   );
