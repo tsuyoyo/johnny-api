@@ -7,8 +7,8 @@
     "tsc": "tsc",
     "dev": "nodemon -L",
     "ts-node": "ts-node",
-    "lint": "eslint src/index.ts",
-    "lint:fix": "eslint --fix src/**/*.ts",
+    "lint": "eslint src/**/*.ts __tests__/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts __tests__/**/*.ts --fix",
     "test": "jest",
     "testCoverage": "jest --collectCoverage"
   },
@@ -18,12 +18,14 @@
   "description": "",
   "dependencies": {
     "@types/morgan": "^1.9.2",
+    "@types/mysql": "^2.15.17",
     "base64-arraybuffer": "^0.2.0",
     "class-transformer": "^0.2.3",
+    "dayjs": "^1.10.4",
     "express": "^4.17.1",
     "firebase-admin": "^9.4.2",
     "google-protobuf": "^3.14.0",
-    "johnny-proto": "tsuyoyo/johnny-protobuf.git",
+    "johnny-proto": "github:tsuyoyo/johnny-protobuf",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "protobufjs": "^6.10.2",
@@ -57,7 +59,7 @@
     },
     "globals": {
       "ts-jest": {
-        "tsConfigFile": "tsconfig.json"
+        "tsconfig": "tsconfig.json"
       }
     },
     "testMatch": [

@@ -48,18 +48,120 @@ function getApiExceptionForDbError(error: any): ApiException {
 
 export function runQuery(
   query: string,
+  connection: mysql.Connection,
   onQueryDone: (apiException: ApiException, rows, fields) => void
 ): void {
-  console.log(`query - ${query}`);
-  const connection = mysql.createConnection(connectionParams);
-  connection.connect();
+  // console.log(`query - ${query}`);
   connection.query(query, (err, rows, fields) => {
     if (err) {
       console.log(`Database error - ${JSON.stringify(err)}`);
       onQueryDone(getApiExceptionForDbError(err), rows, fields);
     } else {
-      onQueryDone(err, rows, fields);
+      onQueryDone(null, rows, fields);
     }
   });
-  connection.end();
+}
+
+function doRunSingleQuery(
+  query: string,
+  connection: mysql.Connection,
+  onSuccess,
+  onError
+) {
+  runQuery(query, connection, (err, rows) => {
+    if (err) {
+      onError(err);
+    } else {
+      onSuccess(rows.length);
+    }
+  });
+}
+
+function doRunSelectQuery(
+  query: string,
+  connection: mysql.Connection,
+  onSuccess,
+  onError
+) {
+  runQuery(query, connection, (err, rows) => {
+    if (err) {
+      onError(err);
+    } else {
+      onSuccess(rows);
+    }
+  });
+}
+
+export function runSingleQuery(query: string): Promise<number> {
+  const connection = mysql.createConnection(connectionParams);
+  return new Promise<number>((onResolve, onReject) => {
+    connection.connect();
+    doRunSingleQuery(query, connection, onResolve, onReject);
+  }).finally(() => connection.end());
+}
+
+export function runSingleQueryOnConnection(
+  query: string,
+  connection: mysql.Connection
+): Promise<number> {
+  return new Promise<number>((onResolve, onReject) =>
+    doRunSingleQuery(query, connection, onResolve, onReject)
+  );
+}
+
+export function runSelectQuery(query: string): Promise<Array<object>> {
+  const connection = mysql.createConnection(connectionParams);
+  return new Promise<Array<object>>((onResolve, onReject) => {
+    connection.connect();
+    doRunSingleQuery(query, connection, onResolve, onReject);
+  }).finally(() => connection.end());
+}
+
+export function runSelectQueryOnConnection(
+  query: string,
+  connection: mysql.Connection
+): Promise<Array<object>> {
+  return new Promise<Array<object>>((onResolve, onReject) =>
+    doRunSelectQuery(query, connection, onResolve, onReject)
+  );
+}
+
+export function queryInTransaction(proceed: (connection) => Promise<void>) {
+  const connection = mysql.createConnection(connectionParams);
+  return new Promise<void>((onResolve, onReject) => {
+    connection.connect();
+    connection.beginTransaction((err) => {
+      if (err) {
+        onReject(err);
+      } else {
+        proceed(connection).then(() => onResolve());
+      }
+    });
+  }).finally(() => connection.end());
+}
+
+export function commitTransaction(connection: mysql.Connection): Promise<void> {
+  return new Promise<void>((onResolve, onReject) => {
+    connection.commit((err) => {
+      if (err) {
+        onReject(err);
+      } else {
+        onResolve();
+      }
+    });
+  });
+}
+
+export function rollbackTransaction(
+  connection: mysql.Connection
+): Promise<void> {
+  return new Promise<void>((onResolve, onReject) => {
+    connection.rollback((err) => {
+      if (err) {
+        onReject(err);
+      } else {
+        onResolve();
+      }
+    });
+  });
 }

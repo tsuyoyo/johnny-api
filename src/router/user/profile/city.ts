@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import * as userRequestUtil from "../util";
 import * as userCityService from "../../../service/userCity";
 import * as userCitiesTable from "../../../database/user/cities";
-import * as areaTable from "../../../database/areas";
+import * as areaTable from "../../../database/address";
 import { ResponseHandler } from "../../../response/handler";
 
 import deserialize, {} from "../../../request/deserialize"

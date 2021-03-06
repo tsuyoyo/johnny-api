@@ -4,11 +4,11 @@ import { pj } from "johnny-proto";
 import proto = pj.sakuchin.percussion.proto;
 
 export class FirebaseUser {
-  readonly user: proto.IUser;
+  readonly player: proto.IPlayer;
   readonly email: string;
 
-  constructor(user: proto.IUser, email: string) {
-    this.user = user;
+  constructor(user: proto.IPlayer, email: string) {
+    this.player = user;
     this.email = email;
   }
 }
@@ -23,12 +23,12 @@ export function verifyToken(
         getUser(decodedIdToken.uid)
       )
       .then((userRecord: admin.auth.UserRecord) => {
-        const user = new proto.User({
+        const player = new proto.Player({
           id: userRecord.uid,
           name: userRecord.displayName,
-          photo: userRecord.photoURL || "",
+          icon: userRecord.photoURL || "",
         });
-        return new FirebaseUser(user, userRecord.email);
+        return new FirebaseUser(player, userRecord.email);
       })
       .catch((error) => {
         console.log(`Failed to get firebase user - ${error.message}`);
