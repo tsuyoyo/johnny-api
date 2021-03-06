@@ -148,3 +148,54 @@ describe("select", () => {
     jest.clearAllMocks();
   });
 })
+
+describe("update", () => {
+  let runSingleQuery;
+  const instrumentId = 1
+  const instrumentName = "guiter";
+
+  beforeEach(() => {
+    runSingleQuery = jest
+      .spyOn(sqlWrapper, "runSingleQuery")
+      .mockImplementation(
+        () => new Promise<number>((onResolve) => onResolve(3))
+      );
+  });
+  it("should pass expected query", () => {
+    const query = `UPDATE ${table.TABLE_NAME} ` + 
+      `SET ${table.NAME}=${instrumentName} ` +
+      `WHERE ${table.ID}=${instrumentId}`;
+    
+    return target.update(instrumentId, instrumentName).then(() => {
+      expect(runSingleQuery.mock.calls.length).toBe(1);
+      expect(runSingleQuery.mock.calls[0][0]).toBe(query);
+    });
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+});
+
+describe("delete", () => {
+  let runSingleQuery;
+  const instrumentId = 1
+
+  beforeEach(() => {
+    runSingleQuery = jest
+      .spyOn(sqlWrapper, "runSingleQuery")
+      .mockImplementation(
+        () => new Promise<number>((onResolve) => onResolve(3))
+      );
+  });
+  it("should pass expected query", () => {
+    const query = `DELETE WHERE ${table.ID}=${instrumentId}`;
+    
+    return target.deleteEntry(instrumentId).then(() => {
+      expect(runSingleQuery.mock.calls.length).toBe(1);
+      expect(runSingleQuery.mock.calls[0][0]).toBe(query);
+    });
+  });
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+});

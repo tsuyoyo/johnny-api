@@ -5,13 +5,13 @@ import { johnnyDb } from "./fields";
 import table = johnnyDb.tables.ADDRESS;
 
 const SELECT_FIELDS = `${table.PREFECTURE}, ${table.CITY_NAME}, ${table.CITY_ID}`;
-const SELECT_QUERY = `SELECT DISTINCT ${SELECT_FIELDS} from ${table.TABLE_NAME}`;
+const SELECT_QUERY = `SELECT DISTINCT ${SELECT_FIELDS} FROM ${table.TABLE_NAME}`;
 
 function buildCityFromJsObj(obj: object): proto.ICity {
   return new proto.City({
     id: `${obj[table.CITY_ID]}`,
     name: obj[table.CITY_NAME],
-    prefecture: obj[table.PREFECTURE],
+    prefecture: proto.Prefecture[obj[table.PREFECTURE] as string],
   });
 }
 
@@ -24,9 +24,9 @@ function buildCitiesArrayFromJsObj(objects: Array<object>): Array<proto.ICity> {
 }
 
 export async function selectCitiesByPrefecture(
-  prefecture: string
+  prefecture: proto.Prefecture
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.PREFECTURE}=${prefecture}`)
+  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.PREFECTURE}=${proto.Prefecture[prefecture]}`)
     .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
@@ -40,7 +40,7 @@ export async function selectCitiesLikeZipCode(
 export async function selectCitiesByZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.ZIP_CODE}=${zipCode}`)
+  return runSelectQuery(`${SELECT_QUERY} WHERE ${table.ZIP_CODE}='${zipCode}'`)
     .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
@@ -49,7 +49,7 @@ export async function selectCitiesByIds(
 ): Promise<Array<proto.ICity>> {
   let query = `${SELECT_QUERY} WHERE ${table.CITY_ID} in (`;
   for (let i = 0; i < ids.length; i++) {
-    query += `'${ids[i]}'` + (i < ids.length - 1 ? "," : "");
+    query += ids[i] + (i < ids.length - 1 ? "," : "");
   }
   query += ")";
 
