@@ -42,6 +42,7 @@ CREATE TABLE test_db.studio (
     city_id INT not null,
     url varchar(256),
     author_id VARCHAR(256) not null,
+    introduction VARCHAR(1500),
     registered_date_time DATETIME not null
 ) AUTO_INCREMENT = 100;
 
