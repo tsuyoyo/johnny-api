@@ -11,43 +11,35 @@ import { johnnyDb } from "../../database/fields";
 import table = johnnyDb.tables.player.STUDIO;
 import { Connection } from "mysql";
 
-function queryInsertOneValue(playerId: string, studioId: number): string {
-  return `(null, '${playerId}', '${studioId}')`;
-}
-
-function queryInsert(playerId: string, ids: Array<number>): string {
-  let query = `INSERT INTO ${table.TABLE_NAME} ` +
+function queryInsert(ids: Array<number>): string {
+  return `INSERT INTO ${table.TABLE_NAME} ` +
     `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) ` +
-    `VALUES `;
-  for (let i = 0; i < ids.length; i++) {
-    query += queryInsertOneValue(playerId, ids[i]) + (i < ids.length - 1 ? "," : "");
-  }
-  return query;
+    `VALUES ${ids.map(() => '(null,?,?)').join(',')}`;
 }
 
-function queryDelete(playerId: string): string {
-  return `DELETE from ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`;
+function valuesInsert(playerId: string, ids: Array<number>): Array<any> {
+  const values = new Array<any>();
+  ids.forEach((id: number) => {
+    values.push(playerId);
+    values.push(id);
+  })
+  return values;
 }
 
 function queryDeleteByIds(ids: Array<number>): string {
-  return `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${ids.join(',')})`;
-}
-
-function querySelect(playerId: string): string {
-  return `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`;
+  return `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${ids.map(() => '?').join(',')})`;
 }
 
 function buildTypedObjectArray(objects: object[]): Array<number> {
-  if (!objects) {
-    return new Array();
-  }
   const values = new Array<number>();
   objects.forEach((obj) => values.push(obj[table.STUDIO_ID]))
   return values;
 }
 
 export function select(playerId: string): Promise<Array<number>> {
-  return runSelectQuery(querySelect(playerId))
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`;
+  const values = [playerId];
+  return runSelectQuery(query, values)
     .then((objects: Array<object>) => buildTypedObjectArray(objects));
 }
 
@@ -55,23 +47,30 @@ export function insert(
   playerId: string,
   studioIds: Array<number>
 ): Promise<number> {
-  return runSingleQuery(queryInsert(playerId, studioIds));
+  const query = queryInsert(studioIds);
+  const values = valuesInsert(playerId, studioIds);
+  return runSingleQuery(query, values);
 }
 
 export function deleteEntries(playerId: string): Promise<number> {
-  return runSingleQuery(queryDelete(playerId));
+  const query = `DELETE from ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`;
+  const values = [playerId];
+  return runSingleQuery(query, values);
 }
 
 export function update(playerId: string, ids: Array<number>): Promise<void> {
   return queryInTransaction((connection: Connection) =>
-      runSelectQueryOnConnection(querySelect(playerId), connection)
+      runSelectQueryOnConnection(
+        `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`, [playerId], connection
+      )
         .then((objects) => buildTypedObjectArray(objects))
         .then((currentIds: Array<number>) => {
           const removedIds = currentIds.filter(id => !ids.includes(id));
           const newIds = ids.filter(id => !currentIds.includes(id))
 
           const deleteQuery = (removedIds.length > 0) ? queryDeleteByIds(removedIds) : null;
-          const insertQuery = (newIds.length > 0) ? queryInsert(playerId, newIds) : null;
+          const insertQuery = (newIds.length > 0) ? queryInsert(newIds) : null;
+          const insertValues = valuesInsert(playerId, newIds);
 
           // There's no data update actually.
           if (!deleteQuery && !insertQuery) {
@@ -79,12 +78,12 @@ export function update(playerId: string, ids: Array<number>): Promise<void> {
           }
           let processInTransaction;
           if (deleteQuery && insertQuery) {
-            processInTransaction = runSingleQueryOnConnection(deleteQuery, connection)
-              .then(() => runSingleQueryOnConnection(insertQuery, connection))
+            processInTransaction = runSingleQueryOnConnection(deleteQuery, removedIds, connection)
+              .then(() => runSingleQueryOnConnection(insertQuery, insertValues, connection))
           } else if (deleteQuery) {
-            processInTransaction = runSingleQueryOnConnection(deleteQuery, connection)
+            processInTransaction = runSingleQueryOnConnection(deleteQuery, removedIds, connection)
           } else {
-            processInTransaction = runSingleQueryOnConnection(insertQuery, connection)
+            processInTransaction = runSingleQueryOnConnection(insertQuery, insertValues, connection)
           }
 
           return processInTransaction

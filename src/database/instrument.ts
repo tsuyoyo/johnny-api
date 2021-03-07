@@ -31,6 +31,7 @@ export function insert(
   playerId: string,
   date: Date
 ): Promise<number> {
+  const formattedDate = dayjs(date).format(johnnyDb.DATE_TIME_FORMAT);
   const query =
     `INSERT INTO ${table.TABLE_NAME} ` +
     `(` +
@@ -39,19 +40,15 @@ export function insert(
     `${table.AUTHOR_ID},` +
     `${table.REGISTERED_DATE_TIME}` +
     `) ` +
-    `VALUES ` +
-    `(` +
-    `null,` +
-    `'${name}',` +
-    `${playerId},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
-    `)`;
-  return runSingleQuery(query);
+    `VALUES (null, ?, ?, ?)`;
+  const values = [name, playerId, formattedDate];
+  return runSingleQuery(query, values);
 }
 
 export function selectById(id: number): Promise<proto.IInstrument> {
-  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=${id}`;
-  return runSelectQuery(query).then((objects: Array<object>) =>
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=?`;
+  const values = [id];
+  return runSelectQuery(query, values).then((objects: Array<object>) =>
     objects.length > 0 ? buildInstrumentObject(objects[0]) : null
   );
 }
@@ -59,22 +56,21 @@ export function selectById(id: number): Promise<proto.IInstrument> {
 export function selectByIds(
   ids: Array<number>
 ): Promise<Array<proto.IInstrument>> {
-  let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (`;
-  for (let i = 0; i < ids.length; i++) {
-    query += `'${ids[i]}'` + (i < ids.length - 1 ? "," : "");
-  }
-  query += ")";
-  return runSelectQuery(query).then((objects: Array<object>) =>
-    buildInstrumentObjects(objects)
-  );
+  const values = new Array<number>();
+  let query = `SELECT * FROM ${table.TABLE_NAME} ` +
+    `WHERE ${table.ID} in (${ids.map(() => '?').join(',')})`;
+  return runSelectQuery(query, ids)
+    .then((objects: Array<object>) => buildInstrumentObjects(objects));
 }
 
 export function update(id: number, name: string): Promise<number> {
-  const query = `UPDATE ${table.TABLE_NAME} SET ${table.NAME}=${name} WHERE ${table.ID}=${id}`;
-  return runSingleQuery(query);
+  const query = `UPDATE ${table.TABLE_NAME} SET ${table.NAME}=? WHERE ${table.ID}=?`;
+  const values = [name, id]
+  return runSingleQuery(query, values);
 }
 
 export function deleteEntry(id: number): Promise<number> {
-  const query = `DELETE WHERE ${table.ID}=${id}`;
-  return runSingleQuery(query);
+  const query = `DELETE WHERE ${table.ID}=?`;
+  const values = [id]
+  return runSingleQuery(query, values);
 }

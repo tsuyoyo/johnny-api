@@ -37,8 +37,11 @@ function buildImageObjects(objects: Array<object>): Array<InstrumentImage> {
   return values;
 }
 
-function selectImages(query: string): Promise<Array<InstrumentImage>> {
-  return runSelectQuery(query)
+function selectImages(
+  query: string,
+  values: Array<any>,
+): Promise<Array<InstrumentImage>> {
+  return runSelectQuery(query, values)
     .then((objects: Array<object>) => buildImageObjects(objects))
     .then((histories: Array<InstrumentImage>) =>
       histories.sort((a, b) => a.date.getMilliseconds() - b.date.getMilliseconds())
@@ -60,31 +63,26 @@ export function insert(
     `${table.AUTHOR_ID},` +
     `${table.POSTED_DATE_TIME}` +
     `) ` +
-    `VALUES ` +
-    `(` +
-    `null,` +
-    `'${url}',` +
-    `${instrumentId},` +
-    `${playerId},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
-    `)`
+    `VALUES (null,?,?,?,?)`
   );
-  return runSingleQuery(query);
+  const values = [url, instrumentId, playerId, dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)];
+  return runSingleQuery(query, values);
 }
 
 export function selectByAuthorId(playerId: number): Promise<Array<InstrumentImage>> {
-  return selectImages(
-    `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.AUTHOR_ID}=${playerId}`
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.AUTHOR_ID}=?`;
+  const values = [playerId];
+  return selectImages(query, values);
 }
 
 export function selectByInstrumentId(id: number): Promise<Array<InstrumentImage>> {
-  return selectImages(
-    `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.INSTRUMENT_ID}=${id}`
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.INSTRUMENT_ID}=?`;
+  const values = [id]
+  return selectImages(query, values);
 }
 
 export function deleteEntry(id: number): Promise<number> {
-  const query = `DELETE WHERE ${table.ID}=${id}`;
-  return runSingleQuery(query);
+  const query = `DELETE WHERE ${table.ID}=?`;
+  const values = [id];
+  return runSingleQuery(query, values);
 }

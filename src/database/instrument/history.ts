@@ -34,8 +34,11 @@ function buildHistoryObjects(objects: Array<object>): Array<InstrumentEditHistor
   return values;
 }
 
-function selectHistories(query: string): Promise<Array<InstrumentEditHistory>> {
-  return runSelectQuery(query)
+function selectHistories(
+  query: string,
+  values: Array<any>,
+): Promise<Array<InstrumentEditHistory>> {
+  return runSelectQuery(query, values)
     .then((objects: Array<object>) => buildHistoryObjects(objects))
     .then((histories: Array<InstrumentEditHistory>) =>
       histories.sort((a, b) => b.date.getMilliseconds() - a.date.getMilliseconds())
@@ -51,30 +54,26 @@ export function insert(instrumentId: number, playerId: string, date: Date): Prom
     `${table.PLAYER_ID},` +
     `${table.UPDATED_DATE_TIME}` +
     `) ` +
-    `VALUES ` +
-    `(` +
-    `null,` +
-    `${instrumentId},` +
-    `${playerId},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
-    `)`
+    `VALUES (null,?,?,?)`
   );
-  return runSingleQuery(query);
+  const values = [instrumentId, playerId, dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)]
+  return runSingleQuery(query, values);
 }
 
 export function selectByPlayerId(playerId: number): Promise<Array<InstrumentEditHistory>> {
-  return selectHistories(
-    `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=${playerId}`
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`;
+  const values = [playerId];
+  return selectHistories(query, values);
 }
 
 export function selectByInstrumentId(id: number): Promise<Array<InstrumentEditHistory>> {
-  return selectHistories(
-    `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.INSTRUMENT_ID}=${id}`
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.INSTRUMENT_ID}=?`;
+  const values = [id]
+  return selectHistories(query, values);
 }
 
 export function deleteEntry(id: number): Promise<number> {
-  const query = `DELETE WHERE ${table.ID}=${id}`;
-  return runSingleQuery(query);
+  const query = `DELETE WHERE ${table.ID}=?`;
+  const values = [id];
+  return runSingleQuery(query, values);
 }

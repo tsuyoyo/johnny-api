@@ -26,37 +26,41 @@ function buildCitiesArrayFromJsObj(objects: Array<object>): Array<proto.ICity> {
 export async function selectCitiesByPrefecture(
   prefecture: proto.Prefecture
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(
-    `${SELECT_QUERY} WHERE ${table.PREFECTURE}=${proto.Prefecture[prefecture]}`
-  ).then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  const query = `${SELECT_QUERY} WHERE ${table.PREFECTURE}=?`;
+  const values = [proto.Prefecture[prefecture]];
+  return runSelectQuery(query, values)
+    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
 export async function selectCitiesLikeZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(
-    `${SELECT_QUERY} WHERE ${table.ZIP_CODE} like '${zipCode}%'`
-  ).then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  const query = `${SELECT_QUERY} WHERE ${table.ZIP_CODE} like ?`
+  const values = `${zipCode}%`;
+  return runSelectQuery(query, values)
+    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
 export async function selectCitiesByZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
-  return runSelectQuery(
-    `${SELECT_QUERY} WHERE ${table.ZIP_CODE}='${zipCode}'`
-  ).then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  const query = `${SELECT_QUERY} WHERE ${table.ZIP_CODE}=?`;
+  const values = [zipCode];
+  return runSelectQuery(query, values)
+    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
 
 export async function selectCitiesByIds(
   ids: Array<number>
 ): Promise<Array<proto.ICity>> {
   let query = `${SELECT_QUERY} WHERE ${table.CITY_ID} in (`;
+  const values = new Array<number>();
   for (let i = 0; i < ids.length; i++) {
-    query += ids[i] + (i < ids.length - 1 ? "," : "");
+    query += '?' + (i < ids.length - 1 ? "," : "");
+    values.push(ids[i]);
   }
   query += ")";
 
-  return runSelectQuery(query).then((objects: Array<object>) =>
-    buildCitiesArrayFromJsObj(objects)
-  );
+  return runSelectQuery(query, values)
+    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }

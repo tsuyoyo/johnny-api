@@ -63,55 +63,46 @@ export function insert(
     `${table.AUTHOR_ID},` +
     `${table.INTRODUCTION},` +
     `${table.REGISTERED_DATE_TIME}` +
-    `) ` +
-    `VALUES ` +
-    `(` +
-    `null,` +
-    `'${name}',` +
-    `${cityId},` +
-    `${authorId},` +
-    `${introduction},` +
-    `'${dayjs(date).format(johnnyDb.DATE_TIME_FORMAT)}'` +
-    `)`;
-  return runSingleQuery(query);
+    `) VALUES (null,?,?,?,?,?)`;
+  const values = [
+    name,
+    cityId,
+    authorId,
+    introduction,
+    dayjs(date).format(johnnyDb.DATE_TIME_FORMAT),
+  ];
+  return runSingleQuery(query, values);
 }
 
 export function selectById(id: number): Promise<StudioData> {
-  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=${id}`;
-  return runSelectQuery(query).then((objects: Array<object>) =>
-    objects.length > 0 ? buildStudioDataObject(objects[0]) : null
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=?`;
+  const values = [id];
+  return runSelectQuery(query, values).then(
+    (objects: Array<object>) => objects.length > 0 ? buildStudioDataObject(objects[0]) : null
   );
 }
 
 export function selectByIds(
   ids: Array<number>
 ): Promise<Array<StudioData>> {
-  let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (`;
-  for (let i = 0; i < ids.length; i++) {
-    query += `'${ids[i]}'` + (i < ids.length - 1 ? "," : "");
-  }
-  query += ")";
-  return runSelectQuery(query).then((objects: Array<object>) =>
-    buildStudioDataObjects(objects)
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} ` + 
+    `WHERE ${table.ID} in (${ids.map(() => '?').join(',')})`;
+  return runSelectQuery(query, ids)
+    .then((objects: Array<object>) =>　buildStudioDataObjects(objects));
 }
 
 export function selectByCityId(cityId: number): Promise<Array<StudioData>> {
-  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.CITY_ID}=${cityId}`;
-  return runSelectQuery(query).then((objects: Array<object>) => 
-    buildStudioDataObjects(objects)
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.CITY_ID}=?`;
+  const values = [cityId];
+  return runSelectQuery(query, values)
+    .then((objects: Array<object>) => buildStudioDataObjects(objects));
 }
 
 export function selectByCityIds(cityIds: Array<number>): Promise<Array<StudioData>> {
-  let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.CITY_ID} in (`;
-  for (let i = 0; i < cityIds.length; i++) {
-    query += `'${cityIds[i]}'` + (i < cityIds.length - 1 ? "," : "");
-  }
-  query += ")";
-  return runSelectQuery(query).then((objects: Array<object>) =>
-    buildStudioDataObjects(objects)
-  );
+  const query = `SELECT * FROM ${table.TABLE_NAME} ` + 
+    `WHERE ${table.CITY_ID} in (${cityIds.map(() => '?').join(',')})`;
+  return runSelectQuery(query, cityIds)
+    .then((objects: Array<object>) => buildStudioDataObjects(objects));
 }
 
 export function update(
@@ -120,13 +111,15 @@ export function update(
   url: string,
   introduction: string,
 ): Promise<number> {
-  return runSingleQuery(
-    `UPDATE ${table.TABLE_NAME} ` + 
-    `SET ${table.NAME}='${name}' ${table.URL}='${url}' ${table.INTRODUCTION}='${introduction}'` +
-    `WHERE ${table.ID}=${id}`
-  );
+  const query = `UPDATE ${table.TABLE_NAME} ` + 
+    `SET ${table.NAME}=? ${table.URL}=? ${table.INTRODUCTION}=?` +
+    `WHERE ${table.ID}=?`;
+  const values = [name, url, introduction, id];
+  return runSingleQuery(query, values);
 }
 
 export function deleteEntry(id: number): Promise<number> {
-  return runSingleQuery(`DELETE WHERE ${table.ID}=${id}`);
+  const query = `DELETE WHERE ${table.ID}=?`;
+  const values = [id]
+  return runSingleQuery(query, values);
 }

@@ -33,15 +33,10 @@ describe("insert", () => {
         `${table.AUTHOR_ID},` +
         `${table.POSTED_DATE_TIME}` +
         `) ` +
-        `VALUES ` +
-        `(` +
-        `null,` +
-        `'${url}',` +
-        `${instrumentId},` +
-        `${playerId},` +
-        `'${formatDate}'` +
-        `)`
+        `VALUES (null,?,?,?,?)`
       );
+      expect(runSingleQuery.mock.calls[0][1])
+        .toEqual([url, instrumentId, playerId, formatDate])
     });
   });
   afterEach(() => {
@@ -82,8 +77,9 @@ describe("select", () => {
       return target.selectByAuthorId(authorId).then(() => {
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(
-          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.AUTHOR_ID}=${authorId}`
+          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.AUTHOR_ID}=?`
         );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([authorId]);
       });
     });
     it("should return typed objects", () => {
@@ -107,8 +103,9 @@ describe("select", () => {
       return target.selectByInstrumentId(instrumentId).then(() => {
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(
-          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.INSTRUMENT_ID}=${instrumentId}`
+          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.INSTRUMENT_ID}=?`
         );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([instrumentId]);
       });
     });
     it("should return typed objects", () => {
@@ -135,11 +132,12 @@ describe("delete", () => {
       );
   });
   it("should pass expected query", () => {
-    const query = `DELETE WHERE ${table.ID}=${id}`;
+    const query = `DELETE WHERE ${table.ID}=?`;
 
     return target.deleteEntry(id).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);
+      expect(runSingleQuery.mock.calls[0][1]).toEqual([id]);
     });
   });
   afterEach(() => {
