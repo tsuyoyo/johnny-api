@@ -34,8 +34,11 @@ describe("insert", () => {
           expect(runSingleQuery.mock.calls[0][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` +
             `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) VALUES ` +
-            `(null, '${playerId}', '1'),(null, '${playerId}', '2'),(null, '${playerId}', '3')`
+            `(null,?,?),(null,?,?),(null,?,?)`
           );
+          expect(runSingleQuery.mock.calls[0][1]).toEqual(
+            [playerId, 1, playerId, 2, playerId, 3]
+          )
         });
     });
   });
@@ -66,7 +69,10 @@ describe("deleteEntries", () => {
       return target.deleteEntries("id").then((rows: number) => {
         expect(runSingleQuery.mock.calls.length).toBe(1);
         expect(runSingleQuery.mock.calls[0][0]).toBe(
-          `DELETE from ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='id'`
+          `DELETE from ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`
+        );
+        expect(runSingleQuery.mock.calls[0][1]).toEqual(
+          ["id"]
         );
       })
     });
@@ -123,7 +129,10 @@ describe("select", () => {
           expect(ids.length).toBe(3)
           expect(runSelectQuery.mock.calls.length).toBe(1);
           expect(runSelectQuery.mock.calls[0][0]).toBe(
-            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`
+          );
+          expect(runSelectQuery.mock.calls[0][1]).toEqual(
+            [playerId]
           );
         });
     });
@@ -169,17 +178,28 @@ describe("update", () =>{
         .then(() => {
           expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
-            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`
           );
+          expect(runSelectQueryOnConnection.mock.calls[0][1]).toEqual(
+            [playerId]
+          );
+
           expect(runSingleQueryOnConnection.mock.calls.length).toBe(2);
           expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
-            `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${[5, 6].join(',')})`
+            `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (?,?)`
           );
+          expect(runSingleQueryOnConnection.mock.calls[0][1]).toEqual(
+            [5, 6]
+          );
+
           expect(runSingleQueryOnConnection.mock.calls[1][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` +
             `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) VALUES ` +
-            `(null, '${playerId}', '1'),(null, '${playerId}', '2')`
+            `(null,?,?),(null,?,?)`
           );
+          expect(runSingleQueryOnConnection.mock.calls[1][1]).toEqual(
+            [playerId, 1, playerId, 2]
+          )
         })
     })
   })
@@ -209,12 +229,19 @@ describe("update", () =>{
         .then(() => {
           expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
-            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`
           );
+          expect(runSelectQueryOnConnection.mock.calls[0][1]).toEqual(
+            [playerId]
+          );
+
           expect(runSingleQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
-            `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${[3, 4].join(',')})`
+            `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (?,?)`
           );
+          expect(runSingleQueryOnConnection.mock.calls[0][1]).toEqual(
+            [3, 4]
+          )
         })
     })
   })
@@ -244,13 +271,20 @@ describe("update", () =>{
         .then(() => {
           expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
-            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`
           );
+          expect(runSelectQueryOnConnection.mock.calls[0][1]).toEqual(
+            [playerId]
+          )
+
           expect(runSingleQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSingleQueryOnConnection.mock.calls[0][0]).toBe(
             `INSERT INTO ${table.TABLE_NAME} ` +
             `(${table.ID}, ${table.PLAYER_ID}, ${table.STUDIO_ID}) VALUES ` +
-            `(null, '${playerId}', '4'),(null, '${playerId}', '5')`
+            `(null,?,?),(null,?,?)`
+          );
+          expect(runSingleQueryOnConnection.mock.calls[0][1]).toEqual(
+            [playerId, 4, playerId, 5]
           );
         })
     })
@@ -281,7 +315,10 @@ describe("update", () =>{
         .then(() => {
           expect(runSelectQueryOnConnection.mock.calls.length).toBe(1);
           expect(runSelectQueryOnConnection.mock.calls[0][0]).toBe(
-            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}='${playerId}'`
+            `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.PLAYER_ID}=?`
+          );
+          expect(runSelectQueryOnConnection.mock.calls[0][1]).toEqual(
+            [playerId]
           );
           expect(runSingleQueryOnConnection.mock.calls.length).toBe(0);
         })
