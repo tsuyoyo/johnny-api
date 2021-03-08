@@ -67,7 +67,10 @@ describe("select", () => {
           expect(runSelectQuery.mock.calls[0][0]).toBe(
             `SELECT DISTINCT ${table.PREFECTURE}, ${table.CITY_NAME}, ${table.CITY_ID} ` +
               `FROM ${table.TABLE_NAME} ` +
-              `WHERE ${table.PREFECTURE}=TOKYO`
+              `WHERE ${table.PREFECTURE}=?`
+          );
+          expect(runSelectQuery.mock.calls[0][1]).toEqual(
+            [proto.Prefecture[proto.Prefecture.TOKYO]]
           );
         });
     });
@@ -93,7 +96,10 @@ describe("select", () => {
         expect(runSelectQuery.mock.calls[0][0]).toBe(
           `SELECT DISTINCT ${table.PREFECTURE}, ${table.CITY_NAME}, ${table.CITY_ID} ` +
             `FROM ${table.TABLE_NAME} ` +
-            `WHERE ${table.ZIP_CODE} like '${input}%'`
+            `WHERE ${table.ZIP_CODE} like ?`
+        );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [`${input}%`]
         );
       });
     });
@@ -119,8 +125,11 @@ describe("select", () => {
         expect(runSelectQuery.mock.calls[0][0]).toBe(
           `SELECT DISTINCT ${table.PREFECTURE}, ${table.CITY_NAME}, ${table.CITY_ID} ` +
             `FROM ${table.TABLE_NAME} ` +
-            `WHERE ${table.ZIP_CODE}='${input}'`
+            `WHERE ${table.ZIP_CODE}=?`
         );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [input]
+        )
       });
     });
     it("should return typed objects", () => {
@@ -145,7 +154,10 @@ describe("select", () => {
         expect(runSelectQuery.mock.calls[0][0]).toBe(
           `SELECT DISTINCT ${table.PREFECTURE}, ${table.CITY_NAME}, ${table.CITY_ID} ` +
             `FROM ${table.TABLE_NAME} ` +
-            `WHERE ${table.CITY_ID} in (10,20,30)`
+            `WHERE ${table.CITY_ID} in (?,?,?)`
+        );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [10, 20, 30]
         );
       });
     });

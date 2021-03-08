@@ -36,7 +36,7 @@ export async function selectCitiesLikeZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
   const query = `${SELECT_QUERY} WHERE ${table.ZIP_CODE} like ?`
-  const values = `${zipCode}%`;
+  const values = [`${zipCode}%`];
   return runSelectQuery(query, values)
     .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
 }
