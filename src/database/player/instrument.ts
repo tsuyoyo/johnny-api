@@ -27,7 +27,7 @@ function valuesInsert(playerId: string, ids: Array<number>): Array<any> {
 }
 
 function queryDeleteByIds(ids: Array<number>): string {
-  return `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${ids.join(',')})`;
+  return `DELETE from ${table.TABLE_NAME} WHERE ${table.ID} in (${ids.map(() => '?').join(',')})`;
 }
 
 function buildTypedObjectArray(objects: object[]): Array<number> {
