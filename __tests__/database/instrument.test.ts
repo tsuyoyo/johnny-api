@@ -32,14 +32,11 @@ describe("insert", () => {
           `${table.AUTHOR_ID},` +
           `${table.REGISTERED_DATE_TIME}` +
           `) ` +
-          `VALUES ` +
-          `(` +
-          `null,` +
-          `'${instrumentName}',` +
-          `${playerId},` +
-          `'${formatDate}'` +
-          `)`
+          `VALUES (null,?,?,?)`
       );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [instrumentName, playerId, formatDate]
+      )
     });
   });
   afterEach(() => {
@@ -76,8 +73,11 @@ describe("select", () => {
       return target.selectById(instrumentId).then(() => {
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(
-          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=${instrumentId}`
+          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=?`
         );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [instrumentId]
+        )
       });
     });
     it("should return typed objects", () => {
@@ -132,15 +132,13 @@ describe("select", () => {
     });
     it("should pass expected query", () => {
       return target.selectByIds(instrumentIds).then(() => {
-        let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (`;
-        for (let i = 0; i < instrumentIds.length; i++) {
-          query +=
-            `'${instrumentIds[i]}'` + (i < instrumentIds.length - 1 ? "," : "");
-        }
-        query += ")";
+        let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (?,?,?)`
 
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(query);
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [100, 200, 300]
+        )
       });
     });
     it("should return typed objects", () => {
@@ -170,12 +168,15 @@ describe("update", () => {
   it("should pass expected query", () => {
     const query =
       `UPDATE ${table.TABLE_NAME} ` +
-      `SET ${table.NAME}=${instrumentName} ` +
-      `WHERE ${table.ID}=${instrumentId}`;
+      `SET ${table.NAME}=? ` +
+      `WHERE ${table.ID}=?`;
 
     return target.update(instrumentId, instrumentName).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [instrumentName, instrumentId]
+      );
     });
   });
   afterEach(() => {
@@ -195,11 +196,14 @@ describe("delete", () => {
       );
   });
   it("should pass expected query", () => {
-    const query = `DELETE WHERE ${table.ID}=${instrumentId}`;
+    const query = `DELETE WHERE ${table.ID}=?`;
 
     return target.deleteEntry(instrumentId).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [instrumentId]
+      );
     });
   });
   afterEach(() => {

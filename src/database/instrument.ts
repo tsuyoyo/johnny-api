@@ -40,7 +40,7 @@ export function insert(
     `${table.AUTHOR_ID},` +
     `${table.REGISTERED_DATE_TIME}` +
     `) ` +
-    `VALUES (null, ?, ?, ?)`;
+    `VALUES (null,?,?,?)`;
   const values = [name, playerId, formattedDate];
   return runSingleQuery(query, values);
 }
