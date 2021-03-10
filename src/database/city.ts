@@ -28,17 +28,19 @@ export async function selectCitiesByPrefecture(
 ): Promise<Array<proto.ICity>> {
   const query = `${SELECT_QUERY} WHERE ${table.PREFECTURE}=?`;
   const values = [proto.Prefecture[prefecture]];
-  return runSelectQuery(query, values)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(query, values).then((objects: Array<object>) =>
+    buildCitiesArrayFromJsObj(objects)
+  );
 }
 
 export async function selectCitiesLikeZipCode(
   zipCode: string
 ): Promise<Array<proto.ICity>> {
-  const query = `${SELECT_QUERY} WHERE ${table.ZIP_CODE} like ?`
+  const query = `${SELECT_QUERY} WHERE ${table.ZIP_CODE} like ?`;
   const values = [`${zipCode}%`];
-  return runSelectQuery(query, values)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(query, values).then((objects: Array<object>) =>
+    buildCitiesArrayFromJsObj(objects)
+  );
 }
 
 export async function selectCitiesByZipCode(
@@ -46,8 +48,9 @@ export async function selectCitiesByZipCode(
 ): Promise<Array<proto.ICity>> {
   const query = `${SELECT_QUERY} WHERE ${table.ZIP_CODE}=?`;
   const values = [zipCode];
-  return runSelectQuery(query, values)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(query, values).then((objects: Array<object>) =>
+    buildCitiesArrayFromJsObj(objects)
+  );
 }
 
 export async function selectCitiesByIds(
@@ -56,11 +59,12 @@ export async function selectCitiesByIds(
   let query = `${SELECT_QUERY} WHERE ${table.CITY_ID} in (`;
   const values = new Array<number>();
   for (let i = 0; i < ids.length; i++) {
-    query += '?' + (i < ids.length - 1 ? "," : "");
+    query += "?" + (i < ids.length - 1 ? "," : "");
     values.push(ids[i]);
   }
   query += ")";
 
-  return runSelectQuery(query, values)
-    .then((objects: Array<object>) => buildCitiesArrayFromJsObj(objects));
+  return runSelectQuery(query, values).then((objects: Array<object>) =>
+    buildCitiesArrayFromJsObj(objects)
+  );
 }

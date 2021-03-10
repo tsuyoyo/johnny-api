@@ -57,20 +57,22 @@ export function selectByIds(
   ids: Array<number>
 ): Promise<Array<proto.IInstrument>> {
   const values = new Array<number>();
-  let query = `SELECT * FROM ${table.TABLE_NAME} ` +
-    `WHERE ${table.ID} in (${ids.map(() => '?').join(',')})`;
-  return runSelectQuery(query, ids)
-    .then((objects: Array<object>) => buildInstrumentObjects(objects));
+  const query =
+    `SELECT * FROM ${table.TABLE_NAME} ` +
+    `WHERE ${table.ID} in (${ids.map(() => "?").join(",")})`;
+  return runSelectQuery(query, ids).then((objects: Array<object>) =>
+    buildInstrumentObjects(objects)
+  );
 }
 
 export function update(id: number, name: string): Promise<number> {
   const query = `UPDATE ${table.TABLE_NAME} SET ${table.NAME}=? WHERE ${table.ID}=?`;
-  const values = [name, id]
+  const values = [name, id];
   return runSingleQuery(query, values);
 }
 
 export function deleteEntry(id: number): Promise<number> {
   const query = `DELETE WHERE ${table.ID}=?`;
-  const values = [id]
+  const values = [id];
   return runSingleQuery(query, values);
 }

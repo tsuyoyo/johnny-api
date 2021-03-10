@@ -114,7 +114,10 @@ export function runSingleQueryOnConnection(
   );
 }
 
-export function runSelectQuery(query: string, values: any): Promise<Array<object>> {
+export function runSelectQuery(
+  query: string,
+  values: any
+): Promise<Array<object>> {
   const connection = mysql.createConnection(connectionParams);
   return new Promise<Array<object>>((onResolve, onReject) => {
     connection.connect();

@@ -34,9 +34,11 @@ describe("insert", () => {
           `) ` +
           `VALUES (null,?,?,?)`
       );
-      expect(runSingleQuery.mock.calls[0][1]).toEqual(
-        [instrumentName, playerId, formatDate]
-      )
+      expect(runSingleQuery.mock.calls[0][1]).toEqual([
+        instrumentName,
+        playerId,
+        formatDate,
+      ]);
     });
   });
   afterEach(() => {
@@ -75,9 +77,7 @@ describe("select", () => {
         expect(runSelectQuery.mock.calls[0][0]).toBe(
           `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=?`
         );
-        expect(runSelectQuery.mock.calls[0][1]).toEqual(
-          [instrumentId]
-        )
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([instrumentId]);
       });
     });
     it("should return typed objects", () => {
@@ -132,13 +132,11 @@ describe("select", () => {
     });
     it("should pass expected query", () => {
       return target.selectByIds(instrumentIds).then(() => {
-        let query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (?,?,?)`
+        const query = `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID} in (?,?,?)`;
 
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(query);
-        expect(runSelectQuery.mock.calls[0][1]).toEqual(
-          [100, 200, 300]
-        )
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([100, 200, 300]);
       });
     });
     it("should return typed objects", () => {
@@ -174,9 +172,10 @@ describe("update", () => {
     return target.update(instrumentId, instrumentName).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);
-      expect(runSingleQuery.mock.calls[0][1]).toEqual(
-        [instrumentName, instrumentId]
-      );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual([
+        instrumentName,
+        instrumentId,
+      ]);
     });
   });
   afterEach(() => {
@@ -201,9 +200,7 @@ describe("delete", () => {
     return target.deleteEntry(instrumentId).then(() => {
       expect(runSingleQuery.mock.calls.length).toBe(1);
       expect(runSingleQuery.mock.calls[0][0]).toBe(query);
-      expect(runSingleQuery.mock.calls[0][1]).toEqual(
-        [instrumentId]
-      );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual([instrumentId]);
     });
   });
   afterEach(() => {

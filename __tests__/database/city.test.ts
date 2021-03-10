@@ -69,9 +69,9 @@ describe("select", () => {
               `FROM ${table.TABLE_NAME} ` +
               `WHERE ${table.PREFECTURE}=?`
           );
-          expect(runSelectQuery.mock.calls[0][1]).toEqual(
-            [proto.Prefecture[proto.Prefecture.TOKYO]]
-          );
+          expect(runSelectQuery.mock.calls[0][1]).toEqual([
+            proto.Prefecture[proto.Prefecture.TOKYO],
+          ]);
         });
     });
     it("should return typed objects", () => {
@@ -98,9 +98,7 @@ describe("select", () => {
             `FROM ${table.TABLE_NAME} ` +
             `WHERE ${table.ZIP_CODE} like ?`
         );
-        expect(runSelectQuery.mock.calls[0][1]).toEqual(
-          [`${input}%`]
-        );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([`${input}%`]);
       });
     });
     it("should return typed objects", () => {
@@ -127,9 +125,7 @@ describe("select", () => {
             `FROM ${table.TABLE_NAME} ` +
             `WHERE ${table.ZIP_CODE}=?`
         );
-        expect(runSelectQuery.mock.calls[0][1]).toEqual(
-          [input]
-        )
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([input]);
       });
     });
     it("should return typed objects", () => {
@@ -156,9 +152,7 @@ describe("select", () => {
             `FROM ${table.TABLE_NAME} ` +
             `WHERE ${table.CITY_ID} in (?,?,?)`
         );
-        expect(runSelectQuery.mock.calls[0][1]).toEqual(
-          [10, 20, 30]
-        );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual([10, 20, 30]);
       });
     });
     it("should return typed objects", () => {
