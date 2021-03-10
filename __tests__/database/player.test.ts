@@ -37,15 +37,17 @@ describe("insert", () => {
           `${table.REGISTERED_DATE_TIME},` +
           `${table.UPDATED_DATE_TIME}` +
           `) ` +
-          `VALUES ` +
-          `(` +
-          `'${player.id}',` +
-          `'${player.name}',` +
-          `'${player.icon}',` +
-          `'${mail}',` +
-          `'${formatDate}',` +
-          `'${formatDate}'` +
-          `)`
+          `VALUES (?,?,?,?,?,?)`
+      );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [
+          player.id,
+          player.name,
+          player.icon,
+          mail,
+          formatDate,
+          formatDate,
+        ]
       );
     });
   });
@@ -140,7 +142,12 @@ describe("selectPlayerById", () => {
       return target.selectPlayerById(playerId).then(() => {
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(
-          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}='${playerId}'`
+          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=?`
+        );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [
+            playerId,
+          ]
         );
       });
     });
@@ -238,7 +245,12 @@ describe("selectPlayerDetailById", () => {
       target.selectPlayerDetailById(playerId).then(() => {
         expect(runSelectQuery.mock.calls.length).toBe(1);
         expect(runSelectQuery.mock.calls[0][0]).toBe(
-          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}='${playerId}'`
+          `SELECT * FROM ${table.TABLE_NAME} WHERE ${table.ID}=?`
+        );
+        expect(runSelectQuery.mock.calls[0][1]).toEqual(
+          [
+            playerId,
+          ]
         );
       });
     });
@@ -327,10 +339,18 @@ describe("updateEntryByPlayer", () => {
       expect(runSingleQuery.mock.calls[0][0]).toBe(
         `UPDATE ${table.TABLE_NAME} ` +
           `SET ` +
-          `${table.NAME}=${player.name},` +
-          `${table.ICON}=${player.icon},` +
-          `${table.UPDATED_DATE_TIME}=${formatDate}` +
-          ` WHERE ${table.ID}=${player.id}`
+          `${table.NAME}=?,` +
+          `${table.ICON}=?,` +
+          `${table.UPDATED_DATE_TIME}=?` +
+          ` WHERE ${table.ID}=?`
+      );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [
+          player.name,
+          player.icon,
+          formatDate,
+          player.id,
+        ]
       );
     });
   });
@@ -363,12 +383,21 @@ describe("updateEntryByPlayerDetail", () => {
       expect(runSingleQuery.mock.calls[0][0]).toBe(
         `UPDATE ${table.TABLE_NAME} ` +
           `SET ` +
-          `${table.NAME}=${player.name},` +
-          `${table.ICON}=${player.icon},` +
-          `${table.INTRODUCTION}=${player.introduction},` +
-          `${table.UPDATED_DATE_TIME}=${formatDate}` +
-          ` WHERE ${table.ID}=${player.id}`
+          `${table.NAME}=?,` +
+          `${table.ICON}=?,` +
+          `${table.INTRODUCTION}=?,` +
+          `${table.UPDATED_DATE_TIME}=?` +
+          ` WHERE ${table.ID}=?`
       );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [
+          player.name,
+          player.icon,
+          player.introduction,
+          formatDate,
+          player.id,
+        ]
+      )
     });
   });
   afterEach(() => {
@@ -396,10 +425,17 @@ describe("updateMailOfEntry", () => {
       expect(runSingleQuery.mock.calls[0][0]).toBe(
         `UPDATE ${table.TABLE_NAME} ` +
           `SET ` +
-          `${table.MAIL}=${mail},` +
-          `${table.UPDATED_DATE_TIME}=${formatDate}` +
-          ` WHERE ${table.ID}=${playerId}`
+          `${table.MAIL}=?,` +
+          `${table.UPDATED_DATE_TIME}=?` +
+          ` WHERE ${table.ID}=?`
       );
+      expect(runSingleQuery.mock.calls[0][1]).toEqual(
+        [
+          mail,
+          formatDate,
+          playerId,
+        ]
+      )
     });
   });
 });

@@ -61,7 +61,7 @@ export function insert(
   const values = [
     player.id,
     player.name,
-    player.name,
+    player.icon,
     mail,
     formatDate,
     formatDate
