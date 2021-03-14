@@ -9,8 +9,7 @@ export class StudioData {
   readonly id: number;
   readonly name: string;
   readonly cityId: number;
-  readonly url;
-  string;
+  readonly url: string;
   readonly introduction: string;
   readonly registeredDate: Date;
 
